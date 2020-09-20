@@ -10,4 +10,12 @@ function add(table, chart, week, entries) {
     VALUES ${values.join(',')}`);
 }
 
-module.exports = { add };
+function addAlbums(chart, week, entries) {
+  return add('albumChart', chart, week, entries);
+}
+
+function addSingles(chart, week, entries) {
+  return add('singleChart', chart, week, entries);
+}
+
+module.exports = { addAlbums, addSingles };

@@ -1,6 +1,6 @@
 const { dml, query, cleanup } = require('@eunmo/mysql');
-const { addMissing, getIds } = require('../album-chart-entry');
-const { add } = require('../album-chart');
+const { addMissingAlbums, getAlbumIds } = require('../chart-entry');
+const { addAlbums } = require('../chart');
 
 const chart = 1;
 const dummyEntries = [
@@ -17,8 +17,8 @@ beforeAll(async () => {
   await dml('DROP TABLE IF EXISTS albumChartEntry;');
   await dml('CREATE TABLE albumChartEntry LIKE chart.albumChartEntry;');
   await dml('CREATE TABLE albumChart LIKE chart.albumChart;');
-  await addMissing(chart, dummyEntries);
-  ids = await getIds(chart, dummyEntries);
+  await addMissingAlbums(chart, dummyEntries);
+  ids = await getAlbumIds(chart, dummyEntries);
 });
 
 afterAll(async () => {
@@ -32,7 +32,7 @@ beforeEach(async () => {
 });
 
 test('add', async () => {
-  await add(1, '2020-09-12', ids);
+  await addAlbums(1, '2020-09-12', ids);
   const rows = await query('SELECT * FROM albumChart');
   expect(rows.length).toBe(5);
 });

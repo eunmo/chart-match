@@ -1,6 +1,6 @@
 const { dml, query, cleanup } = require('@eunmo/mysql');
-const { addMissing, getIds } = require('../single-chart-entry');
-const { add } = require('../single-chart');
+const { addMissingSingles, getSingleIds } = require('../chart-entry');
+const { addSingles } = require('../chart');
 
 const chart = 1;
 const dummyEntries = [
@@ -17,8 +17,8 @@ beforeAll(async () => {
   await dml('DROP TABLE IF EXISTS singleChartEntry;');
   await dml('CREATE TABLE singleChartEntry LIKE chart.singleChartEntry;');
   await dml('CREATE TABLE singleChart LIKE chart.singleChart;');
-  await addMissing(chart, dummyEntries);
-  ids = await getIds(chart, dummyEntries);
+  await addMissingSingles(chart, dummyEntries);
+  ids = await getSingleIds(chart, dummyEntries);
 });
 
 afterAll(async () => {
@@ -32,7 +32,7 @@ beforeEach(async () => {
 });
 
 test('add', async () => {
-  await add(1, '2020-09-12', ids);
+  await addSingles(1, '2020-09-12', ids);
   const rows = await query('SELECT * FROM singleChart');
   expect(rows.length).toBe(5);
 });

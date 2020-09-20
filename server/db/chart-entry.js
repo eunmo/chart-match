@@ -27,4 +27,25 @@ function getIds(table, chart, entries) {
     AND t.title = s.title`);
 }
 
-module.exports = { addMissing, getIds };
+function addMissingAlbums(chart, entries) {
+  return addMissing('albumChartEntry', chart, entries);
+}
+
+function getAlbumIds(chart, entries) {
+  return getIds('albumChartEntry', chart, entries);
+}
+
+function addMissingSingles(chart, entries) {
+  return addMissing('singleChartEntry', chart, entries);
+}
+
+function getSingleIds(chart, entries) {
+  return getIds('singleChartEntry', chart, entries);
+}
+
+module.exports = {
+  addMissingAlbums,
+  getAlbumIds,
+  addMissingSingles,
+  getSingleIds,
+};
