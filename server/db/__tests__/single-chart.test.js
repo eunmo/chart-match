@@ -1,8 +1,9 @@
 const { dml, query, cleanup } = require('@eunmo/mysql');
 const { addMissingSingles, getSingleIds } = require('../chart-entry');
-const { addSingles } = require('../chart');
+const { addSingles, getRawSingles } = require('../chart');
 
 const chart = 1;
+const week = '2020-09-12';
 const dummyEntries = [
   { artist: 'a1', title: 't1' },
   { artist: 'a2', title: 't2' },
@@ -32,7 +33,18 @@ beforeEach(async () => {
 });
 
 test('add', async () => {
-  await addSingles(1, '2020-09-12', ids);
+  await addSingles(chart, week, ids);
   const rows = await query('SELECT * FROM singleChart');
   expect(rows.length).toBe(5);
+});
+
+test('add then get', async () => {
+  await addSingles(chart, week, ids);
+  const rows = await getRawSingles(chart, week);
+  dummyEntries.forEach(({ artist, title }, index) => {
+    const row = rows[index];
+    expect(row.ranking).toBe(index + 1);
+    expect(row.artist).toEqual(artist);
+    expect(row.title).toEqual(title);
+  });
 });

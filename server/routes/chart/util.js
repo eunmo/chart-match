@@ -21,4 +21,21 @@ function refDateYMD(date, weekDiff, dayDiff) {
   return utc.toISOString().substring(0, 10);
 }
 
-module.exports = { getDoc, refDateYMD };
+function shouldUpdate(existing, toAdd) {
+  if (existing.length === 0) {
+    return true;
+  }
+
+  if (existing.length !== toAdd.length) {
+    return false;
+  }
+
+  const diffs = existing.filter(
+    ({ artist, title }, index) =>
+      artist !== toAdd[index].artist || title !== toAdd[index].title
+  );
+
+  return diffs.length > 5;
+}
+
+module.exports = { getDoc, refDateYMD, shouldUpdate };

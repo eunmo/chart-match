@@ -1,8 +1,9 @@
 const { dml, query } = require('@eunmo/mysql');
+const { escape } = require('./util');
 
 function addMissing(table, chart, entries) {
   const values = entries.map(
-    ({ artist, title }) => `(${chart}, '${artist}', '${title}')`
+    ({ artist, title }) => `(${chart}, '${escape(artist)}', '${escape(title)}')`
   );
 
   return dml(`
@@ -14,7 +15,9 @@ function getIds(table, chart, entries) {
   const temp = entries
     .map(
       ({ artist, title }) =>
-        `SELECT ${chart} as chart, '${artist}' as artist, '${title}' as title`
+        `SELECT ${chart} as chart, '${escape(artist)}' as artist, '${escape(
+          title
+        )}' as title`
     )
     .join(' UNION ');
 

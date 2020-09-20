@@ -30,6 +30,12 @@ const set3 = [
   { artist: 'a4', title: 't4' },
 ];
 
+const set4 = [
+  { artist: "a'", title: "t'" },
+  { artist: "a'1", title: "t'1" },
+  { artist: "a'2", title: "t'2" },
+];
+
 test('insert two', async () => {
   await addMissingSingles(1, set1);
   const rows = await getSingleIds(1, set1);
@@ -78,4 +84,13 @@ test('insert two then two without overlap', async () => {
   expect(rows.length).toBe(2);
   expect(rows[0].id).toBe(3);
   expect(rows[1].id).toBe(4);
+});
+
+test('escape', async () => {
+  await addMissingSingles(1, set4);
+  const rows = await getSingleIds(1, set4);
+  expect(rows.length).toBe(3);
+  expect(rows[0].id).toBe(1);
+  expect(rows[1].id).toBe(2);
+  expect(rows[2].id).toBe(3);
 });

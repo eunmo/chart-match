@@ -1,8 +1,9 @@
 const { dml, query, cleanup } = require('@eunmo/mysql');
 const { addMissingAlbums, getAlbumIds } = require('../chart-entry');
-const { addAlbums } = require('../chart');
+const { addAlbums, getRawAlbums } = require('../chart');
 
 const chart = 1;
+const week = '2020-09-12';
 const dummyEntries = [
   { artist: 'a1', title: 't1' },
   { artist: 'a2', title: 't2' },
@@ -31,8 +32,19 @@ beforeEach(async () => {
   await dml('TRUNCATE TABLE albumChart;');
 });
 
-test('add', async () => {
-  await addAlbums(1, '2020-09-12', ids);
+test('add then get', async () => {
+  await addAlbums(chart, week, ids);
   const rows = await query('SELECT * FROM albumChart');
   expect(rows.length).toBe(5);
+});
+
+test('add then get', async () => {
+  await addAlbums(chart, week, ids);
+  const rows = await getRawAlbums(chart, week);
+  dummyEntries.forEach(({ artist, title }, index) => {
+    const row = rows[index];
+    expect(row.ranking).toBe(index + 1);
+    expect(row.artist).toEqual(artist);
+    expect(row.title).toEqual(title);
+  });
 });
