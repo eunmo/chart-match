@@ -47,7 +47,7 @@ router.get('/fetch/single/:date', async (req, res) => {
   const entryIds = await chartEntry.getSingleIds(chartId, ranks);
   await chart.addSingles(chartId, week, entryIds);
 
-  res.json({ ranks, entryIds });
+  res.sendStatus(200);
 });
 
 router.get('/fetch/album/:date', async (req, res) => {

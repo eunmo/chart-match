@@ -1,5 +1,5 @@
 function escape(string) {
-  return string.replace("'", "''");
+  return string.replace(/'/g, "''");
 }
 
 module.exports = { escape };
