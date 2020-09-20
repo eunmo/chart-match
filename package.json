@@ -36,7 +36,8 @@
     "extends": [
       "react-app",
       "airbnb",
-      "plugin:prettier/recommended"
+      "plugin:prettier/recommended",
+      "prettier/react"
     ],
     "plugins": [
       "react-hooks"
