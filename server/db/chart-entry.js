@@ -1,6 +1,6 @@
 const { dml, query } = require('@eunmo/mysql');
 
-async function addMissing(table, chart, entries) {
+function addMissing(table, chart, entries) {
   const values = entries.map(
     ({ artist, title }) => `(${chart}, '${artist}', '${title}')`
   );
@@ -10,7 +10,7 @@ async function addMissing(table, chart, entries) {
     VALUES ${values.join(',')}`);
 }
 
-async function getIds(table, chart, entries) {
+function getIds(table, chart, entries) {
   const temp = entries
     .map(
       ({ artist, title }) =>
