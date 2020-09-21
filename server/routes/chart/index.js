@@ -1,9 +1,11 @@
 const express = require('express');
-const billboard = require('./billboard');
+const us = require('./us');
 const gb = require('./gb');
+const match = require('./match');
 
 const router = express.Router();
-router.use('/billboard', billboard);
-router.use('/gb', gb);
+router.use('/fetch/us', us);
+router.use('/fetch/gb', gb);
+router.use('/match', match);
 
 module.exports = router;

@@ -28,7 +28,7 @@ function extract(doc) {
   return ranks;
 }
 
-router.get('/fetch/single/:date', async (req, res) => {
+router.get('/single/:date', async (req, res) => {
   const { date } = req.params;
   const ymd = refDateYMD(date, 0, 5).replace('-', '');
   const url = `https://www.officialcharts.com/charts/singles-chart/${ymd}/7501`;
@@ -51,7 +51,7 @@ router.get('/fetch/single/:date', async (req, res) => {
   res.sendStatus(200);
 });
 
-router.get('/fetch/album/:date', async (req, res) => {
+router.get('/album/:date', async (req, res) => {
   const { date } = req.params;
   const ymd = refDateYMD(date, 0, 5).replace('-', '');
   const url = `https://www.officialcharts.com/charts/albums-chart/${ymd}/7502`;

@@ -7,6 +7,7 @@ const { dml, query, cleanup } = require('@eunmo/mysql');
 const { chart } = require('../../../db');
 const { chartIds } = require('../constants');
 const router = require('../gb');
+const { albums } = require('./test-data');
 
 const chartId = chartIds.gb;
 const app = express();
@@ -44,99 +45,8 @@ const curData = fs.readFileSync(
 );
 const data = { [prevWeek]: prevData, [curWeek]: curData };
 
-const prev10 = [
-  {
-    ranking: 1,
-    artist: 'NINES',
-    title: 'CRABS IN A BUCKET',
-  },
-  { ranking: 2, artist: 'METALLICA', title: 'S&M2' },
-  {
-    ranking: 3,
-    artist: 'GREGORY PORTER',
-    title: 'ALL RISE',
-  },
-  { ranking: 4, artist: 'DISCLOSURE', title: 'ENERGY' },
-  { ranking: 5, artist: 'KATY PERRY', title: 'SMILE' },
-  {
-    ranking: 6,
-    artist: 'POP SMOKE',
-    title: 'SHOOT FOR THE STARS AIM FOR THE MOON',
-  },
-  {
-    ranking: 7,
-    artist: 'KILLERS',
-    title: 'IMPLODING THE MIRAGE',
-  },
-  {
-    ranking: 8,
-    artist: 'TAYLOR SWIFT',
-    title: 'FOLKLORE',
-  },
-  {
-    ranking: 9,
-    artist: 'LEWIS CAPALDI',
-    title: 'DIVINELY UNINSPIRED TO A HELLISH EXTENT',
-  },
-  {
-    ranking: 10,
-    artist: 'JUICE WRLD',
-    title: 'LEGENDS NEVER DIE',
-  },
-];
-
-const cur10 = [
-  {
-    ranking: 1,
-    artist: 'ROLLING STONES',
-    title: 'GOATS HEAD SOUP',
-  },
-  {
-    ranking: 2,
-    artist: 'DECLAN MCKENNA',
-    title: 'ZEROS',
-  },
-  {
-    ranking: 3,
-    artist: 'POP SMOKE',
-    title: 'SHOOT FOR THE STARS AIM FOR THE MOON',
-  },
-  {
-    ranking: 4,
-    artist: 'NINES',
-    title: 'CRABS IN A BUCKET',
-  },
-  {
-    ranking: 5,
-    artist: 'TAYLOR SWIFT',
-    title: 'FOLKLORE',
-  },
-  {
-    ranking: 6,
-    artist: 'JUICE WRLD',
-    title: 'LEGENDS NEVER DIE',
-  },
-  {
-    ranking: 7,
-    artist: 'LEWIS CAPALDI',
-    title: 'DIVINELY UNINSPIRED TO A HELLISH EXTENT',
-  },
-  {
-    ranking: 8,
-    artist: 'DUA LIPA',
-    title: 'FUTURE NOSTALGIA',
-  },
-  {
-    ranking: 9,
-    artist: 'GREGORY PORTER',
-    title: 'ALL RISE',
-  },
-  {
-    ranking: 10,
-    artist: 'HARRY STYLES',
-    title: 'FINE LINE',
-  },
-];
+const prev10 = albums.prev.gb;
+const cur10 = albums.cur.gb;
 
 test.each([
   [prevWeek, prev10],
@@ -144,7 +54,7 @@ test.each([
 ])('fetch clean %s', async (week, expected) => {
   fetch.mockReturnValue(Promise.resolve(new Response(data[week])));
 
-  const url = `/fetch/album/${week}`;
+  const url = `/album/${week}`;
   const response = await request(app).get(url);
   expect(response.statusCode).toBe(200);
 
@@ -163,7 +73,7 @@ test.each([
   [curWeek, cur10],
 ])('fetch twice %s', async (week, expected) => {
   fetch.mockReturnValue(Promise.resolve(new Response(data[week])));
-  const url = `/fetch/album/${week}`;
+  const url = `/album/${week}`;
   let response = await request(app).get(url);
   expect(response.statusCode).toBe(200);
 
@@ -183,12 +93,12 @@ test.each([
 
 test('fetch consecutive', async () => {
   fetch.mockReturnValue(Promise.resolve(new Response(data[prevWeek])));
-  let url = `/fetch/album/${prevWeek}`;
+  let url = `/album/${prevWeek}`;
   let response = await request(app).get(url);
   expect(response.statusCode).toBe(200);
 
   fetch.mockReturnValue(Promise.resolve(new Response(data[curWeek])));
-  url = `/fetch/album/${curWeek}`;
+  url = `/album/${curWeek}`;
   response = await request(app).get(url);
   expect(response.statusCode).toBe(200);
 

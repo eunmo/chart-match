@@ -27,7 +27,7 @@ function extract(doc) {
   return ranks;
 }
 
-router.get('/fetch/single/:date', async (req, res) => {
+router.get('/single/:date', async (req, res) => {
   const { date } = req.params;
   const ymd = refDateYMD(date, 1, 4);
   const url = `https://www.billboard.com/charts/hot-100/${ymd}`;
@@ -50,7 +50,7 @@ router.get('/fetch/single/:date', async (req, res) => {
   res.sendStatus(200);
 });
 
-router.get('/fetch/album/:date', async (req, res) => {
+router.get('/album/:date', async (req, res) => {
   const { date } = req.params;
   const ymd = refDateYMD(date, 1, 4);
   const url = `https://www.billboard.com/charts/billboard-200/${ymd}`;

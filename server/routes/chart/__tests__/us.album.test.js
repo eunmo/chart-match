@@ -6,7 +6,8 @@ const fetch = require('node-fetch');
 const { dml, query, cleanup } = require('@eunmo/mysql');
 const { chart } = require('../../../db');
 const { chartIds } = require('../constants');
-const router = require('../billboard');
+const router = require('../us');
+const { albums } = require('./test-data');
 
 const chartId = chartIds.us;
 const app = express();
@@ -37,98 +38,15 @@ const prevWeek = '2020-09-05';
 const curWeek = '2020-09-12';
 
 const prevData = fs.readFileSync(
-  path.join(__dirname, 'html', `billboard-album-${prevWeek}.html`)
+  path.join(__dirname, 'html', `us-album-${prevWeek}.html`)
 );
 const curData = fs.readFileSync(
-  path.join(__dirname, 'html', `billboard-album-${curWeek}.html`)
+  path.join(__dirname, 'html', `us-album-${curWeek}.html`)
 );
 const data = { [prevWeek]: prevData, [curWeek]: curData };
 
-const prev10 = [
-  {
-    ranking: 1,
-    artist: 'Taylor Swift',
-    title: 'Folklore',
-  },
-  {
-    ranking: 2,
-    artist: 'Pop Smoke',
-    title: 'Shoot For The Stars Aim For The Moon',
-  },
-  {
-    ranking: 3,
-    artist: 'Juice WRLD',
-    title: 'Legends Never Die',
-  },
-  {
-    ranking: 4,
-    artist: 'Metallica And San Francisco Symphony',
-    title: 'S&M2',
-  },
-  { ranking: 5, artist: 'Katy Perry', title: 'Smile' },
-  {
-    ranking: 6,
-    artist: 'Original Broadway Cast',
-    title: 'Hamilton: An American Musical',
-  },
-  { ranking: 7, artist: 'Lil Baby', title: 'My Turn' },
-  {
-    ranking: 8,
-    artist: 'Rod Wave',
-    title: 'Pray 4 Love',
-  },
-  {
-    ranking: 9,
-    artist: 'DaBaby',
-    title: 'BLAME IT ON BABY',
-  },
-  {
-    ranking: 10,
-    artist: 'Internet Money',
-    title: 'B4 The Storm',
-  },
-];
-
-const cur10 = [
-  { ranking: 1, artist: 'Big Sean', title: 'Detroit 2' },
-  {
-    ranking: 2,
-    artist: 'Pop Smoke',
-    title: 'Shoot For The Stars Aim For The Moon',
-  },
-  {
-    ranking: 3,
-    artist: 'Juice WRLD',
-    title: 'Legends Never Die',
-  },
-  { ranking: 4, artist: '6ix9ine', title: 'TattleTales' },
-  {
-    ranking: 5,
-    artist: 'Taylor Swift',
-    title: 'Folklore',
-  },
-  {
-    ranking: 6,
-    artist: 'Original Broadway Cast',
-    title: 'Hamilton: An American Musical',
-  },
-  { ranking: 7, artist: 'Lil Baby', title: 'My Turn' },
-  {
-    ranking: 8,
-    artist: 'Rod Wave',
-    title: 'Pray 4 Love',
-  },
-  {
-    ranking: 9,
-    artist: 'DaBaby',
-    title: 'BLAME IT ON BABY',
-  },
-  {
-    ranking: 10,
-    artist: 'Post Malone',
-    title: "Hollywood's Bleeding",
-  },
-];
+const prev10 = albums.prev.us;
+const cur10 = albums.cur.us;
 
 test.each([
   [prevWeek, prev10],
@@ -136,7 +54,7 @@ test.each([
 ])('fetch clean %s', async (week, expected) => {
   fetch.mockReturnValue(Promise.resolve(new Response(data[week])));
 
-  const url = `/fetch/album/${week}`;
+  const url = `/album/${week}`;
   const response = await request(app).get(url);
   expect(response.statusCode).toBe(200);
 
@@ -155,7 +73,7 @@ test.each([
   [curWeek, cur10],
 ])('fetch twice %s', async (week, expected) => {
   fetch.mockReturnValue(Promise.resolve(new Response(data[week])));
-  const url = `/fetch/album/${week}`;
+  const url = `/album/${week}`;
   let response = await request(app).get(url);
   expect(response.statusCode).toBe(200);
 
@@ -175,12 +93,12 @@ test.each([
 
 test('fetch consecutive', async () => {
   fetch.mockReturnValue(Promise.resolve(new Response(data[prevWeek])));
-  let url = `/fetch/album/${prevWeek}`;
+  let url = `/album/${prevWeek}`;
   let response = await request(app).get(url);
   expect(response.statusCode).toBe(200);
 
   fetch.mockReturnValue(Promise.resolve(new Response(data[curWeek])));
-  url = `/fetch/album/${curWeek}`;
+  url = `/album/${curWeek}`;
   response = await request(app).get(url);
   expect(response.statusCode).toBe(200);
 

@@ -6,7 +6,8 @@ const fetch = require('node-fetch');
 const { dml, query, cleanup } = require('@eunmo/mysql');
 const { chart } = require('../../../db');
 const { chartIds } = require('../constants');
-const router = require('../billboard');
+const router = require('../us');
+const { singles } = require('./test-data');
 
 const chartId = chartIds.us;
 const app = express();
@@ -37,110 +38,15 @@ const prevWeek = '2020-09-05';
 const curWeek = '2020-09-12';
 
 const prevData = fs.readFileSync(
-  path.join(__dirname, 'html', `billboard-single-${prevWeek}.html`)
+  path.join(__dirname, 'html', `us-single-${prevWeek}.html`)
 );
 const curData = fs.readFileSync(
-  path.join(__dirname, 'html', `billboard-single-${curWeek}.html`)
+  path.join(__dirname, 'html', `us-single-${curWeek}.html`)
 );
 const data = { [prevWeek]: prevData, [curWeek]: curData };
 
-const prev10 = [
-  { ranking: 1, artist: 'BTS', title: 'Dynamite' },
-  {
-    ranking: 2,
-    artist: 'Cardi B Featuring Megan Thee Stallion',
-    title: 'WAP',
-  },
-  {
-    ranking: 3,
-    artist: 'Drake Featuring Lil Durk',
-    title: 'Laugh Now Cry Later',
-  },
-  {
-    ranking: 4,
-    artist: 'DaBaby Featuring Roddy Ricch',
-    title: 'Rockstar',
-  },
-  {
-    ranking: 5,
-    artist: 'The Weeknd',
-    title: 'Blinding Lights',
-  },
-  {
-    ranking: 6,
-    artist: 'Harry Styles',
-    title: 'Watermelon Sugar',
-  },
-  {
-    ranking: 7,
-    artist: 'Jack Harlow Featuring DaBaby, Tory Lanez & Lil Wayne',
-    title: 'Whats Poppin',
-  },
-  {
-    ranking: 8,
-    artist: '24kGoldn Featuring iann dior',
-    title: 'Mood',
-  },
-  {
-    ranking: 9,
-    artist: 'Jawsh 685 x Jason Derulo',
-    title: 'Savage Love (Laxed - Siren Beat)',
-  },
-  {
-    ranking: 10,
-    artist: 'Lewis Capaldi',
-    title: 'Before You Go',
-  },
-];
-
-const cur10 = [
-  {
-    ranking: 1,
-    artist: 'Cardi B Featuring Megan Thee Stallion',
-    title: 'WAP',
-  },
-  { ranking: 2, artist: 'BTS', title: 'Dynamite' },
-  {
-    ranking: 3,
-    artist: 'Drake Featuring Lil Durk',
-    title: 'Laugh Now Cry Later',
-  },
-  {
-    ranking: 4,
-    artist: 'DaBaby Featuring Roddy Ricch',
-    title: 'Rockstar',
-  },
-  {
-    ranking: 5,
-    artist: 'The Weeknd',
-    title: 'Blinding Lights',
-  },
-  {
-    ranking: 6,
-    artist: '24kGoldn Featuring iann dior',
-    title: 'Mood',
-  },
-  {
-    ranking: 7,
-    artist: 'Harry Styles',
-    title: 'Watermelon Sugar',
-  },
-  {
-    ranking: 8,
-    artist: 'Jack Harlow Featuring DaBaby, Tory Lanez & Lil Wayne',
-    title: 'Whats Poppin',
-  },
-  {
-    ranking: 9,
-    artist: 'Jawsh 685 x Jason Derulo',
-    title: 'Savage Love (Laxed - Siren Beat)',
-  },
-  {
-    ranking: 10,
-    artist: 'DJ Khaled Featuring Drake',
-    title: 'Popstar',
-  },
-];
+const prev10 = singles.prev.us;
+const cur10 = singles.cur.us;
 
 test.each([
   [prevWeek, prev10],
@@ -148,7 +54,7 @@ test.each([
 ])('fetch clean %s', async (week, expected) => {
   fetch.mockReturnValue(Promise.resolve(new Response(data[week])));
 
-  const url = `/fetch/single/${week}`;
+  const url = `/single/${week}`;
   const response = await request(app).get(url);
   expect(response.statusCode).toBe(200);
 
@@ -167,7 +73,7 @@ test.each([
   [curWeek, cur10],
 ])('fetch twice %s', async (week, expected) => {
   fetch.mockReturnValue(Promise.resolve(new Response(data[week])));
-  const url = `/fetch/single/${week}`;
+  const url = `/single/${week}`;
   let response = await request(app).get(url);
   expect(response.statusCode).toBe(200);
 
@@ -187,12 +93,12 @@ test.each([
 
 test('fetch consecutive', async () => {
   fetch.mockReturnValue(Promise.resolve(new Response(data[prevWeek])));
-  let url = `/fetch/single/${prevWeek}`;
+  let url = `/single/${prevWeek}`;
   let response = await request(app).get(url);
   expect(response.statusCode).toBe(200);
 
   fetch.mockReturnValue(Promise.resolve(new Response(data[curWeek])));
-  url = `/fetch/single/${curWeek}`;
+  url = `/single/${curWeek}`;
   response = await request(app).get(url);
   expect(response.statusCode).toBe(200);
 

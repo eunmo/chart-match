@@ -7,6 +7,7 @@ const { dml, query, cleanup } = require('@eunmo/mysql');
 const { chart } = require('../../../db');
 const { chartIds } = require('../constants');
 const router = require('../gb');
+const { singles } = require('./test-data');
 
 const chartId = chartIds.gb;
 const app = express();
@@ -44,111 +45,8 @@ const curData = fs.readFileSync(
 );
 const data = { [prevWeek]: prevData, [curWeek]: curData };
 
-const prev10 = [
-  {
-    ranking: 1,
-    artist: 'CARDI B FT MEGAN THEE STALLION',
-    title: 'WAP',
-  },
-  {
-    ranking: 2,
-    artist: 'JOEL CORRY FT MNEK',
-    title: 'HEAD & HEART',
-  },
-  {
-    ranking: 3,
-    artist: 'NATHAN DAWE FT KSI',
-    title: 'LIGHTER',
-  },
-  {
-    ranking: 4,
-    artist: '24KGOLDN FT IANN DIOR',
-    title: 'MOOD',
-  },
-  {
-    ranking: 5,
-    artist: 'HEADIE ONE/AJ TRACEY/STORMZY',
-    title: "AIN'T IT DIFFERENT",
-  },
-  {
-    ranking: 6,
-    artist: 'POP SMOKE FT LIL TJAY',
-    title: 'MOOD SWINGS',
-  },
-  {
-    ranking: 7,
-    artist: 'DRAKE FT LIL DURK',
-    title: 'LAUGH NOW CRY LATER',
-  },
-  {
-    ranking: 8,
-    artist: 'HARRY STYLES',
-    title: 'WATERMELON SUGAR',
-  },
-  {
-    ranking: 9,
-    artist: 'DJ KHALED FT DRAKE',
-    title: 'GREECE',
-  },
-  {
-    ranking: 10,
-    artist: 'AJ TRACEY & MABEL',
-    title: 'WEST TEN',
-  },
-];
-
-const cur10 = [
-  {
-    ranking: 1,
-    artist: 'CARDI B FT MEGAN THEE STALLION',
-    title: 'WAP',
-  },
-  {
-    ranking: 2,
-    artist: '24KGOLDN FT IANN DIOR',
-    title: 'MOOD',
-  },
-  {
-    ranking: 3,
-    artist: 'HEADIE ONE/AJ TRACEY/STORMZY',
-    title: "AIN'T IT DIFFERENT",
-  },
-  {
-    ranking: 4,
-    artist: 'NATHAN DAWE FT KSI',
-    title: 'LIGHTER',
-  },
-  {
-    ranking: 5,
-    artist: 'POP SMOKE FT LIL TJAY',
-    title: 'MOOD SWINGS',
-  },
-  {
-    ranking: 6,
-    artist: 'JOEL CORRY FT MNEK',
-    title: 'HEAD & HEART',
-  },
-  {
-    ranking: 7,
-    artist: 'DRAKE FT LIL DURK',
-    title: 'LAUGH NOW CRY LATER',
-  },
-  {
-    ranking: 8,
-    artist: 'PAUL WOOLFORD & DIPLO/LOMAX',
-    title: 'LOOKING FOR ME',
-  },
-  {
-    ranking: 9,
-    artist: 'DJ KHALED FT DRAKE',
-    title: 'GREECE',
-  },
-  {
-    ranking: 10,
-    artist: 'MILEY CYRUS',
-    title: 'MIDNIGHT SKY',
-  },
-];
+const prev10 = singles.prev.gb;
+const cur10 = singles.cur.gb;
 
 test.each([
   [prevWeek, prev10],
@@ -156,7 +54,7 @@ test.each([
 ])('fetch clean %s', async (week, expected) => {
   fetch.mockReturnValue(Promise.resolve(new Response(data[week])));
 
-  const url = `/fetch/single/${week}`;
+  const url = `/single/${week}`;
   const response = await request(app).get(url);
   expect(response.statusCode).toBe(200);
 
@@ -175,7 +73,7 @@ test.each([
   [curWeek, cur10],
 ])('fetch twice %s', async (week, expected) => {
   fetch.mockReturnValue(Promise.resolve(new Response(data[week])));
-  const url = `/fetch/single/${week}`;
+  const url = `/single/${week}`;
   let response = await request(app).get(url);
   expect(response.statusCode).toBe(200);
 
@@ -195,12 +93,12 @@ test.each([
 
 test('fetch consecutive', async () => {
   fetch.mockReturnValue(Promise.resolve(new Response(data[prevWeek])));
-  let url = `/fetch/single/${prevWeek}`;
+  let url = `/single/${prevWeek}`;
   let response = await request(app).get(url);
   expect(response.statusCode).toBe(200);
 
   fetch.mockReturnValue(Promise.resolve(new Response(data[curWeek])));
-  url = `/fetch/single/${curWeek}`;
+  url = `/single/${curWeek}`;
   response = await request(app).get(url);
   expect(response.statusCode).toBe(200);
 
