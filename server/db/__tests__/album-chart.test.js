@@ -32,7 +32,7 @@ beforeEach(async () => {
   await dml('TRUNCATE TABLE albumChart;');
 });
 
-test('add then get', async () => {
+test('add', async () => {
   await addAlbums(chart, week, ids);
   const rows = await query('SELECT * FROM albumChart');
   expect(rows.length).toBe(5);

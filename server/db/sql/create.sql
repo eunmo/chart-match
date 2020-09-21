@@ -1,5 +1,5 @@
 DROP TABLE singleChart;
-DROP TABLE singleChartSong;
+DROP TABLE singleChartMatch;
 DROP TABLE singleChartEntry;
 
 CREATE TABLE singleChartEntry (
@@ -23,15 +23,18 @@ CREATE TABLE singleChart (
   CONSTRAINT single_chart_fk FOREIGN KEY (entry) REFERENCES singleChartEntry (id)
 );
 
-CREATE TABLE singleChartSong (
+CREATE TABLE singleChartMatch (
   entry INT NOT NULL,
+  store CHAR(2) NOT NULL,
   track INT NOT NULL,
-  song INT,
-  PRIMARY KEY (entry, track),
-  CONSTRAINT single_chart_song_fk FOREIGN KEY (entry) REFERENCES singleChartEntry (id)
+  id VARCHAR(255),
+  url VARCHAR(255),
+  PRIMARY KEY (entry, store, track),
+  CONSTRAINT single_chart_match_fk FOREIGN KEY (entry) REFERENCES singleChartEntry (id)
 );
 
 DROP TABLE albumChart;
+DROP TABLE albumChartMatch;
 DROP TABLE albumChartEntry;
 
 CREATE TABLE albumChartEntry (
@@ -55,4 +58,13 @@ CREATE TABLE albumChart (
   KEY Ranking (ranking),
   KEY ChartWeek (chart, week),
   CONSTRAINT album_chart_fk FOREIGN KEY (entry) REFERENCES albumChartEntry (id)
+);
+
+CREATE TABLE albumChartMatch (
+  entry INT NOT NULL,
+  store CHAR(2) NOT NULL,
+  id VARCHAR(255),
+  url VARCHAR(255),
+  PRIMARY KEY (entry, store),
+  CONSTRAINT album_chart_match_fk FOREIGN KEY (entry) REFERENCES albumChartEntry (id)
 );

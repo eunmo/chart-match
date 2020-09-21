@@ -37,4 +37,60 @@ function getRawSingles(chart, week) {
   return getRaw('singleChart', 'singleChartEntry', chart, week);
 }
 
-module.exports = { addAlbums, addSingles, getRawAlbums, getRawSingles };
+function getAlbumMatches(chart, week, store) {
+  return query(`
+    SELECT ranking, id, url
+    FROM albumChart c
+    LEFT JOIN albumChartMatch m
+    ON c.entry = m.entry
+    WHERE c.chart=${chart}
+    AND c.week='${week}'
+    AND m.store='${store}'
+    ORDER BY ranking`);
+}
+
+function getSingleMatches(chart, week, store) {
+  return query(`
+    SELECT ranking, track, id, url
+    FROM singleChart c
+    LEFT JOIN singleChartMatch m
+    ON c.entry = m.entry
+    WHERE c.chart=${chart}
+    AND c.week='${week}'
+    AND m.store='${store}'
+    ORDER BY ranking, track`);
+}
+
+function getNonMatches(table, chart, week, store) {
+  return query(`
+    SELECT ranking, artist, title, entry
+    FROM ${table}Chart c
+    LEFT JOIN ${table}ChartEntry e
+    ON c.entry = e.id
+    WHERE c.chart=${chart}
+    AND c.week='${week}'
+    AND NOT EXISTS (SELECT m.entry
+                    FROM ${table}ChartMatch m
+                    WHERE c.entry = m.entry
+                    AND m.store='${store}')
+    ORDER BY ranking`);
+}
+
+function getAlbumNonMatches(chart, week, store) {
+  return getNonMatches('album', chart, week, store);
+}
+
+function getSingleNonMatches(chart, week, store) {
+  return getNonMatches('single', chart, week, store);
+}
+
+module.exports = {
+  addAlbums,
+  addSingles,
+  getRawAlbums,
+  getRawSingles,
+  getAlbumMatches,
+  getSingleMatches,
+  getAlbumNonMatches,
+  getSingleNonMatches,
+};
