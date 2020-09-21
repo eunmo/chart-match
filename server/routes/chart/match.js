@@ -1,3 +1,4 @@
+/* eslint no-constant-condition: ["error", { "checkLoops": false }] */
 const express = require('express');
 const fetch = require('node-fetch');
 const config = require('config');
@@ -101,11 +102,25 @@ async function queryAlbum(store, chartId, artist, title) {
   query = `term=${query}&types=artists,albums`;
   const url = `https://api.music.apple.com/v1/catalog/${store}/search?${query}`;
   const { results } = await queryAppleMusic(url);
+  const data = results.albums?.data;
+  if (data === undefined) {
+    return undefined;
+  }
+
   // find non-deluxe explicit albums
-  return results?.albums?.data.find(
+  const album = data.find(
     ({ attributes: { contentRating, name } }) =>
       name.match(/deluxe/i) === null &&
       (contentRating === undefined || contentRating === 'explicit')
+  );
+
+  if (album) {
+    return album;
+  }
+
+  return data.find(
+    ({ attributes: { contentRating } }) =>
+      contentRating === undefined || contentRating === 'explicit'
   );
 }
 
@@ -134,7 +149,11 @@ router.get('/album/:chartName/:date/:store', async (req, res) => {
   const toAdd = [];
   response.forEach((album, index) => {
     const { entry } = raw[index];
-    toAdd.push({ entry, id: album.id, url: album.attributes.url });
+    if (album) {
+      toAdd.push({ entry, id: album.id, url: album.attributes.url });
+    } else {
+      toAdd.push({ entry });
+    }
   });
 
   await chartMatch.addAlbums(store, toAdd);
