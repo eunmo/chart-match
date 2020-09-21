@@ -9,7 +9,7 @@ const { albums } = require('./test-data');
 const app = express();
 app.use('/', router);
 
-const names = ['us', 'gb'];
+const names = ['us', 'jp', 'gb'];
 const week = '2020-09-12';
 const ymd = '2020/09/12';
 
@@ -156,6 +156,101 @@ const expected = {
       },
     ],
   },
+  jp: {
+    us: [
+      {
+        ranking: 1,
+        id: '1528149531',
+        url: 'https://music.apple.com/us/album/24h-ep/1528149531',
+      },
+      {
+        ranking: 2,
+        id: '1525539754',
+        url:
+          'https://music.apple.com/us/album/heard-that-theres-good-pasta/1525539754',
+      },
+      {
+        ranking: 3,
+        id: '1525512958',
+        url: 'https://music.apple.com/us/album/stray-sheep/1525512958',
+      },
+      {
+        ranking: 4,
+        id: '1522750384',
+        url: 'https://music.apple.com/us/album/no-good-left-to-give/1522750384',
+      },
+      {
+        ranking: 5,
+        id: '1155649978',
+        url: 'https://music.apple.com/us/album/nisamehe-single/1155649978',
+      },
+      {
+        ranking: 6,
+        id: '915220144',
+        url:
+          'https://music.apple.com/us/album/college-marching-band-practice-songs-classic-fun-songs/915220144',
+      },
+      { ranking: 7, id: null, url: null },
+      { ranking: 8, id: null, url: null },
+      {
+        ranking: 9,
+        id: '1520206097',
+        url: 'https://music.apple.com/us/album/make-you-happy-ep/1520206097',
+      },
+      {
+        ranking: 10,
+        id: '1479397582',
+        url: 'https://music.apple.com/us/album/traveler/1479397582',
+      },
+    ],
+    jp: [
+      {
+        ranking: 1,
+        id: '1528149531',
+        url: 'https://music.apple.com/jp/album/24h-ep/1528149531',
+      },
+      {
+        ranking: 2,
+        id: '1525539754',
+        url:
+          'https://music.apple.com/jp/album/heard-that-theres-good-pasta/1525539754',
+      },
+      {
+        ranking: 3,
+        id: '1521414178',
+        url: 'https://music.apple.com/jp/album/stray-sheep/1521414178',
+      },
+      {
+        ranking: 4,
+        id: '1528189387',
+        url: 'https://music.apple.com/jp/album/no-good/1528189387',
+      },
+      {
+        ranking: 5,
+        id: '1046404054',
+        url:
+          'https://music.apple.com/jp/album/g-o-d-feat-ice-prince-yung-l-single/1046404054',
+      },
+      {
+        ranking: 6,
+        id: '2531863',
+        url:
+          'https://music.apple.com/jp/album/black-star-liner-reggae-from-africa/2531863',
+      },
+      { ranking: 7, id: null, url: null },
+      { ranking: 8, id: null, url: null },
+      {
+        ranking: 9,
+        id: '1519410580',
+        url: 'https://music.apple.com/jp/album/make-you-happy-ep/1519410580',
+      },
+      {
+        ranking: 10,
+        id: '1479397582',
+        url: 'https://music.apple.com/jp/album/traveler/1479397582',
+      },
+    ],
+  },
   gb: {
     us: [
       {
@@ -272,6 +367,8 @@ const expected = {
 test.each([
   ['us', 'us'],
   ['us', 'jp'],
+  ['jp', 'us'],
+  ['jp', 'jp'],
   ['gb', 'us'],
   ['gb', 'jp'],
 ])('match album %s %s', async (name, store) => {
@@ -293,6 +390,8 @@ test.each([
 test.each([
   ['us', 'us'],
   ['us', 'jp'],
+  ['jp', 'us'],
+  ['jp', 'jp'],
   ['gb', 'us'],
   ['gb', 'jp'],
 ])('match partial album %s %s', async (name, store) => {

@@ -9,7 +9,7 @@ const { singles } = require('./test-data');
 const app = express();
 app.use('/', router);
 
-const names = ['us', 'gb'];
+const names = ['us', 'jp', 'gb'];
 const week = '2020-09-12';
 const ymd = '2020/09/12';
 
@@ -191,6 +191,151 @@ const expected = {
       },
     ],
   },
+  jp: {
+    us: [
+      {
+        ranking: 1,
+        track: 0,
+        id: '1527213875',
+        url: 'https://music.apple.com/us/album/oh-yeah/1527213862?i=1527213875',
+      },
+      {
+        ranking: 2,
+        track: 0,
+        id: '1508133095',
+        url:
+          'https://music.apple.com/us/album/naked-heart/1508133094?i=1508133095',
+      },
+      {
+        ranking: 3,
+        track: 0,
+        id: '1522413698',
+        url: 'https://music.apple.com/us/album/hello/1522413697?i=1522413698',
+      },
+      {
+        ranking: 4,
+        track: 0,
+        id: '1520206112',
+        url:
+          'https://music.apple.com/us/album/make-you-happy/1520206097?i=1520206112',
+      },
+      {
+        ranking: 5,
+        track: 0,
+        id: '1490256995',
+        url:
+          'https://music.apple.com/us/album/%E5%A4%9C%E3%81%AB%E9%A7%86%E3%81%91%E3%82%8B/1490256978?i=1490256995',
+      },
+      {
+        ranking: 6,
+        track: 0,
+        id: '1529518695',
+        url:
+          'https://music.apple.com/us/album/dynamite/1529518691?i=1529518695',
+      },
+      {
+        ranking: 7,
+        track: 0,
+        id: '1528927424',
+        url:
+          'https://music.apple.com/us/album/spark-again/1528927423?i=1528927424',
+      },
+      {
+        ranking: 8,
+        track: 0,
+        id: '1529398354',
+        url: 'https://music.apple.com/us/album/mirror/1529398352?i=1529398354',
+      },
+      {
+        ranking: 8,
+        track: 1,
+        id: '1529398355',
+        url: 'https://music.apple.com/us/album/dance/1529398352?i=1529398355',
+      },
+      { ranking: 9, track: 0, id: null, url: null },
+      {
+        ranking: 10,
+        track: 0,
+        id: '1524596325',
+        url: 'https://music.apple.com/us/album/kousui/1524596324?i=1524596325',
+      },
+    ],
+    jp: [
+      {
+        ranking: 1,
+        track: 0,
+        id: '1527213875',
+        url: 'https://music.apple.com/jp/album/oh-yeah/1527213862?i=1527213875',
+      },
+      {
+        ranking: 2,
+        track: 0,
+        id: '1508133095',
+        url:
+          'https://music.apple.com/jp/album/%E8%A3%B8%E3%81%AE%E5%BF%83/1508133094?i=1508133095',
+      },
+      {
+        ranking: 3,
+        track: 0,
+        id: '1522413698',
+        url: 'https://music.apple.com/jp/album/hello/1522413697?i=1522413698',
+      },
+      {
+        ranking: 4,
+        track: 0,
+        id: '1519410583',
+        url:
+          'https://music.apple.com/jp/album/make-you-happy/1519410580?i=1519410583',
+      },
+      {
+        ranking: 5,
+        track: 0,
+        id: '1490256995',
+        url:
+          'https://music.apple.com/jp/album/%E5%A4%9C%E3%81%AB%E9%A7%86%E3%81%91%E3%82%8B/1490256978?i=1490256995',
+      },
+      {
+        ranking: 6,
+        track: 0,
+        id: '1528831888',
+        url:
+          'https://music.apple.com/jp/album/dynamite/1528831887?i=1528831888',
+      },
+      {
+        ranking: 7,
+        track: 0,
+        id: '1520367284',
+        url:
+          'https://music.apple.com/jp/album/spark-again/1520367283?i=1520367284',
+      },
+      {
+        ranking: 8,
+        track: 0,
+        id: '1529398354',
+        url: 'https://music.apple.com/jp/album/mirror/1529398352?i=1529398354',
+      },
+      {
+        ranking: 8,
+        track: 1,
+        id: '1529398355',
+        url: 'https://music.apple.com/jp/album/dance/1529398352?i=1529398355',
+      },
+      {
+        ranking: 9,
+        track: 0,
+        id: '1521414181',
+        url:
+          'https://music.apple.com/jp/album/%E6%84%9F%E9%9B%BB/1521414178?i=1521414181',
+      },
+      {
+        ranking: 10,
+        track: 0,
+        id: '1524596325',
+        url:
+          'https://music.apple.com/jp/album/%E9%A6%99%E6%B0%B4/1524596324?i=1524596325',
+      },
+    ],
+  },
   gb: {
     us: [
       {
@@ -342,6 +487,8 @@ const expected = {
 test.each([
   ['us', 'us'],
   ['us', 'jp'],
+  ['jp', 'us'],
+  ['jp', 'jp'],
   ['gb', 'us'],
   ['gb', 'jp'],
 ])('match single %s %s', async (name, store) => {
@@ -363,6 +510,8 @@ test.each([
 test.each([
   ['us', 'us'],
   ['us', 'jp'],
+  ['jp', 'us'],
+  ['jp', 'jp'],
   ['gb', 'us'],
   ['gb', 'jp'],
 ])('match partial single %s %s', async (name, store) => {

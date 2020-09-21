@@ -1,4 +1,5 @@
 /* eslint no-constant-condition: ["error", { "checkLoops": false }] */
+const { URL } = require('url');
 const express = require('express');
 const fetch = require('node-fetch');
 const config = require('config');
@@ -10,7 +11,7 @@ const token = config.get('appleMusicToken');
 const router = express.Router();
 
 async function queryAppleMusic(url) {
-  const response = await fetch(url, {
+  const response = await fetch(new URL(url), {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -55,6 +56,19 @@ async function querySong(store, chartId, artist, title) {
   if (song === undefined) {
     return [];
   }
+
+  if (chartId === chartIds.jp && title.split('/').length > 1) {
+    const songUrl = song.attributes.url;
+    const found = songUrl.match(/\/(\d+)\?i/);
+    const albumId = found[1];
+    const albumUrl = `https://api.music.apple.com/v1/catalog/${store}/albums/${albumId}/tracks`;
+    const albumResponse = await queryAppleMusic(albumUrl);
+    const songCount = title.split('/').length;
+    if (albumResponse.data.length >= songCount) {
+      return albumResponse.data.slice(0, songCount);
+    }
+  }
+
   return [song];
 }
 
