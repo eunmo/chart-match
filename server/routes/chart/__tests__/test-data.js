@@ -44,6 +44,22 @@ const albums = {
         title: 'B4 The Storm',
       },
     ],
+    jp: [
+      { ranking: 1, artist: 'King & Prince', title: 'L &' },
+      { ranking: 2, artist: '米津玄師', title: 'STRAY SHEEP' },
+      { ranking: 3, artist: 'Tak Matsumoto', title: 'Bluesman' },
+      { ranking: 4, artist: 'RADWIMPS', title: '夏のせい ep' },
+      {
+        ranking: 5,
+        artist: '虹ヶ咲学園スクールアイドル同好会',
+        title: 'Just Believe!!!',
+      },
+      { ranking: 6, artist: 'SEVENTEEN', title: 'Heng:garae' },
+      { ranking: 7, artist: '雨宮天', title: 'Paint it, BLUE' },
+      { ranking: 8, artist: 'SILENT SIREN', title: 'mix10th' },
+      { ranking: 9, artist: '南條愛乃', title: 'Acoustic for you.' },
+      { ranking: 10, artist: 'Saucy Dog', title: 'テイクミー' },
+    ],
     gb: [
       {
         ranking: 1,
@@ -125,6 +141,31 @@ const albums = {
         artist: 'Post Malone',
         title: "Hollywood's Bleeding",
       },
+    ],
+    jp: [
+      { ranking: 1, artist: 'SEVENTEEN', title: '24H' },
+      {
+        ranking: 2,
+        artist: 'あいみょん',
+        title: 'おいしいパスタがあると聞いて',
+      },
+      { ranking: 3, artist: '米津玄師', title: 'STRAY SHEEP' },
+      { ranking: 4, artist: 'N/A', title: 'NO GOOD' },
+      { ranking: 5, artist: 'King & Prince', title: 'L &' },
+      { ranking: 6, artist: 'Various Artists', title: 'BLACKSTAR' },
+      {
+        ranking: 7,
+        artist: 'Taemin',
+        title: 'Never Gonna Dance Again:Act 1:Taemin Vol.3',
+      },
+      {
+        ranking: 8,
+        artist: 'スタァライト九九組',
+        title:
+          '「少女☆歌劇 レヴュースタァライト ロンド・ロンド・ロンド」主題歌CD「再生讃美曲」',
+      },
+      { ranking: 9, artist: 'NiziU', title: 'Make you happy' },
+      { ranking: 10, artist: 'Official髭男dism', title: 'Traveler' },
     ],
     gb: [
       {
@@ -231,6 +272,18 @@ const singles = {
         title: 'Before You Go',
       },
     ],
+    jp: [
+      { ranking: 1, artist: 'STU48', title: '思い出せる恋をしよう' },
+      { ranking: 2, artist: '三浦春馬', title: 'Night Diver' },
+      { ranking: 3, artist: 'THE ALFEE', title: '友よ人生を語る前に' },
+      { ranking: 4, artist: 'Official髭男dism', title: 'HELLO EP' },
+      { ranking: 5, artist: 'JO1', title: 'STARGAZER (OH-EH-OH)' },
+      { ranking: 6, artist: 'YOASOBI', title: '夜に駆ける' },
+      { ranking: 7, artist: 'あいみょん', title: '裸の心' },
+      { ranking: 8, artist: 'BTS', title: 'Dynamite' },
+      { ranking: 9, artist: '米津玄師', title: '感電' },
+      { ranking: 10, artist: 'Little Glee Monster', title: '足跡' },
+    ],
     gb: [
       {
         ranking: 1,
@@ -332,6 +385,18 @@ const singles = {
         artist: 'DJ Khaled Featuring Drake',
         title: 'Popstar',
       },
+    ],
+    jp: [
+      { ranking: 1, artist: 'BOYS AND MEN', title: 'Oh Yeah' },
+      { ranking: 2, artist: 'あいみょん', title: '裸の心' },
+      { ranking: 3, artist: 'Official髭男dism', title: 'HELLO EP' },
+      { ranking: 4, artist: 'NiziU', title: 'Make you happy' },
+      { ranking: 5, artist: 'YOASOBI', title: '夜に駆ける' },
+      { ranking: 6, artist: 'BTS', title: 'Dynamite' },
+      { ranking: 7, artist: 'Aimer', title: 'SPARK-AGAIN' },
+      { ranking: 8, artist: '浜田省吾', title: 'MIRROR / DANCE' },
+      { ranking: 9, artist: '米津玄師', title: '感電' },
+      { ranking: 10, artist: '瑛人', title: '香水' },
     ],
     gb: [
       {

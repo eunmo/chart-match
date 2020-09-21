@@ -1,9 +1,16 @@
+const { TextDecoder } = require('util');
 const fetch = require('node-fetch');
 const { JSDOM } = require('jsdom');
 
-async function getDoc(url) {
+async function getDoc(url, charset = 'utf-8') {
   const response = await fetch(url);
-  const html = await response.text();
+  let html;
+  if (charset === 'utf-8') {
+    html = await response.text();
+  } else {
+    const decoder = new TextDecoder(charset);
+    html = decoder.decode(await response.arrayBuffer());
+  }
   const dom = new JSDOM(html, { url });
   return dom.window.document;
 }
