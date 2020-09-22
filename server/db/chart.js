@@ -100,6 +100,20 @@ function getLatestSingleWeeks() {
   return getLatestWeeks('singleChart');
 }
 
+function getCurrentSingles(store) {
+  return query(`
+    SELECT c.chart, ranking, track, id, url
+    FROM singleChart c
+    LEFT JOIN singleChartMatch m
+    ON c.entry = m.entry
+    INNER JOIN (
+      SELECT MAX(week) week, chart
+      FROM singleChart
+      GROUP BY chart) w
+    ON c.week = w.week and c.chart = w.chart
+    WHERE m.store = '${store}'`);
+}
+
 module.exports = {
   addAlbums,
   addSingles,
@@ -111,4 +125,5 @@ module.exports = {
   getSingleNonMatches,
   getLatestAlbumWeeks,
   getLatestSingleWeeks,
+  getCurrentSingles,
 };
