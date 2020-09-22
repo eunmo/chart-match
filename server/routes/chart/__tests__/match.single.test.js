@@ -9,7 +9,7 @@ const { singles } = require('./test-data');
 const app = express();
 app.use('/', router);
 
-const names = ['us', 'jp', 'gb'];
+const names = ['us', 'jp', 'gb', 'kr'];
 const week = '2020-09-12';
 const ymd = '2020/09/12';
 
@@ -482,6 +482,148 @@ const expected = {
       },
     ],
   },
+  kr: {
+    us: [
+      {
+        ranking: 1,
+        track: 0,
+        id: '1529518695',
+        url:
+          'https://music.apple.com/us/album/dynamite/1529518691?i=1529518695',
+      },
+      {
+        ranking: 2,
+        track: 0,
+        id: '1524262362',
+        url:
+          'https://music.apple.com/us/album/slightly-tipsy-she-is-my-type/1524262361?i=1524262362',
+      },
+      {
+        ranking: 3,
+        track: 0,
+        id: '1524236597',
+        url:
+          'https://music.apple.com/us/album/beach-again/1524236596?i=1524236597',
+      },
+      {
+        ranking: 4,
+        track: 0,
+        id: '1525184770',
+        url:
+          'https://music.apple.com/us/album/nunu-nana/1525184769?i=1525184770',
+      },
+      {
+        ranking: 5,
+        track: 0,
+        id: '1521222426',
+        url: 'https://music.apple.com/us/album/maria/1521222154?i=1521222426',
+      },
+      {
+        ranking: 6,
+        track: 0,
+        id: '1526450436',
+        url:
+          'https://music.apple.com/us/album/when-we-disco-duet-with-sunmi/1526450252?i=1526450436',
+      },
+      {
+        ranking: 7,
+        track: 0,
+        id: '1520233767',
+        url:
+          'https://music.apple.com/us/album/how-you-like-that/1520233748?i=1520233767',
+      },
+      {
+        ranking: 8,
+        track: 0,
+        id: '1511885178',
+        url:
+          'https://music.apple.com/us/album/eight-feat-suga/1511885175?i=1511885178',
+      },
+      {
+        ranking: 9,
+        track: 0,
+        id: '570435819',
+        url:
+          'https://music.apple.com/us/album/%EC%98%A4%EB%9E%98%EB%90%9C-%EB%85%B8%EB%9E%98/570435818?i=570435819',
+      },
+      {
+        ranking: 10,
+        track: 0,
+        id: '1508988684',
+        url: 'https://music.apple.com/us/album/dolphin/1508988676?i=1508988684',
+      },
+    ],
+    jp: [
+      {
+        ranking: 1,
+        track: 0,
+        id: '1528831888',
+        url:
+          'https://music.apple.com/jp/album/dynamite/1528831887?i=1528831888',
+      },
+      {
+        ranking: 2,
+        track: 0,
+        id: '1524262362',
+        url:
+          'https://music.apple.com/jp/album/slightly-tipsy-she-is-my-type/1524262361?i=1524262362',
+      },
+      {
+        ranking: 3,
+        track: 0,
+        id: '1524236597',
+        url:
+          'https://music.apple.com/jp/album/beach-again/1524236596?i=1524236597',
+      },
+      {
+        ranking: 4,
+        track: 0,
+        id: '1525184770',
+        url:
+          'https://music.apple.com/jp/album/nunu-nana/1525184769?i=1525184770',
+      },
+      {
+        ranking: 5,
+        track: 0,
+        id: '1521405863',
+        url: 'https://music.apple.com/jp/album/maria/1521405861?i=1521405863',
+      },
+      {
+        ranking: 6,
+        track: 0,
+        id: '1526134385',
+        url:
+          'https://music.apple.com/jp/album/when-we-disco-duet-with-sunmi/1526134384?i=1526134385',
+      },
+      {
+        ranking: 7,
+        track: 0,
+        id: '1520164321',
+        url:
+          'https://music.apple.com/jp/album/how-you-like-that/1520164320?i=1520164321',
+      },
+      {
+        ranking: 8,
+        track: 0,
+        id: '1511885178',
+        url:
+          'https://music.apple.com/jp/album/eight-feat-suga/1511885175?i=1511885178',
+      },
+      {
+        ranking: 9,
+        track: 0,
+        id: '570435819',
+        url:
+          'https://music.apple.com/jp/album/%EC%98%A4%EB%9E%98%EB%90%9C-%EB%85%B8%EB%9E%98/570435818?i=570435819',
+      },
+      {
+        ranking: 10,
+        track: 0,
+        id: '1509673709',
+        url: 'https://music.apple.com/jp/album/dolphin/1509673705?i=1509673709',
+      },
+    ],
+  },
 };
 
 test.each([
@@ -491,6 +633,8 @@ test.each([
   ['jp', 'jp'],
   ['gb', 'us'],
   ['gb', 'jp'],
+  ['kr', 'us'],
+  ['kr', 'jp'],
 ])('match single %s %s', async (name, store) => {
   const url = `/single/${name}/${week}/${store}`;
   const response = await request(app).get(url);
@@ -514,6 +658,8 @@ test.each([
   ['jp', 'jp'],
   ['gb', 'us'],
   ['gb', 'jp'],
+  ['kr', 'us'],
+  ['kr', 'jp'],
 ])('match partial single %s %s', async (name, store) => {
   const url = `/single/${name}/${week}/${store}`;
   let response = await request(app).get(url);

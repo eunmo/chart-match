@@ -41,19 +41,51 @@ async function queryAllAppleMusic(url, path) {
   return candidates;
 }
 
-async function querySong(store, chartId, artist, title) {
+function formQuery(store, artist, title, type, replaceFT = false) {
   let query = artist.split(' ').concat(title.split(' ')).join('+');
   query = query.replace(/&/g, '%26');
-  query = query.replace(/\+FT\+/g, '+Feat+');
-  query = `term=${query}&types=artists,songs`;
-  const url = `https://api.music.apple.com/v1/catalog/${store}/search?${query}`;
-  const { results } = await queryAppleMusic(url);
-  const song = results.songs?.data.find(
+  if (replaceFT) {
+    query = query.replace(/\+FT\+/g, '+Feat+');
+  }
+  query = `term=${query}&types=artists,${type}`;
+  return `https://api.music.apple.com/v1/catalog/${store}/search?${query}`;
+}
+
+function findExplicitSong(results) {
+  return results.songs?.data.find(
     ({ attributes: { contentRating } }) =>
       contentRating === undefined || contentRating === 'explicit'
   );
+}
+
+async function queryNormalizedKoreanSong(store, artist, title) {
+  const artistNorm = artist.replace(/\(.*\)/g, '').trim();
+  const titleNorm = title.replace(/\(.*\)/g, '').trim();
+  if (artistNorm !== artist || titleNorm !== title) {
+    const url = formQuery(store, artistNorm, titleNorm, 'songs');
+    const { results } = await queryAppleMusic(url);
+    const song = findExplicitSong(results);
+
+    if (song === undefined) {
+      return [];
+    }
+
+    return [song];
+  }
+
+  return [];
+}
+
+async function querySong(store, chartId, artist, title) {
+  const url = formQuery(store, artist, title, 'songs', chartId === chartIds.gb);
+  const { results } = await queryAppleMusic(url);
+  const song = findExplicitSong(results);
 
   if (song === undefined) {
+    if (chartId === chartIds.kr) {
+      return queryNormalizedKoreanSong(store, artist, title);
+    }
+
     return [];
   }
 
@@ -111,10 +143,7 @@ router.get('/single/:chartName/:date/:store', async (req, res) => {
 });
 
 async function queryAlbum(store, chartId, artist, title) {
-  let query = artist.split(' ').concat(title.split(' ')).join('+');
-  query = query.replace(/&/g, '%26');
-  query = `term=${query}&types=artists,albums`;
-  const url = `https://api.music.apple.com/v1/catalog/${store}/search?${query}`;
+  const url = formQuery(store, artist, title, 'albums');
   const { results } = await queryAppleMusic(url);
   const data = results.albums?.data;
   if (data === undefined) {

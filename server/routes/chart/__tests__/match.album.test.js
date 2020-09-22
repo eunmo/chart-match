@@ -9,7 +9,7 @@ const { albums } = require('./test-data');
 const app = express();
 app.use('/', router);
 
-const names = ['us', 'jp', 'gb'];
+const names = ['us', 'jp', 'gb', 'kr'];
 const week = '2020-09-12';
 const ymd = '2020/09/12';
 
@@ -362,6 +362,96 @@ const expected = {
       },
     ],
   },
+  kr: {
+    us: [
+      { ranking: 1, id: null, url: null },
+      { ranking: 2, id: null, url: null },
+      {
+        ranking: 3,
+        id: '1530216879',
+        url: 'https://music.apple.com/us/album/bon-voyage-ep/1530216879',
+      },
+      {
+        ranking: 4,
+        id: '1531445989',
+        url:
+          'https://music.apple.com/us/album/the-first-step-chapter-two-single/1531445989',
+      },
+      { ranking: 5, id: null, url: null },
+      {
+        ranking: 6,
+        id: '1528946634',
+        url:
+          'https://music.apple.com/us/album/the-book-of-us-gluon-nothing-can-tear-us-apart/1528946634',
+      },
+      {
+        ranking: 7,
+        id: '1523752057',
+        url: 'https://music.apple.com/us/album/zero-fever-pt-1/1523752057',
+      },
+      {
+        ranking: 8,
+        id: '1530785705',
+        url: 'https://music.apple.com/us/album/bird-single/1530785705',
+      },
+      {
+        ranking: 9,
+        id: '1528295587',
+        url:
+          'https://music.apple.com/us/album/hideout-the-new-day-we-step-into-season-2/1528295587',
+      },
+      {
+        ranking: 10,
+        id: '1530315721',
+        url:
+          'https://music.apple.com/us/album/he-dont-wanna-be-alone-single/1530315721',
+      },
+    ],
+    jp: [
+      { ranking: 1, id: null, url: null },
+      { ranking: 2, id: null, url: null },
+      {
+        ranking: 3,
+        id: '1530379595',
+        url: 'https://music.apple.com/jp/album/bon-voyage-ep/1530379595',
+      },
+      {
+        ranking: 4,
+        id: '1531654203',
+        url:
+          'https://music.apple.com/jp/album/the-first-step-chapter-two-single/1531654203',
+      },
+      { ranking: 5, id: null, url: null },
+      {
+        ranking: 6,
+        id: '1528946634',
+        url:
+          'https://music.apple.com/jp/album/the-book-of-us-gluon-nothing-can-tear-us-apart/1528946634',
+      },
+      {
+        ranking: 7,
+        id: '1523752057',
+        url: 'https://music.apple.com/jp/album/zero-fever-pt-1/1523752057',
+      },
+      {
+        ranking: 8,
+        id: '1530785705',
+        url: 'https://music.apple.com/jp/album/bird-single/1530785705',
+      },
+      {
+        ranking: 9,
+        id: '1528295587',
+        url:
+          'https://music.apple.com/jp/album/hideout-the-new-day-we-step-into-season-2/1528295587',
+      },
+      {
+        ranking: 10,
+        id: '1530315721',
+        url:
+          'https://music.apple.com/jp/album/he-dont-wanna-be-alone-single/1530315721',
+      },
+    ],
+  },
 };
 
 test.each([
@@ -371,6 +461,8 @@ test.each([
   ['jp', 'jp'],
   ['gb', 'us'],
   ['gb', 'jp'],
+  ['kr', 'us'],
+  ['kr', 'jp'],
 ])('match album %s %s', async (name, store) => {
   const url = `/album/${name}/${week}/${store}`;
   const response = await request(app).get(url);
@@ -394,6 +486,8 @@ test.each([
   ['jp', 'jp'],
   ['gb', 'us'],
   ['gb', 'jp'],
+  ['kr', 'us'],
+  ['kr', 'jp'],
 ])('match partial album %s %s', async (name, store) => {
   const url = `/album/${name}/${week}/${store}`;
   let response = await request(app).get(url);
