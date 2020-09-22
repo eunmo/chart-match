@@ -20,7 +20,10 @@ router.get('/single/:chartName/:date', async (req, res) => {
     return;
   }
 
-  const { existing, ranks } = await fetchChart[chartName].fetchSingle(date);
+  const [existing, ranks] = await Promise.all([
+    chart.getRawSingles(chartId, week),
+    fetchChart[chartName].fetchSingle(date),
+  ]);
   if (!shouldUpdate(existing, ranks)) {
     res.sendStatus(200);
     return;
@@ -43,7 +46,10 @@ router.get('/album/:chartName/:date', async (req, res) => {
     return;
   }
 
-  const { existing, ranks } = await fetchChart[chartName].fetchAlbum(date);
+  const [existing, ranks] = await Promise.all([
+    chart.getRawAlbums(chartId, week),
+    fetchChart[chartName].fetchAlbum(date),
+  ]);
   if (!shouldUpdate(existing, ranks)) {
     res.sendStatus(200);
     return;

@@ -1,8 +1,4 @@
-const { chart } = require('../../db');
-const { chartIds } = require('./constants');
-const { getDoc, refDateYMD, refDateWeek } = require('./util');
-
-const chartId = chartIds.kr;
+const { getDoc, refDateWeek } = require('./util');
 
 function extract(doc) {
   const ranks = [];
@@ -30,25 +26,13 @@ function extract(doc) {
 async function fetchSingle(date) {
   const [year, refWeek] = refDateWeek(date, 0, 6);
   const url = `http://www.gaonchart.co.kr/main/section/chart/online.gaon?nationGbn=T&serviceGbn=ALL&targetTime=${refWeek}&hitYear=${year}&termGbn=week`;
-  const week = refDateYMD(date, 0, 6);
-  const [doc, existing] = await Promise.all([
-    getDoc(url),
-    chart.getRawSingles(chartId, week),
-  ]);
-  const ranks = extract(doc);
-  return { existing, ranks };
+  return extract(await getDoc(url));
 }
 
 async function fetchAlbum(date) {
   const [year, refWeek] = refDateWeek(date, 0, 6);
   const url = `http://www.gaonchart.co.kr/main/section/chart/album.gaon?nationGbn=T&serviceGbn=ALL&targetTime=${refWeek}&hitYear=${year}&termGbn=week`;
-  const week = refDateYMD(date, 0, 6);
-  const [doc, existing] = await Promise.all([
-    getDoc(url),
-    chart.getRawAlbums(chartId, week),
-  ]);
-  const ranks = extract(doc);
-  return { existing, ranks };
+  return extract(await getDoc(url));
 }
 
 module.exports = { fetchSingle, fetchAlbum };

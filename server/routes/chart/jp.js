@@ -1,8 +1,4 @@
-const { chart } = require('../../db');
-const { chartIds } = require('./constants');
 const { getDoc, refDateYMD } = require('./util');
-
-const chartId = chartIds.jp;
 
 function extract(docs) {
   const ranks = [];
@@ -31,15 +27,9 @@ async function fetchSingle(date) {
     (p) =>
       `https://www.oricon.co.jp/rank/cos/w/${ymd}/${p > 1 ? `p/${p}/` : ''}`
   );
-  const week = refDateYMD(date, 0, 6);
-  const promises = await Promise.all(
-    urls
-      .map((url) => getDoc(url, 'shift_jis'))
-      .concat([chart.getRawSingles(chartId, week)])
+  return extract(
+    await Promise.all(urls.map((url) => getDoc(url, 'shift_jis')))
   );
-  const ranks = extract(promises.slice(0, promises.length - 1));
-  const existing = promises[promises.length - 1];
-  return { existing, ranks };
 }
 
 async function fetchAlbum(date) {
@@ -48,15 +38,9 @@ async function fetchAlbum(date) {
     (p) =>
       `https://www.oricon.co.jp/rank/coa/w/${ymd}/${p > 1 ? `p/${p}/` : ''}`
   );
-  const week = refDateYMD(date, 0, 6);
-  const promises = await Promise.all(
-    urls
-      .map((url) => getDoc(url, 'shift_jis'))
-      .concat([chart.getRawAlbums(chartId, week)])
+  return extract(
+    await Promise.all(urls.map((url) => getDoc(url, 'shift_jis')))
   );
-  const ranks = extract(promises.slice(0, promises.length - 1));
-  const existing = promises[promises.length - 1];
-  return { existing, ranks };
 }
 
 module.exports = { fetchSingle, fetchAlbum };

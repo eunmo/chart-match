@@ -1,8 +1,4 @@
-const { chart } = require('../../db');
-const { chartIds } = require('./constants');
 const { getDoc, refDateYMD } = require('./util');
-
-const chartId = chartIds.gb;
 
 function extract(doc) {
   const ranks = [];
@@ -29,25 +25,13 @@ function extract(doc) {
 async function fetchSingle(date) {
   const ymd = refDateYMD(date, 0, 5).replace('-', '');
   const url = `https://www.officialcharts.com/charts/singles-chart/${ymd}/7501`;
-  const week = refDateYMD(date, 0, 6);
-  const [doc, existing] = await Promise.all([
-    getDoc(url),
-    chart.getRawSingles(chartId, week),
-  ]);
-  const ranks = extract(doc);
-  return { existing, ranks };
+  return extract(await getDoc(url));
 }
 
 async function fetchAlbum(date) {
   const ymd = refDateYMD(date, 0, 5).replace('-', '');
   const url = `https://www.officialcharts.com/charts/albums-chart/${ymd}/7502`;
-  const week = refDateYMD(date, 0, 6);
-  const [doc, existing] = await Promise.all([
-    getDoc(url),
-    chart.getRawAlbums(chartId, week),
-  ]);
-  const ranks = extract(doc);
-  return { existing, ranks };
+  return extract(await getDoc(url));
 }
 
 module.exports = { fetchSingle, fetchAlbum };
