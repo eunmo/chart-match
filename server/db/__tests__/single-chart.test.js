@@ -1,6 +1,6 @@
 const { dml, query, cleanup } = require('@eunmo/mysql');
 const { addMissingSingles, getSingleIds } = require('../chart-entry');
-const { addSingles, getRawSingles } = require('../chart');
+const { addSingles, getRawSingles, getLatestSingleWeeks } = require('../chart');
 
 const chart = 1;
 const week = '2020-09-12';
@@ -47,4 +47,16 @@ test('add then get', async () => {
     expect(row.artist).toEqual(artist);
     expect(row.title).toEqual(title);
   });
+});
+
+test('get latest weeks', async () => {
+  const prevWeek = '2020-09-05';
+  await addSingles(0, prevWeek, ids);
+  await addSingles(chart, week, ids);
+  const rows = await getLatestSingleWeeks();
+  expect(rows.length).toBe(2);
+  expect(rows[0].week.toISOString().substring(0, 10)).toBe(prevWeek);
+  expect(rows[0].chart).toBe(0);
+  expect(rows[1].week.toISOString().substring(0, 10)).toBe(week);
+  expect(rows[1].chart).toBe(chart);
 });

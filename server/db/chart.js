@@ -84,6 +84,22 @@ function getSingleNonMatches(chart, week, store) {
   return getNonMatches('single', chart, week, store);
 }
 
+function getLatestWeeks(table) {
+  return query(`
+    SELECT MAX(week) week, chart
+    FROM ${table}
+    GROUP BY chart
+    ORDER BY chart`);
+}
+
+function getLatestAlbumWeeks() {
+  return getLatestWeeks('albumChart');
+}
+
+function getLatestSingleWeeks() {
+  return getLatestWeeks('singleChart');
+}
+
 module.exports = {
   addAlbums,
   addSingles,
@@ -93,4 +109,6 @@ module.exports = {
   getSingleMatches,
   getAlbumNonMatches,
   getSingleNonMatches,
+  getLatestAlbumWeeks,
+  getLatestSingleWeeks,
 };

@@ -23,13 +23,13 @@ function extract(doc) {
 }
 
 async function fetchSingle(date) {
-  const ymd = refDateYMD(date, 0, 5).replace('-', '');
+  const ymd = refDateYMD(date, 0, 5).replace(/-/g, '');
   const url = `https://www.officialcharts.com/charts/singles-chart/${ymd}/7501`;
   return extract(await getDoc(url));
 }
 
 async function fetchAlbum(date) {
-  const ymd = refDateYMD(date, 0, 5).replace('-', '');
+  const ymd = refDateYMD(date, 0, 5).replace(/-/g, '');
   const url = `https://www.officialcharts.com/charts/albums-chart/${ymd}/7502`;
   return extract(await getDoc(url));
 }
