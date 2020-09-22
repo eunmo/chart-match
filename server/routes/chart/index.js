@@ -1,15 +1,9 @@
 const express = require('express');
-const us = require('./us');
-const jp = require('./jp');
-const gb = require('./gb');
-const kr = require('./kr');
+const fetchRouter = require('./fetch');
 const match = require('./match');
 
 const router = express.Router();
-router.use('/fetch/us', us);
-router.use('/fetch/jp', jp);
-router.use('/fetch/gb', gb);
-router.use('/fetch/kr', kr);
+router.use('/fetch', fetchRouter);
 router.use('/match', match);
 
 module.exports = router;

@@ -6,7 +6,7 @@ const fetch = require('node-fetch');
 const { dml, query, cleanup } = require('@eunmo/mysql');
 const { chart } = require('../../../db');
 const { chartIds } = require('../constants');
-const router = require('../jp');
+const router = require('../fetch');
 const { albums } = require('./test-data');
 
 const chartId = chartIds.jp;
@@ -72,7 +72,7 @@ test.each([
   [prevWeek, prev10],
   [curWeek, cur10],
 ])('fetch clean %s', async (week, expected) => {
-  const url = `/album/${week}`;
+  const url = `/album/jp/${week}`;
   const response = await request(app).get(url);
   expect(response.statusCode).toBe(200);
 
@@ -90,7 +90,7 @@ test.each([
   [prevWeek, prev10],
   [curWeek, cur10],
 ])('fetch twice %s', async (week, expected) => {
-  const url = `/album/${week}`;
+  const url = `/album/jp/${week}`;
   let response = await request(app).get(url);
   expect(response.statusCode).toBe(200);
 
@@ -108,11 +108,11 @@ test.each([
 });
 
 test('fetch consecutive', async () => {
-  let url = `/album/${prevWeek}`;
+  let url = `/album/jp/${prevWeek}`;
   let response = await request(app).get(url);
   expect(response.statusCode).toBe(200);
 
-  url = `/album/${curWeek}`;
+  url = `/album/jp/${curWeek}`;
   response = await request(app).get(url);
   expect(response.statusCode).toBe(200);
 
