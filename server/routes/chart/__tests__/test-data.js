@@ -100,6 +100,46 @@ const albums = {
         title: 'LEGENDS NEVER DIE',
       },
     ],
+    kr: [
+      {
+        ranking: 1,
+        artist: '원호 (WONHO)',
+        title: '1ST MINI ALBUM Part. 1 [Love Synonym #1 : Right for Me]',
+      },
+      {
+        ranking: 2,
+        artist: 'SUPER JUNIOR-D&E (동해&은혁)',
+        title: 'BAD BLOOD - The 4th Mini Album',
+      },
+      {
+        ranking: 3,
+        artist: 'DAY6 (Even of Day)',
+        title: 'The Book of Us : Gluon - Nothing can tear us apart',
+      },
+      {
+        ranking: 4,
+        artist: 'A.C.E (에이스)',
+        title: '호접지몽 (HJZM : The Butterfly Phantasy)',
+      },
+      {
+        ranking: 5,
+        artist: '러블리즈',
+        title: '7th Mini Album [Unforgettable]',
+      },
+      {
+        ranking: 6,
+        artist: 'TREASURE (트레저)',
+        title: 'THE FIRST STEP : CHAPTER ONE',
+      },
+      { ranking: 7, artist: '이은상', title: 'Beautiful Scar' },
+      { ranking: 8, artist: 'CLC', title: 'HELICOPTER' },
+      { ranking: 9, artist: 'ITZY (있지)', title: 'Not Shy' },
+      {
+        ranking: 10,
+        artist: 'CRAVITY',
+        title: 'HIDEOUT: THE NEW DAY WE STEP INTO',
+      },
+    ],
   },
   cur: {
     us: [
@@ -219,6 +259,50 @@ const albums = {
         title: 'FINE LINE',
       },
     ],
+    kr: [
+      {
+        ranking: 1,
+        artist: '태민 (TAEMIN)',
+        title: 'Never Gonna Dance Again : Act 1 - The 3rd Album',
+      },
+      {
+        ranking: 2,
+        artist: 'SUPER JUNIOR-D&E (동해&은혁)',
+        title: 'BAD BLOOD - The 4th Mini Album',
+      },
+      { ranking: 3, artist: '유아', title: 'Bon Voyage' },
+      {
+        ranking: 4,
+        artist: 'TREASURE (트레저)',
+        title: 'THE FIRST STEP : CHAPTER ONE',
+      },
+      {
+        ranking: 5,
+        artist: '원호 (WONHO)',
+        title: '1ST MINI ALBUM Part. 1 [Love Synonym #1 : Right for Me]',
+      },
+      {
+        ranking: 6,
+        artist: 'DAY6 (Even of Day)',
+        title: 'The Book of Us : Gluon - Nothing can tear us apart',
+      },
+      {
+        ranking: 7,
+        artist: 'ATEEZ (에이티즈)',
+        title: 'ZERO : FEVER Part.1',
+      },
+      { ranking: 8, artist: '김남주', title: 'Bird' },
+      {
+        ranking: 9,
+        artist: 'CRAVITY',
+        title: 'HIDEOUT: THE NEW DAY WE STEP INTO',
+      },
+      {
+        ranking: 10,
+        artist: '장우혁',
+        title: "HE(Don't wanna be alone)",
+      },
+    ],
   },
 };
 
@@ -336,6 +420,50 @@ const singles = {
         title: 'WEST TEN',
       },
     ],
+    kr: [
+      { ranking: 1, artist: '방탄소년단', title: 'Dynamite' },
+      {
+        ranking: 2,
+        artist: '싹쓰리 (유두래곤, 린다G, 비룡)',
+        title: '다시 여기 바닷가',
+      },
+      {
+        ranking: 3,
+        artist: '제시(Jessi)',
+        title: '눈누난나 (NUNU NANA)',
+      },
+      {
+        ranking: 4,
+        artist: '화사(Hwa Sa)',
+        title: '마리아 (Maria)',
+      },
+      {
+        ranking: 5,
+        artist: '박진영',
+        title: 'When We Disco (Duet with 선미)',
+      },
+      {
+        ranking: 6,
+        artist: 'BLACKPINK',
+        title: 'How You Like That',
+      },
+      {
+        ranking: 7,
+        artist: '산들',
+        title: '취기를 빌려 (취향저격 그녀 X 산들)',
+      },
+      {
+        ranking: 8,
+        artist: 'BLACKPINK',
+        title: 'Ice Cream (with Selena Gomez)',
+      },
+      {
+        ranking: 9,
+        artist: '아이유 (IU)',
+        title: '에잇 (Prod.&Feat. SUGA of BTS)',
+      },
+      { ranking: 10, artist: 'ITZY (있지)', title: 'Not Shy' },
+    ],
   },
   cur: {
     us: [
@@ -448,6 +576,54 @@ const singles = {
         ranking: 10,
         artist: 'MILEY CYRUS',
         title: 'MIDNIGHT SKY',
+      },
+    ],
+    kr: [
+      { ranking: 1, artist: '방탄소년단', title: 'Dynamite' },
+      {
+        ranking: 2,
+        artist: '산들',
+        title: '취기를 빌려 (취향저격 그녀 X 산들)',
+      },
+      {
+        ranking: 3,
+        artist: '싹쓰리 (유두래곤, 린다G, 비룡)',
+        title: '다시 여기 바닷가',
+      },
+      {
+        ranking: 4,
+        artist: '제시(Jessi)',
+        title: '눈누난나 (NUNU NANA)',
+      },
+      {
+        ranking: 5,
+        artist: '화사(Hwa Sa)',
+        title: '마리아 (Maria)',
+      },
+      {
+        ranking: 6,
+        artist: '박진영',
+        title: 'When We Disco (Duet with 선미)',
+      },
+      {
+        ranking: 7,
+        artist: 'BLACKPINK',
+        title: 'How You Like That',
+      },
+      {
+        ranking: 8,
+        artist: '아이유 (IU)',
+        title: '에잇 (Prod.&Feat. SUGA of BTS)',
+      },
+      {
+        ranking: 9,
+        artist: '스탠딩 에그(Standing Egg)',
+        title: '오래된 노래',
+      },
+      {
+        ranking: 10,
+        artist: '오마이걸 (OH MY GIRL)',
+        title: 'Dolphin',
       },
     ],
   },
