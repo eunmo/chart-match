@@ -6,6 +6,7 @@ const { chartIds } = require('../constants');
 const router = require('../match');
 const { singles } = require('./test-data');
 
+jest.setTimeout(10000);
 const app = express();
 app.use('/', router);
 
