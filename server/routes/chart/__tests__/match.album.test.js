@@ -2,7 +2,6 @@ const express = require('express');
 const request = require('supertest');
 const { dml, cleanup } = require('@eunmo/mysql');
 const { chart, chartEntry } = require('../../../db');
-const { chartIds } = require('../constants');
 const router = require('../match');
 const { albums } = require('./test-data');
 
@@ -16,7 +15,7 @@ const ymd = '2020/09/12';
 
 async function populate(name) {
   const top10 = albums.cur[name];
-  const chartId = chartIds[name];
+  const chartId = chart.ids[name];
 
   await chartEntry.addMissingAlbums(chartId, top10);
   const entryIds = await chartEntry.getAlbumIds(chartId, top10);
@@ -469,7 +468,7 @@ test.each([
   const response = await request(app).get(url);
   expect(response.statusCode).toBe(200);
 
-  const chartId = chartIds[name];
+  const chartId = chart.ids[name];
   const matches = await chart.getAlbumMatches(chartId, ymd, store);
 
   const expectedMatches = expected[name][store];
@@ -499,7 +498,7 @@ test.each([
   response = await request(app).get(url);
   expect(response.statusCode).toBe(200);
 
-  const chartId = chartIds[name];
+  const chartId = chart.ids[name];
   const matches = await chart.getAlbumMatches(chartId, ymd, store);
 
   const expectedMatches = expected[name][store];

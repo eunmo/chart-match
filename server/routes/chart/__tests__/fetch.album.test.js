@@ -5,7 +5,6 @@ const request = require('supertest');
 const fetch = require('node-fetch');
 const { dml, query, cleanup } = require('@eunmo/mysql');
 const { chart } = require('../../../db');
-const { chartIds } = require('../constants');
 const router = require('../fetch');
 const { albums } = require('./test-data');
 
@@ -69,7 +68,7 @@ const expectedSum = {
 };
 
 describe.each(['us', 'gb', 'kr'])('%s', (chartName) => {
-  const chartId = chartIds[chartName];
+  const chartId = chart.ids[chartName];
 
   const prevData = fs.readFileSync(
     path.join(__dirname, 'html', `${chartName}-album-${prevWeek}.html`)

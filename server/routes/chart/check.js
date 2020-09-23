@@ -1,6 +1,5 @@
 const express = require('express');
 const { chart, chartEntry } = require('../../db');
-const { chartIds } = require('./constants');
 const { refDateYMD, shouldUpdate } = require('./util');
 const us = require('./us');
 const jp = require('./jp');
@@ -8,10 +7,10 @@ const gb = require('./gb');
 const kr = require('./kr');
 
 const fetchChart = {
-  [chartIds.us]: us,
-  [chartIds.jp]: jp,
-  [chartIds.gb]: gb,
-  [chartIds.kr]: kr,
+  [chart.ids.us]: us,
+  [chart.ids.jp]: jp,
+  [chart.ids.gb]: gb,
+  [chart.ids.kr]: kr,
 };
 const router = express.Router();
 

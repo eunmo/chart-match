@@ -5,8 +5,9 @@ const request = require('supertest');
 const fetch = require('node-fetch');
 const { dml, cleanup } = require('@eunmo/mysql');
 const { chart } = require('../../../db');
-const { chartIds } = require('../constants');
 const router = require('..');
+
+const { ids: chartIds } = chart;
 
 jest.setTimeout(10000);
 const app = express();

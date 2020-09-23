@@ -5,9 +5,10 @@ const request = require('supertest');
 const fetch = require('node-fetch');
 const { dml, query, cleanup } = require('@eunmo/mysql');
 const { chart } = require('../../../db');
-const { chartIds } = require('../constants');
 const router = require('../fetch');
 const { singles } = require('./test-data');
+
+const { ids: chartIds } = chart;
 
 const app = express();
 app.use('/', router);

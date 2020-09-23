@@ -1,20 +1,23 @@
+const express = require('express');
+const request = require('supertest');
 const { dml, cleanup } = require('@eunmo/mysql');
 const { chart, chartEntry, chartMatch } = require('../../../db');
-const { chartIds } = require('../constants');
-const { getSortedCurrentSongs } = require('../current');
 const {
   singles,
   expected: { singles: matched },
 } = require('./test-data');
+const router = require('../current');
 
 jest.setTimeout(10000);
+const app = express();
+app.use('/', router);
 
 const names = ['us', 'jp', 'gb', 'kr'];
 const ymd = '2020/09/12';
 
 async function populate(name) {
   const top10 = singles.cur[name];
-  const chartId = chartIds[name];
+  const chartId = chart.ids[name];
 
   await chartEntry.addMissingSingles(chartId, top10);
   const entryIds = await chartEntry.getSingleIds(chartId, top10);
@@ -60,7 +63,10 @@ const dynamiteId = {
 };
 
 test.each(['us', 'jp'])('get current singles %s', async (store) => {
-  const songs = await getSortedCurrentSongs(store);
+  const response = await request(app).get(`/single/${store}`);
+  expect(response.statusCode).toBe(200);
+
+  const { body: songs } = response;
   expect(songs.length).toBe(36);
   expect(songs[0].id).toEqual('1526746984'); // wap
   expect(songs[1].id).toEqual(dynamiteId[store]);

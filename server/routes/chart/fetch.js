@@ -1,6 +1,5 @@
 const express = require('express');
 const { chart, chartEntry } = require('../../db');
-const { chartIds } = require('./constants');
 const { refDateYMD, shouldUpdate } = require('./util');
 const us = require('./us');
 const jp = require('./jp');
@@ -14,7 +13,7 @@ router.get('/single/:chartName/:date', async (req, res) => {
   const { chartName, date } = req.params;
   const week = refDateYMD(date, 0, 6);
 
-  const chartId = chartIds[chartName];
+  const chartId = chart.ids[chartName];
   if (chartId === undefined) {
     res.sendStatus(200);
     return;
@@ -40,7 +39,7 @@ router.get('/album/:chartName/:date', async (req, res) => {
   const { chartName, date } = req.params;
   const week = refDateYMD(date, 0, 6);
 
-  const chartId = chartIds[chartName];
+  const chartId = chart.ids[chartName];
   if (chartId === undefined) {
     res.sendStatus(200);
     return;

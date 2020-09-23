@@ -4,11 +4,11 @@ const express = require('express');
 const fetch = require('node-fetch');
 const config = require('config');
 const { chart, chartMatch } = require('../../db');
-const { chartIds } = require('./constants');
 const { refDateYMD } = require('./util');
 
 const token = config.get('appleMusicToken');
 const router = express.Router();
+const { ids: chartIds } = chart;
 
 async function queryAppleMusic(url) {
   const response = await fetch(new URL(url), {
