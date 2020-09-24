@@ -1,7 +1,7 @@
 const { dml } = require('@eunmo/mysql');
 
 function format(string) {
-  return string === undefined ? null : `'${string}'`;
+  return string === undefined || string === null ? null : `'${string}'`;
 }
 
 function addSingles(store, songs) {

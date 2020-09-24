@@ -57,6 +57,7 @@ afterAll(async () => {
   await cleanup();
 });
 
+const songCount = { us: 35, jp: 36 };
 const dynamiteId = {
   us: '1529518695',
   jp: '1528831888',
@@ -67,7 +68,9 @@ test.each(['us', 'jp'])('get current singles %s', async (store) => {
   expect(response.statusCode).toBe(200);
 
   const { body: songs } = response;
-  expect(songs.length).toBe(36);
+  expect(songs.length).toBe(songCount[store]);
   expect(songs[0].id).toEqual('1526746984'); // wap
+  expect(songs[0].name).toEqual('WAP (feat. Megan Thee Stallion)'); // wap
   expect(songs[1].id).toEqual(dynamiteId[store]);
+  expect(songs[1].name).toEqual('Dynamite');
 });

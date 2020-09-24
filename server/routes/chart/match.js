@@ -1,24 +1,10 @@
 /* eslint no-constant-condition: ["error", { "checkLoops": false }] */
-const { URL } = require('url');
 const express = require('express');
-const fetch = require('node-fetch');
-const config = require('config');
 const { chart, chartMatch } = require('../../db');
-const { refDateYMD } = require('./util');
+const { queryAppleMusic, refDateYMD } = require('./util');
 
-const token = config.get('appleMusicToken');
 const router = express.Router();
 const { ids: chartIds } = chart;
-
-async function queryAppleMusic(url) {
-  const response = await fetch(new URL(url), {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  return response.json();
-}
 
 // eslint-disable-next-line no-unused-vars
 async function queryAllAppleMusic(url, path) {

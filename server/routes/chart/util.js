@@ -1,6 +1,20 @@
+const { URL } = require('url');
 const { TextDecoder } = require('util');
 const fetch = require('node-fetch');
+const config = require('config');
 const { JSDOM } = require('jsdom');
+
+const token = config.get('appleMusicToken');
+
+async function queryAppleMusic(url) {
+  const response = await fetch(new URL(url), {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return response.json();
+}
 
 async function getDoc(url, charset = 'utf-8') {
   const response = await fetch(url);
@@ -56,4 +70,10 @@ function shouldUpdate(existing, toAdd) {
   return diffs.length > 5;
 }
 
-module.exports = { getDoc, refDateYMD, refDateWeek, shouldUpdate };
+module.exports = {
+  queryAppleMusic,
+  getDoc,
+  refDateYMD,
+  refDateWeek,
+  shouldUpdate,
+};
