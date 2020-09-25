@@ -1,5 +1,4 @@
 const { query } = require('@eunmo/mysql');
-const { ids } = require('./chart');
 
 function getSongs(store) {
   return query(`
@@ -42,7 +41,7 @@ async function getSortedSongs(store) {
   const rows = await getSongs(store);
   const songMap = {};
 
-  rows.forEach(({ chart: chartName, ranking, track, id }) => {
+  rows.forEach(({ chart, ranking, track, id }) => {
     if (id === null) {
       return;
     }
@@ -51,7 +50,7 @@ async function getSortedSongs(store) {
       songMap[id] = { id, ranks: [] };
     }
 
-    songMap[id].ranks.push({ ranking, track, chartId: ids[chartName] });
+    songMap[id].ranks.push({ ranking, track, chart });
   });
 
   const songs = Object.values(songMap).map((song) => {
