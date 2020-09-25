@@ -24,4 +24,21 @@ function addAlbums(store, albums) {
     VALUES ${values.join(',')}`);
 }
 
-module.exports = { addSingles, addAlbums };
+function editSingle(store, entry, track, id) {
+  return dml(`
+    UPDATE singleChartMatch
+    SET id=${id}
+    WHERE store='${store}'
+    AND entry=${entry}
+    AND track=${track}`);
+}
+
+function editAlbum(store, entry, id) {
+  return dml(`
+    UPDATE albumChartMatch
+    SET id=${id}
+    WHERE store='${store}'
+    AND entry=${entry}`);
+}
+
+module.exports = { addSingles, addAlbums, editSingle, editAlbum };

@@ -1,6 +1,6 @@
 const { dml, query, cleanup } = require('@eunmo/mysql');
 const { addMissingSingles, getSingleIds } = require('../chart-entry');
-const { addSingles: addSingleMatches } = require('../chart-match');
+const { addSingles: addSingleMatches, editSingle } = require('../chart-match');
 const {
   addSingles,
   getSingleMatches,
@@ -78,4 +78,24 @@ test.each([true, false])('add then get', async (withUndefined) => {
 
   const nonMatches = await getSingleNonMatches(chart, week, 'en');
   expect(nonMatches.length).toEqual(withUndefined ? 1 : 3);
+});
+
+test.each([
+  [1, 0, 0],
+  [2, 1, 2],
+])('delete %d %d', async (entry, track, index) => {
+  await addSingleMatches('en', songs1);
+  await editSingle('en', entry, track, null);
+  const rows = await getSingleMatches(chart, week, 'en');
+  expect(rows[index].id).toBe(null);
+});
+
+test.each([
+  [1, 0, 0],
+  [2, 1, 2],
+])('update %d %d', async (entry, track, index) => {
+  await addSingleMatches('en', songs1);
+  await editSingle('en', entry, track, '6');
+  const rows = await getSingleMatches(chart, week, 'en');
+  expect(rows[index].id).toBe('6');
 });

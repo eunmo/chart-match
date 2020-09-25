@@ -1,6 +1,6 @@
 const { dml, query, cleanup } = require('@eunmo/mysql');
 const { addMissingAlbums, getAlbumIds } = require('../chart-entry');
-const { addAlbums: addAlbumMatches } = require('../chart-match');
+const { addAlbums: addAlbumMatches, editAlbum } = require('../chart-match');
 const { addAlbums, getAlbumMatches, getAlbumNonMatches } = require('../chart');
 
 const chart = 1;
@@ -74,4 +74,18 @@ test.each([true, false])('add then get', async (withUndefined) => {
 
   const nonMatches = await getAlbumNonMatches(chart, week, 'en');
   expect(nonMatches.length).toEqual(withUndefined ? 0 : 2);
+});
+
+test.each([1, 2])('delete', async (entry) => {
+  await addAlbumMatches('en', albums1);
+  await editAlbum('en', entry, null);
+  const rows = await getAlbumMatches(chart, week, 'en');
+  expect(rows[entry - 1].id).toBe(null);
+});
+
+test.each([1, 2])('update', async (entry) => {
+  await addAlbumMatches('en', albums1);
+  await editAlbum('en', entry, '6');
+  const rows = await getAlbumMatches(chart, week, 'en');
+  expect(rows[entry - 1].id).toBe('6');
 });
