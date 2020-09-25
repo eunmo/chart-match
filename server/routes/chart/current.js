@@ -27,4 +27,27 @@ router.get('/single/:store', async (req, res) => {
   res.json(merged);
 });
 
+router.get('/album/:store', async (req, res) => {
+  const { store } = req.params;
+  const albums = await chartCurrent.getSortedAlbums(store);
+  const shrinked = albums
+    .map(({ id, ranks }) => ({ id, rank: ranks[0].ranking }))
+    .filter(({ rank }) => rank <= 10);
+  const ids = shrinked.map(({ id }) => id);
+  const query = `albums?ids=${ids.join(',')}`;
+  const queryUrl = `https://api.music.apple.com/v1/catalog/${store}/${query}`;
+  const { data } = await queryAppleMusic(queryUrl);
+  const dataMap = {};
+  data.forEach((album) => {
+    dataMap[album.id] = album;
+  });
+  const merged = shrinked.map(({ id, rank }) => {
+    const {
+      attributes: { artistName, name, url },
+    } = dataMap[id];
+    return { id, rank, artist: artistName, name, url };
+  });
+  res.json(merged);
+});
+
 module.exports = router;
