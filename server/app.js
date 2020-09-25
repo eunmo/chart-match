@@ -11,6 +11,6 @@ app.use(bodyParser.json());
 // Serve static assets
 app.use(express.static(path.join(__dirname, '../build')));
 
-app.use('/api', routes);
+app.use('/', routes);
 
 module.exports = app;
