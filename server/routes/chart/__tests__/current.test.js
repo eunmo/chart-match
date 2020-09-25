@@ -23,17 +23,15 @@ async function populate(name) {
   const entryIds = await chartEntry.getSingleIds(chartId, top10);
   await chart.addSingles(chartId, ymd, entryIds);
 
-  const usSongs = matched[name].us.map(({ ranking, track, id, url }) => ({
+  const usSongs = matched[name].us.map(({ ranking, track, id }) => ({
     entry: entryIds[ranking - 1].id,
     track,
     id,
-    url,
   }));
-  const jpSongs = matched[name].jp.map(({ ranking, track, id, url }) => ({
+  const jpSongs = matched[name].jp.map(({ ranking, track, id }) => ({
     entry: entryIds[ranking - 1].id,
     track,
     id,
-    url,
   }));
   await chartMatch.addSingles('us', usSongs);
   await chartMatch.addSingles('jp', jpSongs);

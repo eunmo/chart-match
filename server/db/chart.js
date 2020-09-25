@@ -39,7 +39,7 @@ function getRawSingles(chart, week) {
 
 function getAlbumMatches(chart, week, store) {
   return query(`
-    SELECT ranking, id, url
+    SELECT ranking, id
     FROM albumChart c
     LEFT JOIN albumChartMatch m
     ON c.entry = m.entry
@@ -51,7 +51,7 @@ function getAlbumMatches(chart, week, store) {
 
 function getSingleMatches(chart, week, store) {
   return query(`
-    SELECT ranking, track, id, url
+    SELECT ranking, track, id
     FROM singleChart c
     LEFT JOIN singleChartMatch m
     ON c.entry = m.entry
@@ -107,7 +107,6 @@ const ids = {
   de: 3,
   fr: 4,
   kr: 5,
-  me: 6,
 };
 
 module.exports = {

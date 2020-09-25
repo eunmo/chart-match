@@ -28,7 +28,6 @@ CREATE TABLE singleChartMatch (
   store CHAR(2) NOT NULL,
   track INT NOT NULL,
   id VARCHAR(255),
-  url VARCHAR(255),
   PRIMARY KEY (entry, store, track),
   CONSTRAINT single_chart_match_fk FOREIGN KEY (entry) REFERENCES singleChartEntry (id)
 );
@@ -64,7 +63,6 @@ CREATE TABLE albumChartMatch (
   entry INT NOT NULL,
   store CHAR(2) NOT NULL,
   id VARCHAR(255),
-  url VARCHAR(255),
   PRIMARY KEY (entry, store),
   CONSTRAINT album_chart_match_fk FOREIGN KEY (entry) REFERENCES albumChartEntry (id)
 );

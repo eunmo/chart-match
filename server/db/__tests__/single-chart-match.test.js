@@ -32,17 +32,17 @@ beforeAll(async () => {
   await addSingles(chart, week, ids);
 
   songs1 = [
-    { entry: ids[0].id, track: 0, id: '1', url: 'https://1' },
-    { entry: ids[1].id, track: 0, id: '2', url: 'https://2' },
-    { entry: ids[1].id, track: 1, id: '3', url: 'https://3' },
+    { entry: ids[0].id, track: 0, id: '1' },
+    { entry: ids[1].id, track: 0, id: '2' },
+    { entry: ids[1].id, track: 1, id: '3' },
     { entry: ids[2].id, track: 0 },
     { entry: ids[3].id, track: 0 },
   ];
 
   songs2 = [
-    { entry: ids[0].id, track: 0, id: '1', url: 'https://1' },
-    { entry: ids[1].id, track: 0, id: '2', url: 'https://2' },
-    { entry: ids[1].id, track: 1, id: '3', url: 'https://3' },
+    { entry: ids[0].id, track: 0, id: '1' },
+    { entry: ids[1].id, track: 0, id: '2' },
+    { entry: ids[1].id, track: 1, id: '3' },
   ];
 });
 
@@ -71,14 +71,9 @@ test.each([true, false])('add then get', async (withUndefined) => {
   expect(rows[0].id).toEqual('1');
   expect(rows[1].id).toEqual('2');
   expect(rows[2].id).toEqual('3');
-  expect(rows[0].url).toEqual('https://1');
-  expect(rows[1].url).toEqual('https://2');
-  expect(rows[2].url).toEqual('https://3');
   if (withUndefined) {
     expect(rows[3].id).toBe(null);
     expect(rows[4].id).toBe(null);
-    expect(rows[3].url).toBe(null);
-    expect(rows[4].url).toBe(null);
   }
 
   const nonMatches = await getSingleNonMatches(chart, week, 'en');

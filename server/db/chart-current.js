@@ -3,7 +3,7 @@ const { ids } = require('./chart');
 
 function getSongs(store) {
   return query(`
-    SELECT c.chart, ranking, track, id, url
+    SELECT c.chart, ranking, track, id
     FROM singleChart c
     LEFT JOIN singleChartMatch m
     ON c.entry = m.entry
@@ -42,13 +42,13 @@ async function getSortedSongs(store) {
   const rows = await getSongs(store);
   const songMap = {};
 
-  rows.forEach(({ chart: chartName, ranking, track, id, url }) => {
+  rows.forEach(({ chart: chartName, ranking, track, id }) => {
     if (id === null) {
       return;
     }
 
     if (songMap[id] === undefined) {
-      songMap[id] = { id, url, ranks: [] };
+      songMap[id] = { id, ranks: [] };
     }
 
     songMap[id].ranks.push({ ranking, track, chartId: ids[chartName] });

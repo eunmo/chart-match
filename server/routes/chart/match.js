@@ -119,7 +119,7 @@ router.get('/single/:chartName/:date/:store', async (req, res) => {
       toAdd.push({ entry, track: 0 });
     } else {
       songs.forEach((song, track) => {
-        toAdd.push({ entry, track, id: song.id, url: song.attributes.url });
+        toAdd.push({ entry, track, id: song.id });
       });
     }
   });
@@ -179,7 +179,7 @@ router.get('/album/:chartName/:date/:store', async (req, res) => {
   response.forEach((album, index) => {
     const { entry } = raw[index];
     if (album) {
-      toAdd.push({ entry, id: album.id, url: album.attributes.url });
+      toAdd.push({ entry, id: album.id });
     } else {
       toAdd.push({ entry });
     }

@@ -6,8 +6,7 @@ function format(string) {
 
 function addSingles(store, songs) {
   const values = songs.map(
-    ({ entry, track, id, url }) =>
-      `(${entry}, '${store}', ${track}, ${format(id)}, ${format(url)})`
+    ({ entry, track, id }) => `(${entry}, '${store}', ${track}, ${format(id)})`
   );
 
   return dml(`
@@ -17,8 +16,7 @@ function addSingles(store, songs) {
 
 function addAlbums(store, albums) {
   const values = albums.map(
-    ({ entry, id, url }) =>
-      `(${entry}, '${store}', ${format(id)}, ${format(url)})`
+    ({ entry, id }) => `(${entry}, '${store}', ${format(id)})`
   );
 
   return dml(`
