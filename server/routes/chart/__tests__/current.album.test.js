@@ -23,16 +23,16 @@ async function populate(name) {
   const entryIds = await chartEntry.getAlbumIds(chartId, top10);
   await chart.addAlbums(chartId, ymd, entryIds);
 
-  const usSongs = matched[name].us.map(({ ranking, id }) => ({
+  const usAlbums = matched[name].us.map(({ ranking, id }) => ({
     entry: entryIds[ranking - 1].id,
     id,
   }));
-  const jpSongs = matched[name].jp.map(({ ranking, id }) => ({
+  const jpAlbums = matched[name].jp.map(({ ranking, id }) => ({
     entry: entryIds[ranking - 1].id,
     id,
   }));
-  await chartMatch.addAlbums('us', usSongs);
-  await chartMatch.addAlbums('jp', jpSongs);
+  await chartMatch.addAlbums('us', usAlbums);
+  await chartMatch.addAlbums('jp', jpAlbums);
 }
 
 beforeAll(async () => {

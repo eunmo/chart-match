@@ -1,17 +1,22 @@
 const { query } = require('@eunmo/mysql');
 
-function getSongs(store) {
-  return query(`
+function songQuery(store) {
+  return `
     SELECT c.chart, ranking, track, id
     FROM singleChart c
-    LEFT JOIN singleChartMatch m
+    INNER JOIN singleChartMatch m
     ON c.entry = m.entry
     INNER JOIN (
       SELECT MAX(week) week, chart
       FROM singleChart
       GROUP BY chart) w
     ON c.week = w.week and c.chart = w.chart
-    WHERE m.store = '${store}'`);
+    WHERE m.store = '${store}'
+    AND id IS NOT NULL`;
+}
+
+function getSongs(store) {
+  return query(songQuery(store));
 }
 
 function compareRanks(a, b) {
@@ -42,10 +47,6 @@ async function getSortedSongs(store) {
   const songMap = {};
 
   rows.forEach(({ chart, ranking, track, id }) => {
-    if (id === null) {
-      return;
-    }
-
     if (songMap[id] === undefined) {
       songMap[id] = { id, ranks: [] };
     }
@@ -62,18 +63,23 @@ async function getSortedSongs(store) {
   return songs;
 }
 
-function getAlbums(store) {
-  return query(`
+function albumQuery(store) {
+  return `
     SELECT c.chart, ranking, id
     FROM albumChart c
-    LEFT JOIN albumChartMatch m
+    INNER JOIN albumChartMatch m
     ON c.entry = m.entry
     INNER JOIN (
       SELECT MAX(week) week, chart
       FROM albumChart
       GROUP BY chart) w
     ON c.week = w.week and c.chart = w.chart
-    WHERE m.store = '${store}'`);
+    WHERE m.store = '${store}'
+    AND id IS NOT NULL`;
+}
+
+function getAlbums(store) {
+  return query(albumQuery(store));
 }
 
 function compareAlbums(a, b) {
@@ -96,10 +102,6 @@ async function getSortedAlbums(store) {
   const albumMap = {};
 
   rows.forEach(({ chart, ranking, id }) => {
-    if (id === null) {
-      return;
-    }
-
     if (albumMap[id] === undefined) {
       albumMap[id] = { id, ranks: [] };
     }
@@ -116,4 +118,25 @@ async function getSortedAlbums(store) {
   return albums;
 }
 
-module.exports = { getSortedSongs, getSortedAlbums };
+function getTops(store) {
+  return Promise.all([
+    query(`
+      WITH t AS (
+        SELECT chart, ranking, track, id,
+        RANK() OVER (PARTITION BY chart ORDER BY ranking, track) as song_rank
+        FROM (${songQuery(store)}) t
+      )
+      SELECT * FROM t
+      WHERE song_rank = 1`),
+    query(`
+      WITH t AS (
+        SELECT chart, ranking, id,
+          RANK() OVER (PARTITION BY chart ORDER BY ranking) album_rank
+        FROM (${albumQuery(store)}) t
+      )
+      SELECT * FROM t
+      WHERE album_rank = 1`),
+  ]);
+}
+
+module.exports = { getSortedSongs, getSortedAlbums, getTops };
