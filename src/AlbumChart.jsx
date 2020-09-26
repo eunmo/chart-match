@@ -7,7 +7,7 @@ import { Edit, Clear } from '@material-ui/icons';
 
 import { Context } from './store';
 import { get } from './util';
-import Flag from './flag';
+import Flag from './Flag';
 import Image from './Image';
 import Item from './Item';
 
