@@ -72,7 +72,11 @@ function merge(objects, data) {
       return { chart, id };
     }
     const {
-      attributes: { artistName, name, url },
+      attributes: {
+        artistName,
+        name,
+        artwork: { url },
+      },
     } = dataMap[id];
     return { chart, id, artist: artistName, name, url };
   });
