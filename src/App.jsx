@@ -11,6 +11,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 
 import { Provider as StoreProvider } from './store';
 import AppBar from './AppBar';
+import SingleChart from './SingleChart';
 import Tops from './Tops';
 
 export default () => {
@@ -31,9 +32,12 @@ export default () => {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <StoreProvider>
-        <AppBar />
         <Router>
+          <AppBar />
           <Switch>
+            <Route path="/single/:chart/:week">
+              <SingleChart />
+            </Route>
             <Route path="/tops">
               <Tops />
             </Route>

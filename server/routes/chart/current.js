@@ -1,19 +1,8 @@
 const express = require('express');
 const { chartCurrent } = require('../../db');
-const { queryAppleMusic } = require('./util');
+const { searchAppleCatalog } = require('./util');
 
 const router = express.Router();
-
-async function searchAppleCatalog(type, store, ids) {
-  if (ids.length === 0) {
-    return [];
-  }
-
-  const query = `${type}?ids=${ids.join(',')}`;
-  const url = `https://api.music.apple.com/v1/catalog/${store}/${query}`;
-  const { data } = await queryAppleMusic(url);
-  return data;
-}
 
 router.get('/single/:store', async (req, res) => {
   const { store } = req.params;
@@ -22,11 +11,7 @@ router.get('/single/:store', async (req, res) => {
     .map(({ id, ranks }) => ({ id, rank: ranks[0].ranking }))
     .filter(({ rank }) => rank <= 10);
   const ids = shrinked.map(({ id }) => id);
-  const data = await searchAppleCatalog('songs', store, ids);
-  const dataMap = {};
-  data.forEach((song) => {
-    dataMap[song.id] = song;
-  });
+  const dataMap = await searchAppleCatalog('songs', store, ids);
   const merged = shrinked.map(({ id, rank }) => {
     const {
       attributes: { artistName, name },
@@ -43,11 +28,7 @@ router.get('/album/:store', async (req, res) => {
     .map(({ id, ranks }) => ({ id, rank: ranks[0].ranking }))
     .filter(({ rank }) => rank <= 10);
   const ids = shrinked.map(({ id }) => id);
-  const data = await searchAppleCatalog('albums', store, ids);
-  const dataMap = {};
-  data.forEach((album) => {
-    dataMap[album.id] = album;
-  });
+  const dataMap = await searchAppleCatalog('albums', store, ids);
   const merged = shrinked.map(({ id, rank }) => {
     const {
       attributes: { artistName, name, url },
@@ -62,15 +43,12 @@ function toIds(objects) {
   return [...set];
 }
 
-function merge(objects, data) {
-  const dataMap = {};
-  data.forEach((d) => {
-    dataMap[d.id] = d;
-  });
-  return objects.map(({ chart, id }) => {
+function merge(objects, dataMap) {
+  return objects.map(({ chart, week, id }) => {
     if (dataMap[id] === undefined) {
       return { chart, id };
     }
+    const weekString = week.toISOString().substring(0, 10);
     const {
       attributes: {
         artistName,
@@ -78,7 +56,7 @@ function merge(objects, data) {
         artwork: { url },
       },
     } = dataMap[id];
-    return { chart, id, artist: artistName, name, url };
+    return { chart, week: weekString, id, artist: artistName, name, url };
   });
 }
 

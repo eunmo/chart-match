@@ -7,13 +7,11 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 
 import { Context } from './store';
+import Link from './Link';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     flexGrow: 1,
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
   },
   title: {
     flexGrow: 1,
@@ -29,7 +27,7 @@ export default () => {
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
-            Chart Match
+            <Link to="/">Chart Match</Link>
           </Typography>
           <ButtonGroup>
             {['us', 'jp'].map((s) => (

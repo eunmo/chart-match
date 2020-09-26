@@ -4,6 +4,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Context } from './store';
 import { get } from './util';
 import Flag from './flag';
+import Image from './Image';
+import Item from './Item';
+import Link from './Link';
 
 const useStyles = makeStyles((theme) => ({
   header: {
@@ -36,40 +39,7 @@ const useStyles = makeStyles((theme) => ({
     gridTemplateColumns: '50px 1fr',
     gridColumnGap: theme.spacing(1),
   },
-  overflow: {
-    overflow: 'hidden',
-  },
-  ellipsis: {
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap',
-  },
-  artist: {
-    color: theme.palette.text.secondary,
-  },
 }));
-
-function replaceUrl(url, size) {
-  const sizeString = `${size}`;
-  return url.replace('{w}', sizeString).replace('{h}', sizeString);
-}
-
-function image(url, id, size = 50) {
-  const imageUrl = replaceUrl(url, size);
-  const srcset = [1, 2, 3]
-    .map((n) => `${replaceUrl(url, size * n)} ${n}x`)
-    .join(',');
-  return (
-    <div style={{ width: size, height: size }}>
-      <img
-        src={imageUrl}
-        srcSet={srcset}
-        alt={id}
-        style={{ borderRadius: '50%' }}
-      />
-    </div>
-  );
-}
 
 export default () => {
   const [charts, setCharts] = useState([]);
@@ -107,29 +77,27 @@ export default () => {
       <div className={classes.grid}>
         {charts.map(({ chart, song, album }) => [
           <div key={`${chart} album`}>
-            <div className={classes.albumGrid}>
-              <div className={classes.overflow}>
-                <div className={classes.ellipsis}>{album.name}</div>
-                <div className={`${classes.ellipsis} ${classes.artist}`}>
-                  {album.artist}
+            <Link to={`/album/${chart}/${song.week}`}>
+              <div className={classes.albumGrid}>
+                <Item title={album.name} subtitle={album.artist} />
+                <div>
+                  <Image url={album.url} />
                 </div>
               </div>
-              <div>{image(album.url, album.id)}</div>
-            </div>
+            </Link>
           </div>,
           <div key={`${chart} flag`}>
             <Flag chart={chart} />
           </div>,
           <div key={`${chart} song`}>
-            <div className={classes.songGrid}>
-              <div>{image(song.url, song.id)}</div>
-              <div className={classes.overflow}>
-                <div className={classes.ellipsis}>{song.name}</div>
-                <div className={`${classes.ellipsis} ${classes.artist}`}>
-                  {song.artist}
+            <Link to={`/single/${chart}/${song.week}`}>
+              <div className={classes.songGrid}>
+                <div>
+                  <Image url={song.url} />
                 </div>
+                <Item title={song.name} subtitle={song.artist} />
               </div>
-            </div>
+            </Link>
           </div>,
         ])}
       </div>

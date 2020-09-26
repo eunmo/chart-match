@@ -16,6 +16,21 @@ async function queryAppleMusic(url) {
   return response.json();
 }
 
+async function searchAppleCatalog(type, store, ids) {
+  if (ids.length === 0) {
+    return {};
+  }
+
+  const query = `${type}?ids=${ids.join(',')}`;
+  const url = `https://api.music.apple.com/v1/catalog/${store}/${query}`;
+  const { data } = await queryAppleMusic(url);
+  const dataMap = {};
+  data.forEach((row) => {
+    dataMap[row.id] = row;
+  });
+  return dataMap;
+}
+
 async function getDoc(url, charset = 'utf-8') {
   const response = await fetch(url);
   let html;
@@ -72,6 +87,7 @@ function shouldUpdate(existing, toAdd) {
 
 module.exports = {
   queryAppleMusic,
+  searchAppleCatalog,
   getDoc,
   refDateYMD,
   refDateWeek,

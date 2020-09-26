@@ -2,7 +2,7 @@ const { query } = require('@eunmo/mysql');
 
 function songQuery(store) {
   return `
-    SELECT c.chart, ranking, track, id
+    SELECT c.chart, c.week, ranking, track, id
     FROM singleChart c
     INNER JOIN singleChartMatch m
     ON c.entry = m.entry
@@ -65,7 +65,7 @@ async function getSortedSongs(store) {
 
 function albumQuery(store) {
   return `
-    SELECT c.chart, ranking, id
+    SELECT c.chart, c.week, ranking, id
     FROM albumChart c
     INNER JOIN albumChartMatch m
     ON c.entry = m.entry
@@ -122,7 +122,7 @@ function getTops(store) {
   return Promise.all([
     query(`
       WITH t AS (
-        SELECT chart, ranking, track, id,
+        SELECT chart, week, ranking, track, id,
         RANK() OVER (PARTITION BY chart ORDER BY ranking, track) as song_rank
         FROM (${songQuery(store)}) t
       )
@@ -130,7 +130,7 @@ function getTops(store) {
       WHERE song_rank = 1`),
     query(`
       WITH t AS (
-        SELECT chart, ranking, id,
+        SELECT chart, week, ranking, id,
           RANK() OVER (PARTITION BY chart ORDER BY ranking) album_rank
         FROM (${albumQuery(store)}) t
       )

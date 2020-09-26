@@ -37,6 +37,33 @@ function getRawSingles(chart, week) {
   return getRaw('singleChart', 'singleChartEntry', chart, week);
 }
 
+function getFullAlbums(chart, week, store) {
+  return query(`
+    SELECT ranking, c.entry, m.id, artist, title
+    FROM albumChart c
+    LEFT JOIN (SELECT * FROM albumChartMatch WHERE store='${store}') m
+    ON c.entry = m.entry
+    INNER JOIN albumChartEntry e
+    ON c.entry = e.id
+    WHERE c.chart=${chart}
+    AND c.week='${week}'
+    AND m.store='${store}'
+    ORDER BY ranking`);
+}
+
+function getFullSingles(chart, week, store) {
+  return query(`
+    SELECT ranking, c.entry, track, m.id, artist, title
+    FROM singleChart c
+    LEFT JOIN (SELECT * FROM singleChartMatch WHERE store='${store}') m
+    ON c.entry = m.entry
+    INNER JOIN singleChartEntry e
+    ON c.entry = e.id
+    WHERE c.chart=${chart}
+    AND c.week='${week}'
+    ORDER BY ranking, track`);
+}
+
 function getAlbumMatches(chart, week, store) {
   return query(`
     SELECT ranking, id
@@ -45,7 +72,7 @@ function getAlbumMatches(chart, week, store) {
     ON c.entry = m.entry
     WHERE c.chart=${chart}
     AND c.week='${week}'
-    AND m.store='${store}'
+    AND m.store in (null, '${store}')
     ORDER BY ranking`);
 }
 
@@ -115,6 +142,8 @@ module.exports = {
   addSingles,
   getRawAlbums,
   getRawSingles,
+  getFullAlbums,
+  getFullSingles,
   getAlbumMatches,
   getSingleMatches,
   getAlbumNonMatches,
