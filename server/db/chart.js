@@ -47,7 +47,6 @@ function getFullAlbums(chart, week, store) {
     ON c.entry = e.id
     WHERE c.chart=${chart}
     AND c.week='${week}'
-    AND m.store='${store}'
     ORDER BY ranking`);
 }
 
