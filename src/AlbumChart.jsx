@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import IconButton from '@material-ui/core/IconButton';
-import { Edit, Clear } from '@material-ui/icons';
+import { Clear, Edit, Loupe, MoreVert } from '@material-ui/icons';
 
 import { Context } from './store';
 import { get } from './util';
@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
   },
   editGrid: {
     display: 'grid',
-    gridTemplateColumns: '50px 30px 1fr 50px',
+    gridTemplateColumns: '50px 30px 1fr 50px 50px',
     gridColumnGap: theme.spacing(1),
     lineHeight: '25px',
     marginBottom: theme.spacing(1),
@@ -39,11 +39,16 @@ const useStyles = makeStyles((theme) => ({
     lineHeight: '50px',
     textAlign: 'center',
   },
+  raw: {
+    lineHeight: '50px',
+    textAlign: 'center',
+  },
 }));
 
 export default () => {
   const [albums, setSongs] = useState([]);
-  const [showEdit, setShowEdit] = useState(false);
+  const [showButtons, setShowButtons] = useState(false);
+  const [selected, setSelected] = useState(null);
   const { chart, week } = useParams();
   const [store] = useContext(Context);
   const classes = useStyles();
@@ -52,7 +57,7 @@ export default () => {
     get(`/api/chart/select/album/${chart}/${week}/${store}`, setSongs);
   }, [chart, week, store]);
 
-  const grid = showEdit ? classes.editGrid : classes.showGrid;
+  const grid = showButtons ? classes.editGrid : classes.showGrid;
 
   return (
     <Container maxWidth="md">
@@ -63,8 +68,8 @@ export default () => {
         </div>
         <div>{week} Albums</div>
         <div style={{ textAlign: 'right' }}>
-          <IconButton onClick={() => setShowEdit(!showEdit)}>
-            {showEdit ? <Clear /> : <Edit />}
+          <IconButton onClick={() => setShowButtons(!showButtons)}>
+            {showButtons ? <Clear /> : <MoreVert />}
           </IconButton>
         </div>
       </div>
@@ -76,16 +81,37 @@ export default () => {
             title={album.catalog ? album.catalog.title : album.raw.title}
             subtitle={album.catalog ? album.catalog.artist : album.raw.artist}
           />
-          {showEdit && (
-            <div>
+          {showButtons && [
+            <div key="show raw">
+              {album.catalog && (
+                <IconButton
+                  onClick={() => setSelected(selected === album ? null : album)}
+                >
+                  <Loupe />
+                </IconButton>
+              )}
+            </div>,
+            <div key="edit">
               <IconButton
                 component={Link}
                 to={`/edit/album/${chart}/${album.entry}`}
               >
                 <Edit />
               </IconButton>
-            </div>
-          )}
+            </div>,
+          ]}
+          {selected === album && [
+            <div
+              className={classes.raw}
+              style={{ gridColumnStart: 2 }}
+              key="raw"
+            >
+              Raw
+            </div>,
+            <div key="item">
+              <Item title={album.raw.title} subtitle={album.raw.artist} />
+            </div>,
+          ]}
         </div>
       ))}
     </Container>

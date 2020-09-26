@@ -46,9 +46,33 @@ function getSingleIds(chart, entries) {
   return getIds('singleChartEntry', chart, entries);
 }
 
+async function getFullAlbum(chart, entry, store) {
+  const rows = await query(`
+    SELECT m.id, artist, title
+    FROM albumChartEntry e
+    LEFT JOIN (SELECT * FROM albumChartMatch WHERE store='${store}') m
+    ON e.id = m.entry
+    WHERE e.chart=${chart}
+    AND e.id=${entry}`);
+  return rows.length > 0 ? rows[0] : undefined;
+}
+
+function getFullSingle(chart, entry, store) {
+  return query(`
+    SELECT track, m.id, artist, title
+    FROM singleChartEntry e
+    LEFT JOIN (SELECT * FROM singleChartMatch WHERE store='${store}') m
+    ON e.id = m.entry
+    WHERE e.chart=${chart}
+    AND e.id=${entry}
+    ORDER BY track`);
+}
+
 module.exports = {
   addMissingAlbums,
   getAlbumIds,
   addMissingSingles,
   getSingleIds,
+  getFullAlbum,
+  getFullSingle,
 };

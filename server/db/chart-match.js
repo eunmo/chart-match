@@ -41,4 +41,27 @@ function editAlbum(store, entry, id) {
     AND entry=${entry}`);
 }
 
-module.exports = { addSingles, addAlbums, editSingle, editAlbum };
+function clearSingle(store, entry) {
+  return dml(`
+    UPDATE singleChartMatch
+    SET id=null
+    WHERE store='${store}'
+    AND entry=${entry}`);
+}
+
+function clearAlbum(store, entry) {
+  return dml(`
+    UPDATE albumChartMatch
+    SET id=null
+    WHERE store='${store}'
+    AND entry=${entry}`);
+}
+
+module.exports = {
+  addSingles,
+  addAlbums,
+  editSingle,
+  editAlbum,
+  clearSingle,
+  clearAlbum,
+};

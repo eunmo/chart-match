@@ -12,6 +12,8 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { Provider as StoreProvider } from './store';
 import AlbumChart from './AlbumChart';
 import AppBar from './AppBar';
+import EditAlbum from './EditAlbum';
+import EditSingle from './EditSingle';
 import SingleChart from './SingleChart';
 import Tops from './Tops';
 
@@ -41,6 +43,12 @@ export default () => {
             </Route>
             <Route path="/album/:chart/:week">
               <AlbumChart />
+            </Route>
+            <Route path="/edit/album/:chart/:entry">
+              <EditAlbum />
+            </Route>
+            <Route path="/edit/single/:chart/:entry">
+              <EditSingle />
             </Route>
             <Route path="/tops">
               <Tops />
