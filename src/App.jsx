@@ -9,7 +9,9 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
-import Tops from './tops';
+import { Provider as StoreProvider } from './store';
+import AppBar from './AppBar';
+import Tops from './Tops';
 
 export default () => {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
@@ -28,14 +30,17 @@ export default () => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Router>
-        <Switch>
-          <Route path="/tops">
-            <Tops />
-          </Route>
-          <Redirect from="/" to="/tops" />
-        </Switch>
-      </Router>
+      <StoreProvider>
+        <AppBar />
+        <Router>
+          <Switch>
+            <Route path="/tops">
+              <Tops />
+            </Route>
+            <Redirect from="/" to="/tops" />
+          </Switch>
+        </Router>
+      </StoreProvider>
     </ThemeProvider>
   );
 };

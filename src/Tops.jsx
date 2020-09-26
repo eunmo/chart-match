@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 
+import { Context } from './store';
 import { get } from './util';
 import Flag from './flag';
 
@@ -72,10 +73,11 @@ function image(url, id, size = 50) {
 
 export default () => {
   const [charts, setCharts] = useState([]);
+  const [store] = useContext(Context);
   const classes = useStyles();
 
   useEffect(() => {
-    get('/api/chart/current/tops/jp', (data) => {
+    get(`/api/chart/current/tops/${store}`, (data) => {
       const { songs, albums } = data;
       const newCharts = [
         { id: 0, chart: 'us' },
@@ -93,7 +95,7 @@ export default () => {
       });
       setCharts(newCharts);
     });
-  }, []);
+  }, [store]);
 
   return (
     <div>
