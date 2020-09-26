@@ -1,9 +1,41 @@
 import React from 'react';
+import {
+  BrowserRouter as Router,
+  Redirect,
+  Route,
+  Switch,
+} from 'react-router-dom';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
 
 import Tops from './tops';
 
-function App() {
-  return <Tops />;
-}
+export default () => {
+  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
 
-export default App;
+  const theme = React.useMemo(
+    () =>
+      createMuiTheme({
+        palette: {
+          type: prefersDarkMode ? 'dark' : 'light',
+          flag: prefersDarkMode ? 'darkGray' : 'lightGray',
+        },
+      }),
+    [prefersDarkMode]
+  );
+
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Router>
+        <Switch>
+          <Route path="/tops">
+            <Tops />
+          </Route>
+          <Redirect from="/" to="/tops" />
+        </Switch>
+      </Router>
+    </ThemeProvider>
+  );
+};

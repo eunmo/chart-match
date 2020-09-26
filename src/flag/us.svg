@@ -1,0 +1,30 @@
+<svg viewBox="0 0 100 100">
+  <polygon points="50,5 5,50 50,95 95,50" fill="white" />
+  <polygon points="50,5, 5,50 50,50" fill="#002147" />
+  <polygon points="50,20 50,30 75,30 65,20" fill="#BB133E" />
+  <polygon points="50,40 50,50 95,50 85,40" fill="#BB133E" />
+  <polygon points="15,60 25,70 75,70 85,60" fill="#BB133E" />
+  <polygon points="35,80 45,90 55,90 65,80" fill="#BB133E" />
+  <path id="star" d="
+M 45.000 46.000
+L 46.176 46.618
+L 45.951 45.309
+L 46.902 44.382
+L 45.588 44.191
+L 45.000 43.000
+L 44.412 44.191
+L 43.098 44.382
+L 44.049 45.309
+L 43.824 46.618
+L 45.000 46.000
+" fill="white" transform="translate(-1, -1)"/>
+  <use xlink:href="#star" transform="translate(-20, 0)" />
+  <use xlink:href="#star" transform="translate(-15, -5)" />
+  <use xlink:href="#star" transform="translate(-10, -10)" />
+  <use xlink:href="#star" transform="translate(-10, 0)" />
+  <use xlink:href="#star" transform="translate(-5, -15)" />
+  <use xlink:href="#star" transform="translate(-5, -5)" />
+  <use xlink:href="#star" transform="translate(0, -20)" />
+  <use xlink:href="#star" transform="translate(0, -10)" />
+  <polygon points="50,5 5,50 50,95 95,50" fill="none" stroke="lightgray" strokeWidth="7" />
+</svg>

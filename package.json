@@ -59,7 +59,8 @@
           "singleQuote": true,
           "parser": "flow"
         }
-      ]
+      ],
+      "react/prop-types": 0
     },
     "env": {
       "browser": true,
