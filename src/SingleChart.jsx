@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import IconButton from '@material-ui/core/IconButton';
-import { Clear, Edit, Loupe, MoreVert } from '@material-ui/icons';
+import { Clear, Edit, Loupe } from '@material-ui/icons';
 
 import { Context } from './store';
 import { get } from './util';
@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
   },
   editGrid: {
     display: 'grid',
-    gridTemplateColumns: '50px 30px 1fr 50px 50px',
+    gridTemplateColumns: '50px 30px 1fr 50px',
     gridColumnGap: theme.spacing(1),
     lineHeight: '25px',
     marginBottom: theme.spacing(1),
@@ -48,7 +48,6 @@ const useStyles = makeStyles((theme) => ({
 export default () => {
   const [songs, setSongs] = useState([]);
   const [showButtons, setShowButtons] = useState(false);
-  const [selected, setSelected] = useState(null);
   const { chart, week } = useParams();
   const [store] = useContext(Context);
   const classes = useStyles();
@@ -69,7 +68,7 @@ export default () => {
         <div>{week} Singles</div>
         <div style={{ textAlign: 'right' }}>
           <IconButton onClick={() => setShowButtons(!showButtons)}>
-            {showButtons ? <Clear /> : <MoreVert />}
+            {showButtons ? <Clear /> : <Loupe />}
           </IconButton>
         </div>
       </div>
@@ -83,37 +82,27 @@ export default () => {
             title={song.catalog ? song.catalog.title : song.raw.title}
             subtitle={song.catalog ? song.catalog.artist : song.raw.artist}
           />
-          {showButtons && [
-            <div key="show raw">
-              {song.catalog && (
-                <IconButton
-                  onClick={() => setSelected(selected === song ? null : song)}
-                >
-                  <Loupe />
-                </IconButton>
-              )}
-            </div>,
-            <div key="edit">
-              <IconButton
-                component={Link}
-                to={`/edit/single/${chart}/${song.entry}`}
-              >
-                <Edit />
-              </IconButton>
-            </div>,
-          ]}
-          {selected === song && [
-            <div
-              className={classes.raw}
-              style={{ gridColumnStart: 2 }}
-              key="raw"
+          {showButtons && (
+            <IconButton
+              component={Link}
+              to={`/edit/single/${chart}/${song.entry}`}
             >
-              Raw
-            </div>,
-            <div key="item">
-              <Item title={song.raw.title} subtitle={song.raw.artist} />
-            </div>,
-          ]}
+              <Edit />
+            </IconButton>
+          )}
+          {showButtons &&
+            song.catalog && [
+              <div
+                className={classes.raw}
+                style={{ gridColumnStart: 2 }}
+                key="raw"
+              >
+                Raw
+              </div>,
+              <div key="item">
+                <Item title={song.raw.title} subtitle={song.raw.artist} />
+              </div>,
+            ]}
         </div>
       ))}
     </Container>
