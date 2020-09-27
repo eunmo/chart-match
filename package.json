@@ -36,7 +36,7 @@
     "eject": "react-scripts eject",
     "lint": "eslint --fix \"src/**/*.{js,jsx}\" \"server/**/*.js\"",
     "jest": "jest -w 1 --watch --only-changed --config server/jest-config.json",
-    "prettier": "prettier --single-quote --write"
+    "server": "nodemon --watch server server/chart-match.js"
   },
   "proxy": "http://localhost:3010",
   "eslintConfig": {

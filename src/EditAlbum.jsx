@@ -7,7 +7,7 @@ import InputBase from '@material-ui/core/InputBase';
 import IconButton from '@material-ui/core/IconButton';
 import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
-import { Clear, Done, Search } from '@material-ui/icons';
+import { ArrowDownward, Clear, Done, Search } from '@material-ui/icons';
 
 import { Context } from './store';
 import { get, put, deleteBody } from './util';
@@ -40,6 +40,11 @@ const useStyles = makeStyles((theme) => ({
   raw: {
     lineHeight: '50px',
     textAlign: 'center',
+  },
+  buttons: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    marginBottom: theme.spacing(1),
   },
   searchBox: {
     padding: '2px 4px',
@@ -92,6 +97,13 @@ export default () => {
     get(`/api/chart/search/album/${keyword}/${store}`, setSearchResults);
   }
 
+  function fillSearchBox() {
+    const { raw } = album;
+    const newKeyword = `${raw.artist} ${raw.title}`;
+    setKeyword(newKeyword);
+    get(`/api/chart/search/album/${newKeyword}/${store}`, setSearchResults);
+  }
+
   function clearSearch() {
     setKeyword('');
     setSearchResults(null);
@@ -125,9 +137,14 @@ export default () => {
           <Item key="item" title={catalog.title} subtitle={catalog.artist} />,
         ]}
       </div>
-      <Button color="secondary" onClick={() => clear()}>
-        Clear
-      </Button>
+      <div className={classes.buttons}>
+        <IconButton onClick={() => fillSearchBox()}>
+          <ArrowDownward />
+        </IconButton>
+        <Button color="secondary" onClick={() => clear()}>
+          Clear
+        </Button>
+      </div>
       <Paper
         component="form"
         variant="outlined"
