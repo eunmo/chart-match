@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link as RouterLink, useParams } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Container from '@material-ui/core/Container';
 import IconButton from '@material-ui/core/IconButton';
+import Link from '@material-ui/core/Link';
 import { Clear, Edit, Loupe } from '@material-ui/icons';
 
 import { Context } from './store';
@@ -112,7 +113,13 @@ export default () => {
       </div>
       {songs?.map((song) => (
         <div className={grid} key={song.ranking + song.track}>
-          {song.catalog ? <Image url={song.catalog.url} /> : <div />}
+          {song.catalog ? (
+            <Link href={song.catalog.url}>
+              <Image url={song.catalog.artworkUrl} />
+            </Link>
+          ) : (
+            <div />
+          )}
           <div className={classes.rank}>{song.ranking}</div>
           <Item
             title={song.catalog ? song.catalog.title : song.raw.title}
@@ -120,7 +127,7 @@ export default () => {
           />
           {showButtons && (
             <IconButton
-              component={Link}
+              component={RouterLink}
               to={`/edit/single/${chart}/${song.entry}`}
             >
               <Edit />

@@ -160,7 +160,9 @@ export default () => {
         {songs
           .filter(({ catalog }) => catalog)
           .map((song) => [
-            <Image key={`${song.track} image`} url={song.catalog.url} />,
+            <Link href={song.catalog.url} key={`${song.track} image`}>
+              <Image url={song.catalog.artworkUrl} />
+            </Link>,
             <Item
               key={`${song.track} item`}
               title={song.catalog.title}

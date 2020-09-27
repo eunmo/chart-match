@@ -18,7 +18,8 @@ router.get('/single/:chart/:week/:store', async (req, res) => {
       attributes: {
         artistName,
         name,
-        artwork: { url },
+        url,
+        artwork: { url: artworkUrl },
       },
     } = dataMap[id];
     return {
@@ -27,7 +28,7 @@ router.get('/single/:chart/:week/:store', async (req, res) => {
       entry,
       id,
       raw: { artist, title },
-      catalog: { artist: artistName, title: name, url },
+      catalog: { artist: artistName, title: name, url, artworkUrl },
     };
   });
   res.json(merged);
@@ -47,7 +48,8 @@ router.get('/album/:chart/:week/:store', async (req, res) => {
       attributes: {
         artistName,
         name,
-        artwork: { url },
+        url,
+        artwork: { url: artworkUrl },
       },
     } = dataMap[id];
     return {
@@ -55,7 +57,7 @@ router.get('/album/:chart/:week/:store', async (req, res) => {
       entry,
       id,
       raw: { artist, title },
-      catalog: { artist: artistName, title: name, url },
+      catalog: { artist: artistName, title: name, url, artworkUrl },
     };
   });
   res.json(merged);
@@ -79,14 +81,15 @@ router.get('/single-entry/:chart/:entry/:store', async (req, res) => {
       attributes: {
         artistName,
         name,
-        artwork: { url },
+        url,
+        artwork: { url: artworkUrl },
       },
     } = dataMap[id];
     return {
       track,
       id,
       raw: { artist, title },
-      catalog: { artist: artistName, title: name, url },
+      catalog: { artist: artistName, title: name, url, artworkUrl },
     };
   });
   res.json(merged);
@@ -112,10 +115,11 @@ router.get('/album-entry/:chart/:entry/:store', async (req, res) => {
       attributes: {
         artistName,
         name,
-        artwork: { url },
+        url,
+        artwork: { url: artworkUrl },
       },
     } = dataMap[id];
-    out.catalog = { artist: artistName, title: name, url };
+    out.catalog = { artist: artistName, title: name, url, artworkUrl };
   }
   res.json(out);
 });

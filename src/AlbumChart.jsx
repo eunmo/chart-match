@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link as RouterLink, useParams } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Container from '@material-ui/core/Container';
 import IconButton from '@material-ui/core/IconButton';
+import Link from '@material-ui/core/Link';
 import { Clear, Edit, Loupe } from '@material-ui/icons';
 
 import { Context } from './store';
@@ -113,7 +114,13 @@ export default () => {
       </div>
       {albums?.map((album) => (
         <div className={grid} key={album.ranking}>
-          {album.catalog ? <Image url={album.catalog.url} /> : <div />}
+          {album.catalog ? (
+            <Link href={album.catalog.url}>
+              <Image url={album.catalog.artworkUrl} />
+            </Link>
+          ) : (
+            <div />
+          )}
           <div className={classes.rank}>{album.ranking}</div>
           <Item
             title={album.catalog ? album.catalog.title : album.raw.title}
@@ -121,7 +128,7 @@ export default () => {
           />
           {showButtons && (
             <IconButton
-              component={Link}
+              component={RouterLink}
               to={`/edit/album/${chart}/${album.entry}`}
             >
               <Edit />

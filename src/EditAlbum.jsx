@@ -132,7 +132,9 @@ export default () => {
         <div className={classes.raw}>Raw</div>
         <Item title={raw.title} subtitle={raw.artist} />
         {catalog && [
-          <Image key="image" url={catalog.url} />,
+          <Link href={catalog.url} key="image">
+            <Image url={catalog.artworkUrl} />
+          </Link>,
           <Item key="item" title={catalog.title} subtitle={catalog.artist} />,
         ]}
       </div>
