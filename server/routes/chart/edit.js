@@ -6,7 +6,8 @@ const router = express.Router();
 
 router.put('/single', async (req, res) => {
   const { store, entry, id } = req.body;
-  await chartMatch.editSingle(store, entry, 0, id);
+  await chartMatch.deleteSingle(store, entry);
+  await chartMatch.addSingles(store, [{ entry, track: 0, id }]);
   res.sendStatus(200);
 });
 
@@ -22,7 +23,7 @@ router.put('/singles', async (req, res) => {
   }
 
   const songs = albumResponse.data.slice(0, count);
-  await chartMatch.clearSingle(store, entry);
+  await chartMatch.deleteSingle(store, entry);
 
   const toAdd = [];
   songs.forEach((song, track) => {

@@ -24,6 +24,13 @@ function addAlbums(store, albums) {
     VALUES ${values.join(',')}`);
 }
 
+function deleteSingle(store, entry) {
+  return dml(`
+    DELETE FROM singleChartMatch
+    WHERE store='${store}'
+    AND entry=${entry}`);
+}
+
 function editAlbum(store, entry, id) {
   return dml(`
     UPDATE albumChartMatch
@@ -51,6 +58,7 @@ function clearAlbum(store, entry) {
 module.exports = {
   addSingles,
   addAlbums,
+  deleteSingle,
   editAlbum,
   clearSingle,
   clearAlbum,
