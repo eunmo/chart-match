@@ -77,7 +77,7 @@ export default () => {
       <div className={classes.grid}>
         {charts.map(({ chart, song, album }) => [
           <div key={`${chart} album`}>
-            <Link to={`/album/${chart}/${song.week}`}>
+            <Link to={`/album/${chart}/${album.week}`}>
               <div className={classes.albumGrid}>
                 <Item title={album.name} subtitle={album.artist} />
                 <div>

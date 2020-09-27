@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Container from '@material-ui/core/Container';
 import IconButton from '@material-ui/core/IconButton';
 import { Clear, Edit, Loupe } from '@material-ui/icons';
@@ -47,9 +49,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default () => {
-  const [albums, setSongs] = useState([]);
+  const [albums, setAlbums] = useState(undefined);
   const [showButtons, setShowButtons] = useState(false);
-  const [openDialog, setOpenDialog] = React.useState(false);
+  const [loading, setLoading] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
   const { chart, week } = useParams();
   const [store] = useContext(Context);
   const classes = useStyles();
@@ -57,8 +60,38 @@ export default () => {
   useEffect(() => {
     setOpenDialog(false);
     setShowButtons(false);
-    get(`/api/chart/select/album/${chart}/${week}/${store}`, setSongs);
+    get(`/api/chart/select/album/${chart}/${week}/${store}`, setAlbums);
   }, [chart, week, store]);
+
+  async function fetchChart() {
+    setAlbums(undefined);
+    setLoading(true);
+    await fetch(`/api/chart/fetch/album/${chart}/${week}`);
+    setLoading(false);
+    setShowButtons(false);
+    get(`/api/chart/select/album/${chart}/${week}/${store}`, setAlbums);
+  }
+
+  async function matchChart() {
+    setAlbums(undefined);
+    setLoading(true);
+    await fetch(`/api/chart/match/album/${chart}/${week}/us`);
+    await fetch(`/api/chart/match/album/${chart}/${week}/jp`);
+    setLoading(false);
+    setShowButtons(false);
+    get(`/api/chart/select/album/${chart}/${week}/${store}`, setAlbums);
+  }
+
+  async function fetchMatchChart() {
+    setAlbums(undefined);
+    setLoading(true);
+    await fetch(`/api/chart/fetch/album/${chart}/${week}`);
+    await fetch(`/api/chart/match/album/${chart}/${week}/us`);
+    await fetch(`/api/chart/match/album/${chart}/${week}/jp`);
+    setLoading(false);
+    setShowButtons(false);
+    get(`/api/chart/select/album/${chart}/${week}/${store}`, setAlbums);
+  }
 
   const grid = showButtons ? classes.editGrid : classes.showGrid;
 
@@ -78,7 +111,7 @@ export default () => {
           </IconButton>
         </div>
       </div>
-      {albums.map((album) => (
+      {albums?.map((album) => (
         <div className={grid} key={album.ranking}>
           {album.catalog ? <Image url={album.catalog.url} /> : <div />}
           <div className={classes.rank}>{album.ranking}</div>
@@ -109,6 +142,18 @@ export default () => {
             ]}
         </div>
       ))}
+      {loading && (
+        <div>
+          <CircularProgress />
+        </div>
+      )}
+      {(showButtons || albums?.length === 0) && !loading && (
+        <ButtonGroup>
+          <Button onClick={() => fetchChart()}>Fetch</Button>
+          <Button onClick={() => matchChart()}>Match</Button>
+          <Button onClick={() => fetchMatchChart()}>Do Both</Button>
+        </ButtonGroup>
+      )}
       <WeekDialog
         handleClose={() => setOpenDialog(false)}
         week={week}

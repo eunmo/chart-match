@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Container from '@material-ui/core/Container';
 import IconButton from '@material-ui/core/IconButton';
 import { Clear, Edit, Loupe } from '@material-ui/icons';
@@ -46,9 +48,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default () => {
-  const [songs, setSongs] = useState([]);
+  const [songs, setSongs] = useState(undefined);
   const [showButtons, setShowButtons] = useState(false);
-  const [openDialog, setOpenDialog] = React.useState(false);
+  const [loading, setLoading] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
   const { chart, week } = useParams();
   const [store] = useContext(Context);
   const classes = useStyles();
@@ -58,6 +61,36 @@ export default () => {
     setShowButtons(false);
     get(`/api/chart/select/single/${chart}/${week}/${store}`, setSongs);
   }, [chart, week, store]);
+
+  async function fetchChart() {
+    setSongs(undefined);
+    setLoading(true);
+    await fetch(`/api/chart/fetch/single/${chart}/${week}`);
+    setLoading(false);
+    setShowButtons(false);
+    get(`/api/chart/select/single/${chart}/${week}/${store}`, setSongs);
+  }
+
+  async function matchChart() {
+    setSongs(undefined);
+    setLoading(true);
+    await fetch(`/api/chart/match/single/${chart}/${week}/us`);
+    await fetch(`/api/chart/match/single/${chart}/${week}/jp`);
+    setLoading(false);
+    setShowButtons(false);
+    get(`/api/chart/select/single/${chart}/${week}/${store}`, setSongs);
+  }
+
+  async function fetchMatchChart() {
+    setSongs(undefined);
+    setLoading(true);
+    await fetch(`/api/chart/fetch/single/${chart}/${week}`);
+    await fetch(`/api/chart/match/single/${chart}/${week}/us`);
+    await fetch(`/api/chart/match/single/${chart}/${week}/jp`);
+    setLoading(false);
+    setShowButtons(false);
+    get(`/api/chart/select/single/${chart}/${week}/${store}`, setSongs);
+  }
 
   const grid = showButtons ? classes.editGrid : classes.showGrid;
 
@@ -77,7 +110,7 @@ export default () => {
           </IconButton>
         </div>
       </div>
-      {songs.map((song) => (
+      {songs?.map((song) => (
         <div className={grid} key={song.ranking + song.track}>
           {song.catalog ? <Image url={song.catalog.url} /> : <div />}
           <div className={classes.rank}>{song.ranking}</div>
@@ -108,6 +141,18 @@ export default () => {
             ]}
         </div>
       ))}
+      {loading && (
+        <div>
+          <CircularProgress />
+        </div>
+      )}
+      {(showButtons || songs?.length === 0) && !loading && (
+        <ButtonGroup>
+          <Button onClick={() => fetchChart()}>Fetch</Button>
+          <Button onClick={() => matchChart()}>Match</Button>
+          <Button onClick={() => fetchMatchChart()}>Do Both</Button>
+        </ButtonGroup>
+      )}
       <WeekDialog
         handleClose={() => setOpenDialog(false)}
         week={week}

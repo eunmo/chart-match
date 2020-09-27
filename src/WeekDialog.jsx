@@ -64,7 +64,7 @@ export default ({ handleClose, week, urlPrefix, open }) => {
                 style.fontWeight = 'bold';
               }
               return (
-                <Button style={style} onClick={() => selectYear(y)}>
+                <Button key={y} style={style} onClick={() => selectYear(y)}>
                   {y}
                 </Button>
               );
@@ -86,6 +86,7 @@ export default ({ handleClose, week, urlPrefix, open }) => {
                 }
                 return (
                   <Button
+                    key={w}
                     style={style}
                     component={Link}
                     to={`${urlPrefix}/${w}`}
