@@ -3,9 +3,15 @@ import { useParams } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
+import InputBase from '@material-ui/core/InputBase';
+import IconButton from '@material-ui/core/IconButton';
+import Link from '@material-ui/core/Link';
+import Paper from '@material-ui/core/Paper';
+import { Clear, Done, DoneAll, Search } from '@material-ui/icons';
 
 import { Context } from './store';
-import { get, deleteBody } from './util';
+import { get, put, deleteBody } from './util';
+import Explicit from './Explicit';
 import Flag from './Flag';
 import Image from './Image';
 import Item from './Item';
@@ -35,16 +41,41 @@ const useStyles = makeStyles((theme) => ({
     lineHeight: '50px',
     textAlign: 'center',
   },
+  searchBox: {
+    padding: '2px 4px',
+    display: 'flex',
+    flexGrow: 1,
+    marginBottom: theme.spacing(1),
+  },
+  input: {
+    flex: 1,
+  },
+  iconButton: {
+    padding: 10,
+  },
+  searchGrid: {
+    display: 'grid',
+    gridTemplateColumns: '50px 50px 50px 1fr',
+    gridRowGap: theme.spacing(1),
+    gridColumnGap: theme.spacing(1),
+    lineHeight: '25px',
+    marginBottom: theme.spacing(1),
+  },
 }));
 
 export default () => {
+  const [keyword, setKeyword] = useState('');
   const [songs, setSongs] = useState([]);
+  const [searchResults, setSearchResults] = useState(null);
+  const [selected, setSelected] = useState(null);
   const { chart, entry } = useParams();
   const [store] = useContext(Context);
   const classes = useStyles();
 
   useEffect(() => {
     get(`/api/chart/select/single-entry/${chart}/${entry}/${store}`, setSongs);
+    setKeyword('');
+    setSearchResults(null);
   }, [chart, entry, store]);
 
   if (songs.length === 0) {
@@ -53,6 +84,41 @@ export default () => {
 
   function clear() {
     deleteBody('/api/chart/edit/single', { store, entry }, () => {
+      get(
+        `/api/chart/select/single-entry/${chart}/${entry}/${store}`,
+        setSongs
+      );
+    });
+  }
+
+  function submitSearch(e) {
+    e.preventDefault();
+    get(`/api/chart/search/single/${keyword}/${store}`, setSearchResults);
+  }
+
+  function clearSearch() {
+    setKeyword('');
+    setSearchResults(null);
+  }
+
+  function chooseSong(song) {
+    put('/api/chart/edit/single', { store, entry, id: song.id }, () => {
+      setKeyword('');
+      setSearchResults(null);
+      setSongs([]);
+      get(
+        `/api/chart/select/single-entry/${chart}/${entry}/${store}`,
+        setSongs
+      );
+    });
+  }
+
+  function chooseSongs(song, count) {
+    const { url } = song.attributes;
+    put('/api/chart/edit/singles', { store, entry, url, count }, () => {
+      setKeyword('');
+      setSearchResults(null);
+      setSongs([]);
       get(
         `/api/chart/select/single-entry/${chart}/${entry}/${store}`,
         setSongs
@@ -88,6 +154,58 @@ export default () => {
       <Button color="secondary" onClick={() => clear()}>
         Clear
       </Button>
+      <Paper
+        component="form"
+        variant="outlined"
+        className={classes.searchBox}
+        onSubmit={(e) => submitSearch(e)}
+      >
+        <IconButton
+          type="submit"
+          className={classes.iconButton}
+          aria-label="search"
+        >
+          <Search />
+        </IconButton>
+        <InputBase
+          className={classes.input}
+          placeholder="Search Apple Music"
+          value={keyword}
+          onChange={({ target }) => setKeyword(target.value)}
+          inputProps={{ 'aria-label': 'search apple music' }}
+        />
+        <IconButton
+          className={classes.iconButton}
+          aria-label="clear search"
+          onClick={clearSearch}
+        >
+          <Clear />
+        </IconButton>
+      </Paper>
+      {searchResults && 'Search Results:'}
+      {searchResults?.data?.map((song) => (
+        <div className={classes.searchGrid} key={song.id}>
+          <IconButton onClick={() => setSelected(song)}>
+            <DoneAll />
+          </IconButton>
+          <IconButton onClick={() => chooseSong(song)}>
+            <Done />
+          </IconButton>
+          <Link href={song.attributes.url}>
+            <Image url={song.attributes.artwork.url} />
+          </Link>
+          <Item
+            title={<Explicit target={song} />}
+            subtitle={song.attributes.artistName}
+          />
+          {selected === song &&
+            [2, 3, 4].map((count) => [
+              <IconButton key={count} onClick={() => chooseSongs(song, count)}>
+                {`+${count}`}
+              </IconButton>,
+            ])}
+        </div>
+      ))}
     </Container>
   );
 };

@@ -24,15 +24,6 @@ function addAlbums(store, albums) {
     VALUES ${values.join(',')}`);
 }
 
-function editSingle(store, entry, track, id) {
-  return dml(`
-    UPDATE singleChartMatch
-    SET id=${id}
-    WHERE store='${store}'
-    AND entry=${entry}
-    AND track=${track}`);
-}
-
 function editAlbum(store, entry, id) {
   return dml(`
     UPDATE albumChartMatch
@@ -60,7 +51,6 @@ function clearAlbum(store, entry) {
 module.exports = {
   addSingles,
   addAlbums,
-  editSingle,
   editAlbum,
   clearSingle,
   clearAlbum,

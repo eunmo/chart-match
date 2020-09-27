@@ -75,9 +75,7 @@ export default () => {
       {songs.map((song) => (
         <div className={grid} key={song.ranking + song.track}>
           {song.catalog ? <Image url={song.catalog.url} /> : <div />}
-          <div className={classes.rank}>
-            {`${song.ranking}${song.track ? `-${song.track}` : ''}`}
-          </div>
+          <div className={classes.rank}>{song.ranking}</div>
           <Item
             title={song.catalog ? song.catalog.title : song.raw.title}
             subtitle={song.catalog ? song.catalog.artist : song.raw.artist}
