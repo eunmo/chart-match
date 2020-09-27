@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import IconButton from '@material-ui/core/IconButton';
 import { Clear, Edit, Loupe } from '@material-ui/icons';
@@ -10,13 +11,13 @@ import { get } from './util';
 import Flag from './Flag';
 import Image from './Image';
 import Item from './Item';
+import WeekDialog from './WeekDialog';
 
 const useStyles = makeStyles((theme) => ({
   header: {
     display: 'grid',
     gridTemplateColumns: '1fr 50px auto 1fr',
     gridColumnGap: theme.spacing(1),
-    fontSize: '1.5em',
     lineHeight: '50px',
   },
   showGrid: {
@@ -47,11 +48,14 @@ const useStyles = makeStyles((theme) => ({
 export default () => {
   const [songs, setSongs] = useState([]);
   const [showButtons, setShowButtons] = useState(false);
+  const [openDialog, setOpenDialog] = React.useState(false);
   const { chart, week } = useParams();
   const [store] = useContext(Context);
   const classes = useStyles();
 
   useEffect(() => {
+    setOpenDialog(false);
+    setShowButtons(false);
     get(`/api/chart/select/single/${chart}/${week}/${store}`, setSongs);
   }, [chart, week, store]);
 
@@ -64,7 +68,9 @@ export default () => {
         <div>
           <Flag chart={chart} />
         </div>
-        <div>{week} Singles</div>
+        <div>
+          <Button onClick={() => setOpenDialog(true)}>{week} Singles</Button>
+        </div>
         <div style={{ textAlign: 'right' }}>
           <IconButton onClick={() => setShowButtons(!showButtons)}>
             {showButtons ? <Clear /> : <Loupe />}
@@ -102,6 +108,12 @@ export default () => {
             ]}
         </div>
       ))}
+      <WeekDialog
+        handleClose={() => setOpenDialog(false)}
+        week={week}
+        urlPrefix={`/single/${chart}`}
+        open={openDialog}
+      />
     </Container>
   );
 };

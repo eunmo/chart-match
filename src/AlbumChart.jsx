@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import IconButton from '@material-ui/core/IconButton';
 import { Clear, Edit, Loupe } from '@material-ui/icons';
@@ -10,6 +11,7 @@ import { get } from './util';
 import Flag from './Flag';
 import Image from './Image';
 import Item from './Item';
+import WeekDialog from './WeekDialog';
 
 const useStyles = makeStyles((theme) => ({
   header: {
@@ -47,11 +49,14 @@ const useStyles = makeStyles((theme) => ({
 export default () => {
   const [albums, setSongs] = useState([]);
   const [showButtons, setShowButtons] = useState(false);
+  const [openDialog, setOpenDialog] = React.useState(false);
   const { chart, week } = useParams();
   const [store] = useContext(Context);
   const classes = useStyles();
 
   useEffect(() => {
+    setOpenDialog(false);
+    setShowButtons(false);
     get(`/api/chart/select/album/${chart}/${week}/${store}`, setSongs);
   }, [chart, week, store]);
 
@@ -64,7 +69,9 @@ export default () => {
         <div>
           <Flag chart={chart} />
         </div>
-        <div>{week} Albums</div>
+        <div>
+          <Button onClick={() => setOpenDialog(true)}>{week} Albums</Button>
+        </div>
         <div style={{ textAlign: 'right' }}>
           <IconButton onClick={() => setShowButtons(!showButtons)}>
             {showButtons ? <Clear /> : <Loupe />}
@@ -102,6 +109,12 @@ export default () => {
             ]}
         </div>
       ))}
+      <WeekDialog
+        handleClose={() => setOpenDialog(false)}
+        week={week}
+        urlPrefix={`/album/${chart}`}
+        open={openDialog}
+      />
     </Container>
   );
 };
