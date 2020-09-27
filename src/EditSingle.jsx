@@ -27,7 +27,6 @@ const useStyles = makeStyles((theme) => ({
     display: 'grid',
     gridTemplateColumns: '1fr 50px auto 1fr',
     gridColumnGap: theme.spacing(1),
-    marginTop: theme.spacing(1),
     fontSize: '1.5em',
     lineHeight: '50px',
   },
