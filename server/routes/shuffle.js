@@ -71,7 +71,7 @@ router.get('/:store', async (req, res) => {
       const {
         attributes: { artistName, name },
       } = dataMap[id];
-      merged.push({ id, artist: artistName, name });
+      merged.push({ id, artist: artistName, name, rank: merged.length + 1 });
     }
   });
   res.json(merged);
