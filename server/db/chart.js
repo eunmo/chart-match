@@ -126,6 +126,25 @@ function getLatestSingleWeeks() {
   return getLatestWeeks('singleChart');
 }
 
+function getWeek(table, store, weeks) {
+  return query(`
+    SELECT m.id
+    FROM ${table}Chart c
+    INNER JOIN ${table}ChartMatch m
+    ON c.entry = m.entry
+    WHERE m.store = '${store}'
+    AND m.id IS NOT NULL
+    AND c.week in ('${weeks.join("','")}')`);
+}
+
+function getWeekSingles(store, weeks) {
+  return getWeek('single', store, weeks);
+}
+
+function getWeekAlbums(store, weeks) {
+  return getWeek('album', store, weeks);
+}
+
 const ids = {
   us: 0,
   jp: 1,
@@ -149,4 +168,6 @@ module.exports = {
   getSingleNonMatches,
   getLatestAlbumWeeks,
   getLatestSingleWeeks,
+  getWeekSingles,
+  getWeekAlbums,
 };
