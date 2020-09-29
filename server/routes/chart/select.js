@@ -4,11 +4,24 @@ const { searchAppleCatalog } = require('./util');
 
 const router = express.Router();
 
+function toFirstWeekMap(firstWeeks) {
+  const map = {};
+  firstWeeks.forEach(({ entry, week }) => {
+    map[entry] = week.toISOString().substring(0, 10);
+  });
+  return map;
+}
+
 router.get('/single/:chart/:week/:store', async (req, res) => {
   const { chart: chartName, week, store } = req.params;
   const songs = await chart.getFullSingles(chart.ids[chartName], week, store);
   const ids = songs.map(({ id }) => id).filter((id) => id !== null);
-  const dataMap = await searchAppleCatalog('songs', store, ids);
+  const entries = songs.map(({ entry }) => entry);
+  const [dataMap, firstWeeks] = await Promise.all([
+    searchAppleCatalog('songs', store, ids),
+    chart.getSingleFirstWeek(entries),
+  ]);
+  const firstWeekMap = toFirstWeekMap(firstWeeks);
   const merged = songs.map(({ ranking, entry, track, id, artist, title }) => {
     if (dataMap[id] === undefined) {
       return { ranking, entry, track, id, raw: { artist, title } };
@@ -27,6 +40,7 @@ router.get('/single/:chart/:week/:store', async (req, res) => {
       track,
       entry,
       id,
+      isNew: week === firstWeekMap[entry],
       raw: { artist, title },
       catalog: { artist: artistName, title: name, url, artworkUrl },
     };
@@ -38,7 +52,12 @@ router.get('/album/:chart/:week/:store', async (req, res) => {
   const { chart: chartName, week, store } = req.params;
   const albums = await chart.getFullAlbums(chart.ids[chartName], week, store);
   const ids = albums.map(({ id }) => id).filter((id) => id !== null);
-  const dataMap = await searchAppleCatalog('albums', store, ids);
+  const entries = albums.map(({ entry }) => entry);
+  const [dataMap, firstWeeks] = await Promise.all([
+    searchAppleCatalog('albums', store, ids),
+    chart.getAlbumFirstWeek(entries),
+  ]);
+  const firstWeekMap = toFirstWeekMap(firstWeeks);
   const merged = albums.map(({ ranking, entry, id, artist, title }) => {
     if (dataMap[id] === undefined) {
       return { ranking, entry, id, raw: { artist, title } };
@@ -56,6 +75,7 @@ router.get('/album/:chart/:week/:store', async (req, res) => {
       ranking,
       entry,
       id,
+      isNew: week === firstWeekMap[entry],
       raw: { artist, title },
       catalog: { artist: artistName, title: name, url, artworkUrl },
     };

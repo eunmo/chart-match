@@ -115,7 +115,7 @@ export default () => {
         <div className={grid} key={song.ranking + song.track}>
           {song.catalog ? (
             <Link href={song.catalog.url}>
-              <Image url={song.catalog.artworkUrl} />
+              <Image url={song.catalog.artworkUrl} isNew={song.isNew} />
             </Link>
           ) : (
             <div />

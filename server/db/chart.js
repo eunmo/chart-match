@@ -145,6 +145,23 @@ function getWeekAlbums(store, weeks) {
   return getWeek('album', store, weeks);
 }
 
+function getFirstWeek(table, entries) {
+  return query(`
+    SELECT min(week) as week, entry
+    FROM ${table}Chart
+    WHERE entry in (${entries.join(',')})
+    AND ranking <= 10
+    GROUP BY entry`);
+}
+
+function getSingleFirstWeek(entries) {
+  return getFirstWeek('single', entries);
+}
+
+function getAlbumFirstWeek(entries) {
+  return getFirstWeek('album', entries);
+}
+
 const ids = {
   us: 0,
   jp: 1,
@@ -168,6 +185,8 @@ module.exports = {
   getSingleNonMatches,
   getLatestAlbumWeeks,
   getLatestSingleWeeks,
-  getWeekSingles,
   getWeekAlbums,
+  getWeekSingles,
+  getAlbumFirstWeek,
+  getSingleFirstWeek,
 };
