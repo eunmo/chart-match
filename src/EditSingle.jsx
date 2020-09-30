@@ -3,17 +3,9 @@ import { useParams } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
-import InputBase from '@material-ui/core/InputBase';
 import IconButton from '@material-ui/core/IconButton';
 import Link from '@material-ui/core/Link';
-import Paper from '@material-ui/core/Paper';
-import {
-  ArrowDownward,
-  Clear,
-  Done,
-  DoneAll,
-  Search,
-} from '@material-ui/icons';
+import { ArrowDownward, Done, DoneAll } from '@material-ui/icons';
 
 import { Context } from './store';
 import { get, put, deleteBody } from './util';
@@ -21,6 +13,7 @@ import Explicit from './Explicit';
 import Flag from './Flag';
 import Image from './Image';
 import Item from './Item';
+import SearchBox from './SearchBox';
 
 const useStyles = makeStyles((theme) => ({
   header: {
@@ -50,18 +43,6 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'space-between',
     marginBottom: theme.spacing(1),
-  },
-  searchBox: {
-    padding: '2px 4px',
-    display: 'flex',
-    flexGrow: 1,
-    marginBottom: theme.spacing(1),
-  },
-  input: {
-    flex: 1,
-  },
-  iconButton: {
-    padding: 10,
   },
   searchGrid: {
     display: 'grid',
@@ -178,34 +159,12 @@ export default () => {
           Clear
         </Button>
       </div>
-      <Paper
-        component="form"
-        variant="outlined"
-        className={classes.searchBox}
-        onSubmit={(e) => submitSearch(e)}
-      >
-        <IconButton
-          type="submit"
-          className={classes.iconButton}
-          aria-label="search"
-        >
-          <Search />
-        </IconButton>
-        <InputBase
-          className={classes.input}
-          placeholder="Search Apple Music"
-          value={keyword}
-          onChange={({ target }) => setKeyword(target.value)}
-          inputProps={{ 'aria-label': 'search apple music' }}
-        />
-        <IconButton
-          className={classes.iconButton}
-          aria-label="clear search"
-          onClick={clearSearch}
-        >
-          <Clear />
-        </IconButton>
-      </Paper>
+      <SearchBox
+        keyword={keyword}
+        onChange={setKeyword}
+        onSubmit={submitSearch}
+        onClear={clearSearch}
+      />
       {searchResults && 'Search Results:'}
       {searchResults?.data?.map((song) => (
         <div className={classes.searchGrid} key={song.id}>
