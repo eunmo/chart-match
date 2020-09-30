@@ -146,6 +146,10 @@ function getWeekAlbums(store, weeks) {
 }
 
 function getFirstWeek(table, entries) {
+  if (entries.length === 0) {
+    return [];
+  }
+
   return query(`
     SELECT min(week) as week, entry
     FROM ${table}Chart
