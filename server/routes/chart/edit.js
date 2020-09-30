@@ -33,6 +33,14 @@ router.put('/singles', async (req, res) => {
   res.sendStatus(200);
 });
 
+router.put('/single-ids', async (req, res) => {
+  const { store, entry, ids } = req.body;
+  const toAdd = ids.map((id, track) => ({ entry, track, id }));
+  await chartMatch.deleteSingle(store, entry);
+  await chartMatch.addSingles(store, toAdd);
+  res.sendStatus(200);
+});
+
 router.delete('/single', async (req, res) => {
   const { store, entry } = req.body;
   await chartMatch.clearSingle(store, entry);

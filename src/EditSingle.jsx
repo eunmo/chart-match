@@ -13,6 +13,7 @@ import Explicit from './Explicit';
 import Flag from './Flag';
 import Image from './Image';
 import Item from './Item';
+import ManualInput from './ManualInput';
 import SearchBox from './SearchBox';
 
 const useStyles = makeStyles((theme) => ({
@@ -124,6 +125,18 @@ export default () => {
     });
   }
 
+  function manualInput(ids) {
+    put('/api/chart/edit/single-ids', { store, entry, ids }, () => {
+      setKeyword('');
+      setSearchResults(null);
+      setSongs([]);
+      get(
+        `/api/chart/select/single-entry/${chart}/${entry}/${store}`,
+        setSongs
+      );
+    });
+  }
+
   const { raw } = songs[0];
 
   return (
@@ -189,6 +202,7 @@ export default () => {
             ])}
         </div>
       ))}
+      <ManualInput onSubmit={manualInput} multiple />
     </Container>
   );
 };

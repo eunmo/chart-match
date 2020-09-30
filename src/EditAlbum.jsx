@@ -13,6 +13,7 @@ import Explicit from './Explicit';
 import Flag from './Flag';
 import Image from './Image';
 import Item from './Item';
+import ManualInput from './ManualInput';
 import SearchBox from './SearchBox';
 
 const useStyles = makeStyles((theme) => ({
@@ -104,6 +105,11 @@ export default () => {
     });
   }
 
+  function manualInput(ids) {
+    const [id] = ids;
+    chooseAlbum({ id });
+  }
+
   const { catalog, raw } = album;
 
   return (
@@ -154,6 +160,7 @@ export default () => {
           />
         </div>
       ))}
+      <ManualInput onSubmit={manualInput} />
     </Container>
   );
 };
