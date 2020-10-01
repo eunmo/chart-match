@@ -61,11 +61,18 @@ function refDateWeek(date, weekDiff, dayDiff) {
   const { year: y, month: m, day: d } = ymd(date);
   const utc = new Date(Date.UTC(y, m - 1, d));
   utc.setUTCDate(utc.getUTCDate() - utc.getUTCDay() + weekDiff * 7 + dayDiff);
-  utc.setUTCDate(utc.getUTCDate() + 4 - (utc.getUTCDay() || 7));
-  const yearStart = new Date(Date.UTC(utc.getUTCFullYear(), 0, 1));
+  let year = utc.getUTCFullYear();
+  if (year <= 2015) {
+    if (year === 2015 && utc.toISOString().substring(0, 10) === '2015-12-26') {
+      return [2015, '53'];
+    }
+    utc.setUTCDate(utc.getUTCDate() + 7);
+  }
+  year = utc.getUTCFullYear();
+  const yearStart = new Date(Date.UTC(year, 0, 1));
   const weekNo = Math.ceil(((utc - yearStart) / 86400000 + 1) / 7);
   const week = `${weekNo}`.padStart(2, '0');
-  return [utc.getUTCFullYear(), week];
+  return [year, week];
 }
 
 function shouldUpdate(existing, toAdd) {
