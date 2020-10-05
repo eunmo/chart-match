@@ -163,7 +163,7 @@ export default () => {
       <WeekDialog
         handleClose={() => setOpenDialog(false)}
         week={week}
-        urlPrefix={`/${type}/${chart}`}
+        urlPrefix={`/week/${type}/${chart}`}
         open={openDialog}
       />
     </Container>
