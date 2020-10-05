@@ -9,8 +9,8 @@ const kr = require('./kr');
 const fetchChart = { us, jp, gb, kr };
 const router = express.Router();
 
-router.get('/single/:chartName/:date', async (req, res) => {
-  const { chartName, date } = req.params;
+router.get('/:type/:chartName/:date', async (req, res) => {
+  const { type, chartName, date } = req.params;
   const week = refDateYMD(date, 0, 6);
 
   const chartId = chart.ids[chartName];
@@ -20,43 +20,17 @@ router.get('/single/:chartName/:date', async (req, res) => {
   }
 
   const [existing, ranks] = await Promise.all([
-    chart.getRawSingles(chartId, week),
-    fetchChart[chartName].fetchSingle(date),
+    chart.getRaw(type, chartId, week),
+    fetchChart[chartName](type, date),
   ]);
   if (!shouldUpdate(existing, ranks)) {
     res.sendStatus(200);
     return;
   }
 
-  await chartEntry.addMissingSingles(chartId, ranks);
-  const entryIds = await chartEntry.getSingleIds(chartId, ranks);
-  await chart.addSingles(chartId, week, entryIds);
-
-  res.sendStatus(200);
-});
-
-router.get('/album/:chartName/:date', async (req, res) => {
-  const { chartName, date } = req.params;
-  const week = refDateYMD(date, 0, 6);
-
-  const chartId = chart.ids[chartName];
-  if (chartId === undefined) {
-    res.sendStatus(200);
-    return;
-  }
-
-  const [existing, ranks] = await Promise.all([
-    chart.getRawAlbums(chartId, week),
-    fetchChart[chartName].fetchAlbum(date),
-  ]);
-  if (!shouldUpdate(existing, ranks)) {
-    res.sendStatus(200);
-    return;
-  }
-
-  await chartEntry.addMissingAlbums(chartId, ranks);
-  const entryIds = await chartEntry.getAlbumIds(chartId, ranks);
-  await chart.addAlbums(chartId, week, entryIds);
+  await chartEntry.addMissing(type, chartId, ranks);
+  const entryIds = await chartEntry.getIds(type, chartId, ranks);
+  await chart.add(type, chartId, week, entryIds);
 
   res.sendStatus(200);
 });

@@ -844,109 +844,109 @@
     }
   },
   "expected": {
-    "singles": {
+    "single": {
       "us": {
         "us": [
           {
             "ranking": 1,
-            "track": 0,
+            "idx": 0,
             "id": "1526746984"
           },
           {
             "ranking": 2,
-            "track": 0,
+            "idx": 0,
             "id": "1529518695"
           },
           {
             "ranking": 3,
-            "track": 0,
+            "idx": 0,
             "id": "1527584879"
           },
           {
             "ranking": 4,
-            "track": 0,
+            "idx": 0,
             "id": "1508023280"
           },
           {
             "ranking": 5,
-            "track": 0,
+            "idx": 0,
             "id": "1488408568"
           },
           {
             "ranking": 6,
-            "track": 0,
+            "idx": 0,
             "id": "1522994920"
           },
           {
             "ranking": 7,
-            "track": 0,
+            "idx": 0,
             "id": "1485802967"
           },
           {
             "ranking": 8,
-            "track": 0,
+            "idx": 0,
             "id": "1519349225"
           },
           {
             "ranking": 9,
-            "track": 0,
+            "idx": 0,
             "id": "1517696110"
           },
           {
             "ranking": 10,
-            "track": 0,
+            "idx": 0,
             "id": "1523923824"
           }
         ],
         "jp": [
           {
             "ranking": 1,
-            "track": 0,
+            "idx": 0,
             "id": "1526746984"
           },
           {
             "ranking": 2,
-            "track": 0,
+            "idx": 0,
             "id": "1528831888"
           },
           {
             "ranking": 3,
-            "track": 0,
+            "idx": 0,
             "id": "1527584879"
           },
           {
             "ranking": 4,
-            "track": 0,
+            "idx": 0,
             "id": "1508023280"
           },
           {
             "ranking": 5,
-            "track": 0,
+            "idx": 0,
             "id": "1488408568"
           },
           {
             "ranking": 6,
-            "track": 0,
+            "idx": 0,
             "id": "1522994920"
           },
           {
             "ranking": 7,
-            "track": 0,
+            "idx": 0,
             "id": "1485802967"
           },
           {
             "ranking": 8,
-            "track": 0,
+            "idx": 0,
             "id": "1519349225"
           },
           {
             "ranking": 9,
-            "track": 0,
+            "idx": 0,
             "id": "1517696110"
           },
           {
             "ranking": 10,
-            "track": 0,
+            "idx": 0,
             "id": "1523923824"
           }
         ]
@@ -955,114 +955,114 @@
         "us": [
           {
             "ranking": 1,
-            "track": 0,
+            "idx": 0,
             "id": "1527213875"
           },
           {
             "ranking": 2,
-            "track": 0,
+            "idx": 0,
             "id": "1508133095"
           },
           {
             "ranking": 3,
-            "track": 0,
+            "idx": 0,
             "id": "1522413698"
           },
           {
             "ranking": 4,
-            "track": 0,
+            "idx": 0,
             "id": "1520206112"
           },
           {
             "ranking": 5,
-            "track": 0,
+            "idx": 0,
             "id": "1490256995"
           },
           {
             "ranking": 6,
-            "track": 0,
+            "idx": 0,
             "id": "1529518695"
           },
           {
             "ranking": 7,
-            "track": 0,
+            "idx": 0,
             "id": "1528927424"
           },
           {
             "ranking": 8,
-            "track": 0,
+            "idx": 0,
             "id": "1529398354"
           },
           {
             "ranking": 8,
-            "track": 1,
+            "idx": 1,
             "id": "1529398355"
           },
           {
             "ranking": 9,
-            "track": 0,
+            "idx": 0,
             "id": null
           },
           {
             "ranking": 10,
-            "track": 0,
+            "idx": 0,
             "id": "1524596325"
           }
         ],
         "jp": [
           {
             "ranking": 1,
-            "track": 0,
+            "idx": 0,
             "id": "1527213875"
           },
           {
             "ranking": 2,
-            "track": 0,
+            "idx": 0,
             "id": "1508133095"
           },
           {
             "ranking": 3,
-            "track": 0,
+            "idx": 0,
             "id": "1522413698"
           },
           {
             "ranking": 4,
-            "track": 0,
+            "idx": 0,
             "id": "1519410583"
           },
           {
             "ranking": 5,
-            "track": 0,
+            "idx": 0,
             "id": "1490256995"
           },
           {
             "ranking": 6,
-            "track": 0,
+            "idx": 0,
             "id": "1528831888"
           },
           {
             "ranking": 7,
-            "track": 0,
+            "idx": 0,
             "id": "1520367284"
           },
           {
             "ranking": 8,
-            "track": 0,
+            "idx": 0,
             "id": "1529398354"
           },
           {
             "ranking": 8,
-            "track": 1,
+            "idx": 1,
             "id": "1529398355"
           },
           {
             "ranking": 9,
-            "track": 0,
+            "idx": 0,
             "id": "1521414181"
           },
           {
             "ranking": 10,
-            "track": 0,
+            "idx": 0,
             "id": "1524596325"
           }
         ]
@@ -1071,104 +1071,104 @@
         "us": [
           {
             "ranking": 1,
-            "track": 0,
+            "idx": 0,
             "id": "1526746984"
           },
           {
             "ranking": 2,
-            "track": 0,
+            "idx": 0,
             "id": "1522994920"
           },
           {
             "ranking": 3,
-            "track": 0,
+            "idx": 0,
             "id": "1527453622"
           },
           {
             "ranking": 4,
-            "track": 0,
+            "idx": 0,
             "id": "1522012311"
           },
           {
             "ranking": 5,
-            "track": 0,
-            "id": "1531546425"
+            "idx": 0,
+            "id": "1521889940"
           },
           {
             "ranking": 6,
-            "track": 0,
+            "idx": 0,
             "id": "1518804165"
           },
           {
             "ranking": 7,
-            "track": 0,
+            "idx": 0,
             "id": "1527584879"
           },
           {
             "ranking": 8,
-            "track": 0,
+            "idx": 0,
             "id": "1511808887"
           },
           {
             "ranking": 9,
-            "track": 0,
+            "idx": 0,
             "id": "1523923826"
           },
           {
             "ranking": 10,
-            "track": 0,
+            "idx": 0,
             "id": "1527145752"
           }
         ],
         "jp": [
           {
             "ranking": 1,
-            "track": 0,
+            "idx": 0,
             "id": "1526746984"
           },
           {
             "ranking": 2,
-            "track": 0,
+            "idx": 0,
             "id": "1522994920"
           },
           {
             "ranking": 3,
-            "track": 0,
+            "idx": 0,
             "id": "1527453622"
           },
           {
             "ranking": 4,
-            "track": 0,
+            "idx": 0,
             "id": "1522012311"
           },
           {
             "ranking": 5,
-            "track": 0,
+            "idx": 0,
             "id": "1521889940"
           },
           {
             "ranking": 6,
-            "track": 0,
+            "idx": 0,
             "id": "1518804165"
           },
           {
             "ranking": 7,
-            "track": 0,
+            "idx": 0,
             "id": "1527584879"
           },
           {
             "ranking": 8,
-            "track": 0,
+            "idx": 0,
             "id": "1513872008"
           },
           {
             "ranking": 9,
-            "track": 0,
+            "idx": 0,
             "id": "1523923826"
           },
           {
             "ranking": 10,
-            "track": 0,
+            "idx": 0,
             "id": "1527145752"
           }
         ]
@@ -1177,192 +1177,212 @@
         "us": [
           {
             "ranking": 1,
-            "track": 0,
+            "idx": 0,
             "id": "1529518695"
           },
           {
             "ranking": 2,
-            "track": 0,
+            "idx": 0,
             "id": "1524262362"
           },
           {
             "ranking": 3,
-            "track": 0,
+            "idx": 0,
             "id": "1524236597"
           },
           {
             "ranking": 4,
-            "track": 0,
+            "idx": 0,
             "id": "1525184770"
           },
           {
             "ranking": 5,
-            "track": 0,
+            "idx": 0,
             "id": "1521222426"
           },
           {
             "ranking": 6,
-            "track": 0,
+            "idx": 0,
             "id": "1526450436"
           },
           {
             "ranking": 7,
-            "track": 0,
+            "idx": 0,
             "id": "1520233767"
           },
           {
             "ranking": 8,
-            "track": 0,
+            "idx": 0,
             "id": "1511885178"
           },
           {
             "ranking": 9,
-            "track": 0,
+            "idx": 0,
             "id": "570435819"
           },
           {
             "ranking": 10,
-            "track": 0,
+            "idx": 0,
             "id": "1508988684"
           }
         ],
         "jp": [
           {
             "ranking": 1,
-            "track": 0,
+            "idx": 0,
             "id": "1528831888"
           },
           {
             "ranking": 2,
-            "track": 0,
+            "idx": 0,
             "id": "1524262362"
           },
           {
             "ranking": 3,
-            "track": 0,
+            "idx": 0,
             "id": "1524236597"
           },
           {
             "ranking": 4,
-            "track": 0,
+            "idx": 0,
             "id": "1525184770"
           },
           {
             "ranking": 5,
-            "track": 0,
+            "idx": 0,
             "id": "1521405863"
           },
           {
             "ranking": 6,
-            "track": 0,
+            "idx": 0,
             "id": "1526134385"
           },
           {
             "ranking": 7,
-            "track": 0,
+            "idx": 0,
             "id": "1520164321"
           },
           {
             "ranking": 8,
-            "track": 0,
+            "idx": 0,
             "id": "1511885178"
           },
           {
             "ranking": 9,
-            "track": 0,
+            "idx": 0,
             "id": "570435819"
           },
           {
             "ranking": 10,
-            "track": 0,
+            "idx": 0,
             "id": "1509673709"
           }
         ]
       }
     },
-    "albums": {
+    "album": {
       "us": {
         "us": [
           {
             "ranking": 1,
+            "idx": 0,
             "id": "1530247672"
           },
           {
             "ranking": 2,
+            "idx": 0,
             "id": "1521889004"
           },
           {
             "ranking": 3,
+            "idx": 0,
             "id": "1522943749"
           },
           {
             "ranking": 4,
+            "idx": 0,
             "id": "1529231564"
           },
           {
             "ranking": 5,
+            "idx": 0,
             "id": "1524801260"
           },
           {
             "ranking": 6,
+            "idx": 0,
             "id": "1025210938"
           },
           {
             "ranking": 7,
+            "idx": 0,
             "id": "1498988850"
           },
           {
             "ranking": 8,
+            "idx": 0,
             "id": "1504192331"
           },
           {
             "ranking": 9,
+            "idx": 0,
             "id": "1508023035"
           },
           {
             "ranking": 10,
+            "idx": 0,
             "id": "1477880265"
           }
         ],
         "jp": [
           {
             "ranking": 1,
+            "idx": 0,
             "id": "1530247672"
           },
           {
             "ranking": 2,
+            "idx": 0,
             "id": "1521889004"
           },
           {
             "ranking": 3,
+            "idx": 0,
             "id": "1522943749"
           },
           {
             "ranking": 4,
+            "idx": 0,
             "id": "1529231564"
           },
           {
             "ranking": 5,
+            "idx": 0,
             "id": "1528112358"
           },
           {
             "ranking": 6,
+            "idx": 0,
             "id": "1025210938"
           },
           {
             "ranking": 7,
+            "idx": 0,
             "id": "1498988850"
           },
           {
             "ranking": 8,
+            "idx": 0,
             "id": "1504192331"
           },
           {
             "ranking": 9,
+            "idx": 0,
             "id": "1508023035"
           },
           {
             "ranking": 10,
+            "idx": 0,
             "id": "1477880265"
           }
         ]
@@ -1371,84 +1391,104 @@
         "us": [
           {
             "ranking": 1,
+            "idx": 0,
             "id": "1528149531"
           },
           {
             "ranking": 2,
+            "idx": 0,
             "id": "1525539754"
           },
           {
             "ranking": 3,
+            "idx": 0,
             "id": "1525512958"
           },
           {
             "ranking": 4,
+            "idx": 0,
             "id": "1522750384"
           },
           {
             "ranking": 5,
+            "idx": 0,
             "id": "1155649978"
           },
           {
             "ranking": 6,
+            "idx": 0,
             "id": "915220144"
           },
           {
             "ranking": 7,
+            "idx": 0,
             "id": null
           },
           {
             "ranking": 8,
+            "idx": 0,
             "id": null
           },
           {
             "ranking": 9,
+            "idx": 0,
             "id": "1520206097"
           },
           {
             "ranking": 10,
+            "idx": 0,
             "id": "1479397582"
           }
         ],
         "jp": [
           {
             "ranking": 1,
+            "idx": 0,
             "id": "1528149531"
           },
           {
             "ranking": 2,
+            "idx": 0,
             "id": "1525539754"
           },
           {
             "ranking": 3,
+            "idx": 0,
             "id": "1521414178"
           },
           {
             "ranking": 4,
+            "idx": 0,
             "id": "1528189387"
           },
           {
             "ranking": 5,
+            "idx": 0,
             "id": "1046404054"
           },
           {
             "ranking": 6,
-            "id": "2531863"
+            "idx": 0,
+            "id": "915220144"
           },
           {
             "ranking": 7,
+            "idx": 0,
             "id": null
           },
           {
             "ranking": 8,
+            "idx": 0,
             "id": null
           },
           {
             "ranking": 9,
+            "idx": 0,
             "id": "1519410580"
           },
           {
             "ranking": 10,
+            "idx": 0,
             "id": "1479397582"
           }
         ]
@@ -1457,84 +1497,104 @@
         "us": [
           {
             "ranking": 1,
+            "idx": 0,
             "id": "1440852826"
           },
           {
             "ranking": 2,
+            "idx": 0,
             "id": "1495273077"
           },
           {
             "ranking": 3,
+            "idx": 0,
             "id": "1521889004"
           },
           {
             "ranking": 4,
+            "idx": 0,
             "id": "1525361355"
           },
           {
             "ranking": 5,
+            "idx": 0,
             "id": "1524801260"
           },
           {
             "ranking": 6,
+            "idx": 0,
             "id": "1522943749"
           },
           {
             "ranking": 7,
+            "idx": 0,
             "id": "1452618876"
           },
           {
             "ranking": 8,
+            "idx": 0,
             "id": "1495799403"
           },
           {
             "ranking": 9,
+            "idx": 0,
             "id": "1494284390"
           },
           {
             "ranking": 10,
+            "idx": 0,
             "id": "1485802965"
           }
         ],
         "jp": [
           {
             "ranking": 1,
+            "idx": 0,
             "id": "1440852826"
           },
           {
             "ranking": 2,
+            "idx": 0,
             "id": "1521184346"
           },
           {
             "ranking": 3,
+            "idx": 0,
             "id": "1521889004"
           },
           {
             "ranking": 4,
+            "idx": 0,
             "id": "1525361355"
           },
           {
             "ranking": 5,
+            "idx": 0,
             "id": "1528112358"
           },
           {
             "ranking": 6,
+            "idx": 0,
             "id": "1522943749"
           },
           {
             "ranking": 7,
+            "idx": 0,
             "id": "1452618876"
           },
           {
             "ranking": 8,
+            "idx": 0,
             "id": "1495799403"
           },
           {
             "ranking": 9,
+            "idx": 0,
             "id": "1494284390"
           },
           {
             "ranking": 10,
+            "idx": 0,
             "id": "1485802965"
           }
         ]
@@ -1543,84 +1603,104 @@
         "us": [
           {
             "ranking": 1,
+            "idx": 0,
             "id": null
           },
           {
             "ranking": 2,
+            "idx": 0,
             "id": null
           },
           {
             "ranking": 3,
+            "idx": 0,
             "id": "1530216879"
           },
           {
             "ranking": 4,
-            "id": "1531445989"
+            "idx": 0,
+            "id": "1526107944"
           },
           {
             "ranking": 5,
+            "idx": 0,
             "id": null
           },
           {
             "ranking": 6,
+            "idx": 0,
             "id": "1528946634"
           },
           {
             "ranking": 7,
+            "idx": 0,
             "id": "1523752057"
           },
           {
             "ranking": 8,
+            "idx": 0,
             "id": "1530785705"
           },
           {
             "ranking": 9,
+            "idx": 0,
             "id": "1528295587"
           },
           {
             "ranking": 10,
+            "idx": 0,
             "id": "1530315721"
           }
         ],
         "jp": [
           {
             "ranking": 1,
+            "idx": 0,
             "id": null
           },
           {
             "ranking": 2,
+            "idx": 0,
             "id": null
           },
           {
             "ranking": 3,
+            "idx": 0,
             "id": "1530379595"
           },
           {
             "ranking": 4,
+            "idx": 0,
             "id": "1531654203"
           },
           {
             "ranking": 5,
+            "idx": 0,
             "id": null
           },
           {
             "ranking": 6,
+            "idx": 0,
             "id": "1528946634"
           },
           {
             "ranking": 7,
+            "idx": 0,
             "id": "1523752057"
           },
           {
             "ranking": 8,
+            "idx": 0,
             "id": "1530785705"
           },
           {
             "ranking": 9,
+            "idx": 0,
             "id": "1528295587"
           },
           {
             "ranking": 10,
+            "idx": 0,
             "id": "1530315721"
           }
         ]

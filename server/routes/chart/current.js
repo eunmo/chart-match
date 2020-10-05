@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.get('/single/:store', async (req, res) => {
   const { store } = req.params;
-  const songs = await chartCurrent.getSortedSongs(store);
+  const songs = await chartCurrent.getSorted('single', store);
   const shrinked = songs
     .map(({ id, ranks }) => ({ id, rank: ranks[0].ranking }))
     .filter(({ rank }) => rank <= 10);
@@ -23,7 +23,7 @@ router.get('/single/:store', async (req, res) => {
 
 router.get('/album/:store', async (req, res) => {
   const { store } = req.params;
-  const albums = await chartCurrent.getSortedAlbums(store);
+  const albums = await chartCurrent.getSorted('album', store);
   const shrinked = albums
     .map(({ id, ranks }) => ({ id, rank: ranks[0].ranking }))
     .filter(({ rank }) => rank <= 10);

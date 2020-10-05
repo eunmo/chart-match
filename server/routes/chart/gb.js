@@ -22,16 +22,13 @@ function extract(doc) {
   return ranks;
 }
 
-async function fetchSingle(date) {
+async function fetch(type, date) {
   const ymd = refDateYMD(date, 0, 5).replace(/-/g, '');
-  const url = `https://www.officialcharts.com/charts/singles-chart/${ymd}/7501`;
+  const url =
+    type === 'single'
+      ? `https://www.officialcharts.com/charts/singles-chart/${ymd}/7501`
+      : `https://www.officialcharts.com/charts/albums-chart/${ymd}/7502`;
   return extract(await getDoc(url));
 }
 
-async function fetchAlbum(date) {
-  const ymd = refDateYMD(date, 0, 5).replace(/-/g, '');
-  const url = `https://www.officialcharts.com/charts/albums-chart/${ymd}/7502`;
-  return extract(await getDoc(url));
-}
-
-module.exports = { fetchSingle, fetchAlbum };
+module.exports = fetch;

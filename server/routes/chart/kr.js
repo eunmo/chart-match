@@ -23,16 +23,13 @@ function extract(doc) {
   return ranks;
 }
 
-async function fetchSingle(date) {
+async function fetch(type, date) {
   const [year, refWeek] = refDateWeek(date, 0, 6);
-  const url = `http://www.gaonchart.co.kr/main/section/chart/online.gaon?nationGbn=T&serviceGbn=ALL&targetTime=${refWeek}&hitYear=${year}&termGbn=week`;
+  const url =
+    type === 'single'
+      ? `http://www.gaonchart.co.kr/main/section/chart/online.gaon?nationGbn=T&serviceGbn=ALL&targetTime=${refWeek}&hitYear=${year}&termGbn=week`
+      : `http://www.gaonchart.co.kr/main/section/chart/album.gaon?nationGbn=T&serviceGbn=ALL&targetTime=${refWeek}&hitYear=${year}&termGbn=week`;
   return extract(await getDoc(url));
 }
 
-async function fetchAlbum(date) {
-  const [year, refWeek] = refDateWeek(date, 0, 6);
-  const url = `http://www.gaonchart.co.kr/main/section/chart/album.gaon?nationGbn=T&serviceGbn=ALL&targetTime=${refWeek}&hitYear=${year}&termGbn=week`;
-  return extract(await getDoc(url));
-}
-
-module.exports = { fetchSingle, fetchAlbum };
+module.exports = fetch;

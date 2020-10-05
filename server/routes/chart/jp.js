@@ -21,26 +21,16 @@ function extract(docs) {
   return ranks;
 }
 
-async function fetchSingle(date) {
+async function fetch(type, date) {
   const ymd = refDateYMD(date, 2, 1);
-  const urls = [1, 2, 3, 4, 5].map(
-    (p) =>
-      `https://www.oricon.co.jp/rank/cos/w/${ymd}/${p > 1 ? `p/${p}/` : ''}`
+  const urls = [1, 2, 3, 4, 5].map((p) =>
+    type === 'single'
+      ? `https://www.oricon.co.jp/rank/cos/w/${ymd}/${p > 1 ? `p/${p}/` : ''}`
+      : `https://www.oricon.co.jp/rank/coa/w/${ymd}/${p > 1 ? `p/${p}/` : ''}`
   );
   return extract(
     await Promise.all(urls.map((url) => getDoc(url, 'shift_jis')))
   );
 }
 
-async function fetchAlbum(date) {
-  const ymd = refDateYMD(date, 2, 1);
-  const urls = [1, 2, 3, 4, 5].map(
-    (p) =>
-      `https://www.oricon.co.jp/rank/coa/w/${ymd}/${p > 1 ? `p/${p}/` : ''}`
-  );
-  return extract(
-    await Promise.all(urls.map((url) => getDoc(url, 'shift_jis')))
-  );
-}
-
-module.exports = { fetchSingle, fetchAlbum };
+module.exports = fetch;

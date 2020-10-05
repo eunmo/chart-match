@@ -4,10 +4,28 @@ const { queryAppleMusic } = require('./util');
 
 const router = express.Router();
 
-router.put('/single', async (req, res) => {
+router.delete('/:type', async (req, res) => {
+  const { type } = req.params;
+  const { store, entry } = req.body;
+  await chartMatch.remove(type, store, entry);
+  await chartMatch.add(type, store, [{ entry, idx: 0, id: null }]);
+  res.sendStatus(200);
+});
+
+router.put('/id/:type', async (req, res) => {
+  const { type } = req.params;
   const { store, entry, id } = req.body;
-  await chartMatch.deleteSingle(store, entry);
-  await chartMatch.addSingles(store, [{ entry, track: 0, id }]);
+  await chartMatch.remove(type, store, entry);
+  await chartMatch.add(type, store, [{ entry, idx: 0, id }]);
+  res.sendStatus(200);
+});
+
+router.put('/ids/:type', async (req, res) => {
+  const { type } = req.params;
+  const { store, entry, ids } = req.body;
+  const toAdd = ids.map((id, idx) => ({ entry, idx, id }));
+  await chartMatch.remove(type, store, entry);
+  await chartMatch.add(type, store, toAdd);
   res.sendStatus(200);
 });
 
@@ -23,39 +41,13 @@ router.put('/singles', async (req, res) => {
   }
 
   const songs = albumResponse.data.slice(0, count);
-  await chartMatch.deleteSingle(store, entry);
+  await chartMatch.remove('single', store, entry);
 
   const toAdd = [];
-  songs.forEach((song, track) => {
-    toAdd.push({ entry, track, id: song.id });
+  songs.forEach((song, idx) => {
+    toAdd.push({ entry, idx, id: song.id });
   });
-  await chartMatch.addSingles(store, toAdd);
-  res.sendStatus(200);
-});
-
-router.put('/single-ids', async (req, res) => {
-  const { store, entry, ids } = req.body;
-  const toAdd = ids.map((id, track) => ({ entry, track, id }));
-  await chartMatch.deleteSingle(store, entry);
-  await chartMatch.addSingles(store, toAdd);
-  res.sendStatus(200);
-});
-
-router.delete('/single', async (req, res) => {
-  const { store, entry } = req.body;
-  await chartMatch.clearSingle(store, entry);
-  res.sendStatus(200);
-});
-
-router.put('/album', async (req, res) => {
-  const { store, entry, id } = req.body;
-  await chartMatch.editAlbum(store, entry, id);
-  res.sendStatus(200);
-});
-
-router.delete('/album', async (req, res) => {
-  const { store, entry } = req.body;
-  await chartMatch.clearAlbum(store, entry);
+  await chartMatch.add('single', store, toAdd);
   res.sendStatus(200);
 });
 

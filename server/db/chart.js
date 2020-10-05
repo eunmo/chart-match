@@ -47,14 +47,14 @@ function getWeeks(type, store, weeks) {
 
 function getMatches(type, chart, week, store) {
   return query(`
-    SELECT ranking, id
+    SELECT ranking, idx, id
     FROM ${type}Chart c
     LEFT JOIN ${type}ChartMatch m
     ON c.entry = m.entry
     WHERE c.chart=${chart}
     AND c.week='${week}'
     AND m.store in (null, '${store}')
-    ORDER BY ranking`);
+    ORDER BY ranking, idx`);
 }
 
 function getNonMatches(type, chart, week, store) {

@@ -21,16 +21,13 @@ function extract(doc) {
   return ranks;
 }
 
-async function fetchSingle(date) {
+async function fetch(type, date) {
   const ymd = refDateYMD(date, 1, 4);
-  const url = `https://www.billboard.com/charts/hot-100/${ymd}`;
+  const url =
+    type === 'single'
+      ? `https://www.billboard.com/charts/hot-100/${ymd}`
+      : `https://www.billboard.com/charts/billboard-200/${ymd}`;
   return extract(await getDoc(url));
 }
 
-async function fetchAlbum(date) {
-  const ymd = refDateYMD(date, 1, 4);
-  const url = `https://www.billboard.com/charts/billboard-200/${ymd}`;
-  return extract(await getDoc(url));
-}
-
-module.exports = { fetchSingle, fetchAlbum };
+module.exports = fetch;

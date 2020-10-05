@@ -100,7 +100,7 @@ router.get('/single/:chartName/:date/:store', async (req, res) => {
     return;
   }
 
-  let raw = await chart.getSingleNonMatches(chartId, week, store);
+  let raw = await chart.getNonMatches('single', chartId, week, store);
   raw = raw.filter(({ ranking }) => ranking <= 10);
   if (raw.length === 0) {
     res.sendStatus(200);
@@ -116,15 +116,15 @@ router.get('/single/:chartName/:date/:store', async (req, res) => {
   response.forEach((songs, index) => {
     const { entry } = raw[index];
     if (songs.length === 0) {
-      toAdd.push({ entry, track: 0 });
+      toAdd.push({ entry, idx: 0 });
     } else {
-      songs.forEach((song, track) => {
-        toAdd.push({ entry, track, id: song.id });
+      songs.forEach((song, idx) => {
+        toAdd.push({ entry, idx, id: song.id });
       });
     }
   });
 
-  await chartMatch.addSingles(store, toAdd);
+  await chartMatch.add('single', store, toAdd);
   res.sendStatus(200);
 });
 
@@ -163,7 +163,7 @@ router.get('/album/:chartName/:date/:store', async (req, res) => {
     return;
   }
 
-  let raw = await chart.getAlbumNonMatches(chartId, week, store);
+  let raw = await chart.getNonMatches('album', chartId, week, store);
   raw = raw.filter(({ ranking }) => ranking <= 10);
   if (raw.length === 0) {
     res.sendStatus(200);
@@ -179,13 +179,13 @@ router.get('/album/:chartName/:date/:store', async (req, res) => {
   response.forEach((album, index) => {
     const { entry } = raw[index];
     if (album) {
-      toAdd.push({ entry, id: album.id });
+      toAdd.push({ entry, idx: 0, id: album.id });
     } else {
-      toAdd.push({ entry });
+      toAdd.push({ entry, idx: 0 });
     }
   });
 
-  await chartMatch.addAlbums(store, toAdd);
+  await chartMatch.add('album', store, toAdd);
   res.sendStatus(200);
 });
 
