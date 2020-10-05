@@ -21,7 +21,6 @@ const useStyles = makeStyles((theme) => ({
     display: 'grid',
     gridTemplateColumns: '1fr 50px auto 1fr',
     gridColumnGap: theme.spacing(1),
-    fontSize: '1.5em',
     lineHeight: '50px',
   },
   showGrid: {
@@ -50,48 +49,48 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default () => {
-  const [albums, setAlbums] = useState(undefined);
+  const [entries, setEntries] = useState(undefined);
   const [showButtons, setShowButtons] = useState(false);
   const [loading, setLoading] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
-  const { chart, week } = useParams();
+  const { type, chart, week } = useParams();
   const [store] = useContext(Context);
   const classes = useStyles();
 
   useEffect(() => {
     setOpenDialog(false);
     setShowButtons(false);
-    get(`/api/chart/select/album/${chart}/${week}/${store}`, setAlbums);
-  }, [chart, week, store]);
+    get(`/api/chart/select/week/${type}/${chart}/${week}/${store}`, setEntries);
+  }, [type, chart, week, store]);
 
   async function fetchChart() {
-    setAlbums(undefined);
+    setEntries(undefined);
     setLoading(true);
-    await fetch(`/api/chart/fetch/album/${chart}/${week}`);
+    await fetch(`/api/chart/fetch/${type}/${chart}/${week}`);
     setLoading(false);
     setShowButtons(false);
-    get(`/api/chart/select/album/${chart}/${week}/${store}`, setAlbums);
+    get(`/api/chart/select/week/${type}/${chart}/${week}/${store}`, setEntries);
   }
 
   async function matchChart() {
-    setAlbums(undefined);
+    setEntries(undefined);
     setLoading(true);
-    await fetch(`/api/chart/match/album/${chart}/${week}/us`);
-    await fetch(`/api/chart/match/album/${chart}/${week}/jp`);
+    await fetch(`/api/chart/match/${type}/${chart}/${week}/us`);
+    await fetch(`/api/chart/match/${type}/${chart}/${week}/jp`);
     setLoading(false);
     setShowButtons(false);
-    get(`/api/chart/select/album/${chart}/${week}/${store}`, setAlbums);
+    get(`/api/chart/select/week/${type}/${chart}/${week}/${store}`, setEntries);
   }
 
   async function fetchMatchChart() {
-    setAlbums(undefined);
+    setEntries(undefined);
     setLoading(true);
-    await fetch(`/api/chart/fetch/album/${chart}/${week}`);
-    await fetch(`/api/chart/match/album/${chart}/${week}/us`);
-    await fetch(`/api/chart/match/album/${chart}/${week}/jp`);
+    await fetch(`/api/chart/fetch/${type}/${chart}/${week}`);
+    await fetch(`/api/chart/match/${type}/${chart}/${week}/us`);
+    await fetch(`/api/chart/match/${type}/${chart}/${week}/jp`);
     setLoading(false);
     setShowButtons(false);
-    get(`/api/chart/select/album/${chart}/${week}/${store}`, setAlbums);
+    get(`/api/chart/select/week/${type}/${chart}/${week}/${store}`, setEntries);
   }
 
   const grid = showButtons ? classes.editGrid : classes.showGrid;
@@ -104,7 +103,7 @@ export default () => {
           <Flag chart={chart} />
         </div>
         <div>
-          <Button onClick={() => setOpenDialog(true)}>{week} Albums</Button>
+          <Button onClick={() => setOpenDialog(true)}>{week} Singles</Button>
         </div>
         <div style={{ textAlign: 'right' }}>
           <IconButton onClick={() => setShowButtons(!showButtons)}>
@@ -112,30 +111,30 @@ export default () => {
           </IconButton>
         </div>
       </div>
-      {albums?.map((album) => (
-        <div className={grid} key={album.ranking}>
-          {album.catalog ? (
-            <Link href={album.catalog.url}>
-              <Image url={album.catalog.artworkUrl} isNew={album.isNew} />
+      {entries?.map((entry) => (
+        <div className={grid} key={`${entry.entry} ${entry.track}`}>
+          {entry.catalog ? (
+            <Link href={entry.catalog.url}>
+              <Image url={entry.catalog.artworkUrl} isNew={entry.isNew} />
             </Link>
           ) : (
             <div />
           )}
-          <div className={classes.rank}>{album.ranking}</div>
+          <div className={classes.rank}>{entry.ranking}</div>
           <Item
-            title={album.catalog ? album.catalog.title : album.raw.title}
-            subtitle={album.catalog ? album.catalog.artist : album.raw.artist}
+            title={entry.catalog ? entry.catalog.title : entry.raw.title}
+            subtitle={entry.catalog ? entry.catalog.artist : entry.raw.artist}
           />
           {showButtons && (
             <IconButton
               component={RouterLink}
-              to={`/edit/album/${chart}/${album.entry}`}
+              to={`/edit/${type}/${chart}/${entry.entry}`}
             >
               <Edit />
             </IconButton>
           )}
           {showButtons &&
-            album.catalog && [
+            entry.catalog && [
               <div
                 className={classes.raw}
                 style={{ gridColumnStart: 2 }}
@@ -144,7 +143,7 @@ export default () => {
                 Raw
               </div>,
               <div key="item">
-                <Item title={album.raw.title} subtitle={album.raw.artist} />
+                <Item title={entry.raw.title} subtitle={entry.raw.artist} />
               </div>,
             ]}
         </div>
@@ -154,7 +153,7 @@ export default () => {
           <CircularProgress />
         </div>
       )}
-      {(showButtons || albums?.length === 0) && !loading && (
+      {(showButtons || entries?.length === 0) && !loading && (
         <ButtonGroup>
           <Button onClick={() => fetchChart()}>Fetch</Button>
           <Button onClick={() => matchChart()}>Match</Button>
@@ -164,7 +163,7 @@ export default () => {
       <WeekDialog
         handleClose={() => setOpenDialog(false)}
         week={week}
-        urlPrefix={`/album/${chart}`}
+        urlPrefix={`/${type}/${chart}`}
         open={openDialog}
       />
     </Container>

@@ -10,11 +10,9 @@ import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
 import { Provider as StoreProvider } from './store';
-import AlbumChart from './AlbumChart';
 import AppBar from './AppBar';
-import EditAlbum from './EditAlbum';
-import EditSingle from './EditSingle';
-import SingleChart from './SingleChart';
+import Edit from './Edit';
+import ChartWeek from './ChartWeek';
 import Tops from './Tops';
 
 export default () => {
@@ -38,17 +36,11 @@ export default () => {
         <Router>
           <AppBar />
           <Switch>
-            <Route path="/single/:chart/:week">
-              <SingleChart />
+            <Route path="/week/:type/:chart/:week">
+              <ChartWeek />
             </Route>
-            <Route path="/album/:chart/:week">
-              <AlbumChart />
-            </Route>
-            <Route path="/edit/album/:chart/:entry">
-              <EditAlbum />
-            </Route>
-            <Route path="/edit/single/:chart/:entry">
-              <EditSingle />
+            <Route path="/edit/:type/:chart/:entry">
+              <Edit />
             </Route>
             <Route path="/tops">
               <Tops />

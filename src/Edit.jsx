@@ -45,9 +45,17 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'space-between',
     marginBottom: theme.spacing(1),
   },
-  searchGrid: {
+  singleSearchGrid: {
     display: 'grid',
     gridTemplateColumns: '50px 50px 50px 1fr',
+    gridRowGap: theme.spacing(1),
+    gridColumnGap: theme.spacing(1),
+    lineHeight: '25px',
+    marginBottom: theme.spacing(1),
+  },
+  albumSearchGrid: {
+    display: 'grid',
+    gridTemplateColumns: '50px 50px 1fr',
     gridRowGap: theme.spacing(1),
     gridColumnGap: theme.spacing(1),
     lineHeight: '25px',
@@ -57,42 +65,45 @@ const useStyles = makeStyles((theme) => ({
 
 export default () => {
   const [keyword, setKeyword] = useState('');
-  const [songs, setSongs] = useState([]);
+  const [entries, setEntries] = useState([]);
   const [searchResults, setSearchResults] = useState(null);
   const [selected, setSelected] = useState(null);
-  const { chart, entry } = useParams();
+  const { type, chart, entry } = useParams();
   const [store] = useContext(Context);
   const classes = useStyles();
 
   useEffect(() => {
-    get(`/api/chart/select/single-entry/${chart}/${entry}/${store}`, setSongs);
+    get(
+      `/api/chart/select/entry/${type}/${chart}/${entry}/${store}`,
+      setEntries
+    );
     setKeyword('');
     setSearchResults(null);
-  }, [chart, entry, store]);
+  }, [type, chart, entry, store]);
 
-  if (songs.length === 0) {
+  if (entries.length === 0) {
     return null;
   }
 
   function clear() {
-    deleteBody('/api/chart/edit/single', { store, entry }, () => {
+    deleteBody(`/api/chart/edit/${type}`, { store, entry }, () => {
       get(
-        `/api/chart/select/single-entry/${chart}/${entry}/${store}`,
-        setSongs
+        `/api/chart/select/entry/${type}/${chart}/${entry}/${store}`,
+        setEntries
       );
     });
   }
 
   function submitSearch(e) {
     e.preventDefault();
-    get(`/api/chart/search/single/${keyword}/${store}`, setSearchResults);
+    get(`/api/chart/search/${type}/${keyword}/${store}`, setSearchResults);
   }
 
   function fillSearchBox() {
-    const { raw } = songs[0];
+    const { raw } = entries[0];
     const newKeyword = `${raw.artist} ${raw.title}`;
     setKeyword(newKeyword);
-    get(`/api/chart/search/single/${newKeyword}/${store}`, setSearchResults);
+    get(`/api/chart/search/${type}/${newKeyword}/${store}`, setSearchResults);
   }
 
   function clearSearch() {
@@ -100,44 +111,37 @@ export default () => {
     setSearchResults(null);
   }
 
-  function chooseSong(song) {
-    put('/api/chart/edit/single', { store, entry, id: song.id }, () => {
+  function chooseEntry(target) {
+    put(`/api/chart/edit/id/${type}`, { store, entry, id: target.id }, () => {
       setKeyword('');
       setSearchResults(null);
-      setSongs([]);
+      setEntries([]);
       get(
-        `/api/chart/select/single-entry/${chart}/${entry}/${store}`,
-        setSongs
+        `/api/chart/select/entry/${type}/${chart}/${entry}/${store}`,
+        setEntries
       );
     });
   }
 
-  function chooseSongs(song, count) {
-    const { url } = song.attributes;
+  function chooseEntries(target, count) {
+    const { url } = target.attributes;
     put('/api/chart/edit/singles', { store, entry, url, count }, () => {
       setKeyword('');
       setSearchResults(null);
-      setSongs([]);
+      setEntries([]);
       get(
-        `/api/chart/select/single-entry/${chart}/${entry}/${store}`,
-        setSongs
+        `/api/chart/select/entry/${type}/${chart}/${entry}/${store}`,
+        setEntries
       );
     });
   }
 
   function manualInput(ids) {
-    put('/api/chart/edit/single-ids', { store, entry, ids }, () => {
-      setKeyword('');
-      setSearchResults(null);
-      setSongs([]);
-      get(
-        `/api/chart/select/single-entry/${chart}/${entry}/${store}`,
-        setSongs
-      );
-    });
+    const [id] = ids;
+    chooseEntry({ id });
   }
 
-  const { raw } = songs[0];
+  const { raw } = entries[0];
 
   return (
     <Container maxWidth="md">
@@ -151,16 +155,16 @@ export default () => {
       <div className={classes.grid}>
         <div className={classes.raw}>Raw</div>
         <Item title={raw.title} subtitle={raw.artist} />
-        {songs
+        {entries
           .filter(({ catalog }) => catalog)
-          .map((song) => [
-            <Link href={song.catalog.url} key={`${song.track} image`}>
-              <Image url={song.catalog.artworkUrl} />
+          .map((e) => [
+            <Link href={e.catalog.url} key={`${e.track} image`}>
+              <Image url={e.catalog.artworkUrl} />
             </Link>,
             <Item
-              key={`${song.track} item`}
-              title={song.catalog.title}
-              subtitle={song.catalog.artist}
+              key={`${e.track} item`}
+              title={e.catalog.title}
+              subtitle={e.catalog.artist}
             />,
           ])}
       </div>
@@ -179,30 +183,32 @@ export default () => {
         onClear={clearSearch}
       />
       {searchResults && 'Search Results:'}
-      {searchResults?.data?.map((song) => (
-        <div className={classes.searchGrid} key={song.id}>
-          <IconButton onClick={() => setSelected(song)}>
-            <DoneAll />
-          </IconButton>
-          <IconButton onClick={() => chooseSong(song)}>
+      {searchResults?.data?.map((e) => (
+        <div className={classes[`${type}SearchGrid`]} key={e.id}>
+          {type === 'single' && (
+            <IconButton onClick={() => setSelected(e)}>
+              <DoneAll />
+            </IconButton>
+          )}
+          <IconButton onClick={() => chooseEntry(e)}>
             <Done />
           </IconButton>
-          <Link href={song.attributes.url}>
-            <Image url={song.attributes.artwork.url} />
+          <Link href={e.attributes.url}>
+            <Image url={e.attributes.artwork.url} />
           </Link>
           <Item
-            title={<Explicit target={song} />}
-            subtitle={song.attributes.artistName}
+            title={<Explicit target={e} />}
+            subtitle={e.attributes.artistName}
           />
-          {selected === song &&
+          {selected === e &&
             [2, 3, 4].map((count) => [
-              <IconButton key={count} onClick={() => chooseSongs(song, count)}>
+              <IconButton key={count} onClick={() => chooseEntries(e, count)}>
                 {`+${count}`}
               </IconButton>,
             ])}
         </div>
       ))}
-      <ManualInput onSubmit={manualInput} multiple />
+      <ManualInput onSubmit={manualInput} />
     </Container>
   );
 };
