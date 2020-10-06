@@ -58,6 +58,7 @@ export default () => {
   const classes = useStyles();
 
   useEffect(() => {
+    setEntries(undefined);
     setOpenDialog(false);
     setShowButtons(false);
     get(`/api/chart/select/week/${type}/${chart}/${week}/${store}`, setEntries);
