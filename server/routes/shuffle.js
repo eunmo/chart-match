@@ -45,8 +45,8 @@ router.get('/:store', async (req, res) => {
   const { store } = req.params;
   const weeks = getWeeks();
   let [singleIds, albumIds] = await Promise.all([
-    chart.getWeekSingles(store, weeks),
-    chart.getWeekAlbums(store, weeks),
+    chart.getWeeks('single', store, weeks),
+    chart.getWeeks('album', store, weeks),
   ]);
 
   singleIds = getRandom(singleIds, 25);
