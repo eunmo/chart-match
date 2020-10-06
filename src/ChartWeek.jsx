@@ -103,7 +103,9 @@ export default () => {
           <Flag chart={chart} />
         </div>
         <div>
-          <Button onClick={() => setOpenDialog(true)}>{week} Singles</Button>
+          <Button onClick={() => setOpenDialog(true)}>
+            {week} {type}s
+          </Button>
         </div>
         <div style={{ textAlign: 'right' }}>
           <IconButton onClick={() => setShowButtons(!showButtons)}>
