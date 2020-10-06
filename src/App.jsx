@@ -13,6 +13,7 @@ import { Provider as StoreProvider } from './store';
 import AppBar from './AppBar';
 import Edit from './Edit';
 import ChartWeek from './ChartWeek';
+import SelectSongs from './SelectSongs';
 import Tops from './Tops';
 
 export default () => {
@@ -41,6 +42,9 @@ export default () => {
             </Route>
             <Route path="/edit/:type/:chart/:entry">
               <Edit />
+            </Route>
+            <Route path="/select-songs/:chart/:entry">
+              <SelectSongs />
             </Route>
             <Route path="/tops">
               <Tops />

@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Link as RouterLink, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import IconButton from '@material-ui/core/IconButton';
 import Link from '@material-ui/core/Link';
-import { ArrowDownward, Assignment, Done, DoneAll } from '@material-ui/icons';
+import { ArrowDownward, Done } from '@material-ui/icons';
 
 import { Context } from './store';
 import { get, put, deleteBody } from './util';
@@ -13,7 +13,6 @@ import Explicit from './Explicit';
 import Flag from './Flag';
 import Image from './Image';
 import Item from './Item';
-import ManualInput from './ManualInput';
 import SearchBox from './SearchBox';
 
 const useStyles = makeStyles((theme) => ({
@@ -45,15 +44,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'space-between',
     marginBottom: theme.spacing(1),
   },
-  singleSearchGrid: {
-    display: 'grid',
-    gridTemplateColumns: '50px 50px 50px 1fr',
-    gridRowGap: theme.spacing(1),
-    gridColumnGap: theme.spacing(1),
-    lineHeight: '25px',
-    marginBottom: theme.spacing(1),
-  },
-  albumSearchGrid: {
+  searchGrid: {
     display: 'grid',
     gridTemplateColumns: '50px 50px 1fr',
     gridRowGap: theme.spacing(1),
@@ -61,8 +52,15 @@ const useStyles = makeStyles((theme) => ({
     lineHeight: '25px',
     marginBottom: theme.spacing(1),
   },
-  assignment: {
-    width: '50px',
+  track: {
+    display: 'flex',
+    height: '40px',
+    lineHeight: '40px',
+  },
+  bottomButtons: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    marginTop: theme.spacing(2),
   },
 }));
 
@@ -70,10 +68,12 @@ export default () => {
   const [keyword, setKeyword] = useState('');
   const [entries, setEntries] = useState([]);
   const [searchResults, setSearchResults] = useState(null);
-  const [selected, setSelected] = useState(null);
-  const { type, chart, entry } = useParams();
+  const [tracks, setTracks] = useState([]);
+  const [selectedSongs, setSelectedSongs] = useState([]);
+  const { chart, entry } = useParams();
   const [store] = useContext(Context);
   const classes = useStyles();
+  const type = 'single';
 
   useEffect(() => {
     get(
@@ -114,34 +114,39 @@ export default () => {
     setSearchResults(null);
   }
 
-  function update() {
-    setKeyword('');
-    setSearchResults(null);
-    setEntries([]);
-    get(
-      `/api/chart/select/entry/${type}/${chart}/${entry}/${store}`,
-      setEntries
-    );
-  }
-
-  function chooseEntry(target) {
-    put(`/api/chart/edit/id/${type}`, { store, entry, id: target.id }, () => {
-      update();
+  function chooseAlbum(song) {
+    const found = song.attributes.url.match(/\/(\d+)\?i/);
+    const albumId = found[1];
+    get(`/api/chart/search/tracks/${albumId}/${store}`, (data) => {
+      clearSearch();
+      setTracks(data);
     });
   }
 
-  function chooseEntries(target, count) {
-    const { url } = target.attributes;
-    put('/api/chart/edit/singles', { store, entry, url, count }, () => {
-      update();
-    });
+  function toggleTrack(track) {
+    const index = selectedSongs.indexOf(track.id);
+    if (index === -1) {
+      setSelectedSongs([...selectedSongs, track.id]);
+    } else {
+      const newSongs = [...selectedSongs];
+      newSongs.splice(index, 1);
+      setSelectedSongs(newSongs);
+    }
   }
 
-  function manualInput(ids) {
-    if (ids.length > 0) {
-      put(`/api/chart/edit/ids/${type}`, { store, entry, ids }, () => {
-        update();
-      });
+  function submit() {
+    if (selectedSongs.length > 0) {
+      put(
+        `/api/chart/edit/ids/${type}`,
+        { store, entry, ids: selectedSongs },
+        () => {
+          setTracks([]);
+          get(
+            `/api/chart/select/entry/${type}/${chart}/${entry}/${store}`,
+            setEntries
+          );
+        }
+      );
     }
   }
 
@@ -154,7 +159,7 @@ export default () => {
         <div>
           <Flag chart={chart} />
         </div>
-        <div>Edit Single</div>
+        <div>Select Singles</div>
       </div>
       <div className={classes.grid}>
         <div className={classes.raw}>Raw</div>
@@ -188,13 +193,8 @@ export default () => {
       />
       {searchResults && 'Search Results:'}
       {searchResults?.data?.map((e) => (
-        <div className={classes[`${type}SearchGrid`]} key={e.id}>
-          {type === 'single' && (
-            <IconButton onClick={() => setSelected(e)}>
-              <DoneAll />
-            </IconButton>
-          )}
-          <IconButton onClick={() => chooseEntry(e)}>
+        <div className={classes.searchGrid} key={e.id}>
+          <IconButton onClick={() => chooseAlbum(e)}>
             <Done />
           </IconButton>
           <Link href={e.attributes.url}>
@@ -204,24 +204,27 @@ export default () => {
             title={<Explicit target={e} />}
             subtitle={e.attributes.artistName}
           />
-          {selected === e &&
-            [2, 3, 4].map((count) => (
-              <IconButton key={count} onClick={() => chooseEntries(e, count)}>
-                {`+${count}`}
-              </IconButton>
-            ))}
         </div>
       ))}
-      {searchResults && (
-        <IconButton
-          className={classes.assignment}
-          component={RouterLink}
-          to={`/select-songs/${chart}/${entry}`}
-        >
-          <Assignment />
-        </IconButton>
+      {tracks.map((track) => {
+        const index = selectedSongs.indexOf(track.id);
+        return (
+          <div className={classes.track} key={track.id}>
+            <Button onClick={() => toggleTrack(track)}>
+              {index === -1 ? <Done /> : index + 1}
+            </Button>
+            <div>{track.attributes.name}</div>
+          </div>
+        );
+      })}
+      {tracks.length > 0 && (
+        <div className={classes.bottomButtons}>
+          <Button variant="contained" color="primary" onClick={() => submit()}>
+            edit
+          </Button>
+          <Button onClick={() => setSelectedSongs([])}>clear</Button>
+        </div>
       )}
-      <ManualInput onSubmit={manualInput} multiple={type === 'album'} />
     </Container>
   );
 };
