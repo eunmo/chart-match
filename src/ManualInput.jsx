@@ -8,8 +8,6 @@ import Typography from '@material-ui/core/Typography';
 const useStyles = makeStyles({
   header: {
     margin: '16px 0px',
-  },
-  buttons: {
     display: 'flex',
     justifyContent: 'space-between',
   },
@@ -19,60 +17,54 @@ const useStyles = makeStyles({
 });
 
 export default ({ multiple, onSubmit }) => {
-  const [id1, setId1] = useState('');
-  const [id2, setId2] = useState('');
-  const [id3, setId3] = useState('');
-  const [id4, setId4] = useState('');
-  const [count, setCount] = useState(1);
+  const [ids, setIds] = useState(['']);
   const classes = useStyles();
 
-  const ids = [
-    [id1, setId1, 'ID 1'],
-    [id2, setId2, 'ID 2'],
-    [id3, setId3, 'ID 3'],
-    [id4, setId4, 'ID 4'],
-  ];
+  function onChange(event, index) {
+    const newIds = [...ids];
+    newIds[index] = event.target.value;
+    setIds(newIds);
+  }
 
   return (
     <>
-      <Typography variant="h5" className={classes.header}>
-        Manual Input
-      </Typography>
-      <Grid container spacing={2}>
-        {ids.slice(0, count).map(([id, setId, name]) => (
-          <Grid item xs={12} sm={3} key={name}>
-            <TextField
-              fullWidth
-              label={multiple ? name : 'ID'}
-              value={id}
-              onChange={(e) => setId(e.target.value)}
-              inputProps={{ 'aria-label': multiple ? name : 'ID' }}
-            />
-          </Grid>
-        ))}
-      </Grid>
-      <div className={classes.buttons}>
-        <Button
-          variant="contained"
-          color="primary"
-          className={classes.button}
-          onClick={() => onSubmit([id1, id2, id3, id4].slice(0, count))}
-          aria-label="edit"
-        >
-          edit
-        </Button>
-        {multiple && count < 4 && (
+      <div className={classes.header}>
+        <Typography variant="h5">Manual Input</Typography>
+        {multiple && (
           <Button
             variant="contained"
             color="secondary"
-            className={classes.button}
-            onClick={() => setCount(count + 1)}
+            onClick={() => setIds([...ids, ''])}
             aria-label="+1"
           >
             +1
           </Button>
         )}
       </div>
+      <Grid container spacing={2}>
+        {ids.map((id, index) => {
+          const label = multiple && ids.length > 1 ? `ID ${index + 1}` : 'ID';
+          return (
+            <Grid item xs={12} sm={3} key={label}>
+              <TextField
+                fullWidth
+                label={label}
+                value={id}
+                onChange={(e) => onChange(e, index)}
+              />
+            </Grid>
+          );
+        })}
+      </Grid>
+      <Button
+        variant="contained"
+        color="primary"
+        className={classes.button}
+        onClick={() => onSubmit(ids.filter((id) => id !== ''))}
+        aria-label="edit"
+      >
+        edit
+      </Button>
     </>
   );
 };

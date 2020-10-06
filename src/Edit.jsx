@@ -111,34 +111,35 @@ export default () => {
     setSearchResults(null);
   }
 
+  function update() {
+    setKeyword('');
+    setSearchResults(null);
+    setEntries([]);
+    get(
+      `/api/chart/select/entry/${type}/${chart}/${entry}/${store}`,
+      setEntries
+    );
+  }
+
   function chooseEntry(target) {
     put(`/api/chart/edit/id/${type}`, { store, entry, id: target.id }, () => {
-      setKeyword('');
-      setSearchResults(null);
-      setEntries([]);
-      get(
-        `/api/chart/select/entry/${type}/${chart}/${entry}/${store}`,
-        setEntries
-      );
+      update();
     });
   }
 
   function chooseEntries(target, count) {
     const { url } = target.attributes;
     put('/api/chart/edit/singles', { store, entry, url, count }, () => {
-      setKeyword('');
-      setSearchResults(null);
-      setEntries([]);
-      get(
-        `/api/chart/select/entry/${type}/${chart}/${entry}/${store}`,
-        setEntries
-      );
+      update();
     });
   }
 
   function manualInput(ids) {
-    const [id] = ids;
-    chooseEntry({ id });
+    if (ids.length > 0) {
+      put(`/api/chart/edit/ids/${type}`, { store, entry, ids }, () => {
+        update();
+      });
+    }
   }
 
   const { raw } = entries[0];
@@ -208,7 +209,7 @@ export default () => {
             ])}
         </div>
       ))}
-      <ManualInput onSubmit={manualInput} />
+      <ManualInput onSubmit={manualInput} multiple={type === 'album'} />
     </Container>
   );
 };
