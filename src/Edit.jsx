@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link as RouterLink, useParams } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -7,7 +7,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Link from '@material-ui/core/Link';
 import { ArrowDownward, Assignment, Done, DoneAll } from '@material-ui/icons';
 
-import { Context } from './store';
+import { useStore } from './store';
 import { get, put, deleteBody } from './util';
 import Explicit from './Explicit';
 import Flag from './Flag';
@@ -72,7 +72,7 @@ export default () => {
   const [searchResults, setSearchResults] = useState(null);
   const [selected, setSelected] = useState(null);
   const { type, chart, entry } = useParams();
-  const [store] = useContext(Context);
+  const store = useStore();
   const classes = useStyles();
 
   useEffect(() => {

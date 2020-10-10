@@ -19,13 +19,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const colors = {
+  jp: '#3f51b5',
+  us: '#009688',
+};
+
 export default () => {
   const [store, setStore] = useContext(Context);
   const classes = useStyles();
 
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar position="static" style={{ backgroundColor: colors[store] }}>
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
             <Link to="/">Chart Match</Link>

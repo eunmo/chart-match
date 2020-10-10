@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { Context } from './store';
+import { useStore } from './store';
 import { get } from './util';
 import Flag from './Flag';
 import Image from './Image';
@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default () => {
   const [charts, setCharts] = useState([]);
-  const [store] = useContext(Context);
+  const store = useStore();
   const classes = useStyles();
 
   useEffect(() => {

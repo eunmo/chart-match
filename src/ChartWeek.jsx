@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link as RouterLink, useParams } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -9,7 +9,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Link from '@material-ui/core/Link';
 import { Clear, Edit, Loupe } from '@material-ui/icons';
 
-import { Context } from './store';
+import { useStore } from './store';
 import { get } from './util';
 import Flag from './Flag';
 import Image from './Image';
@@ -54,7 +54,7 @@ export default () => {
   const [loading, setLoading] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const { type, chart, week } = useParams();
-  const [store] = useContext(Context);
+  const store = useStore();
   const classes = useStyles();
 
   useEffect(() => {
