@@ -1,6 +1,6 @@
 const express = require('express');
 const { chartCurrent } = require('../../db');
-const { searchAppleCatalog } = require('./util');
+const { searchAppleCatalog, typeToApple } = require('./util');
 
 const router = express.Router();
 
@@ -34,6 +34,26 @@ router.get('/album/:store', async (req, res) => {
       attributes: { artistName, name, url },
     } = dataMap[id];
     return { id, rank, artist: artistName, name, url };
+  });
+  res.json(merged);
+});
+
+router.get('/full/:type/:store', async (req, res) => {
+  const { type, store } = req.params;
+  const entries = await chartCurrent.getSorted(type, store);
+  const shrinked = entries.filter(({ ranks }) => ranks[0].ranking <= 10);
+  const ids = shrinked.map(({ id }) => id);
+  const dataMap = await searchAppleCatalog(typeToApple[type], store, ids);
+  const merged = shrinked.map(({ id, ranks }) => {
+    const {
+      attributes: {
+        artistName: artist,
+        name,
+        url,
+        artwork: { url: artworkUrl },
+      },
+    } = dataMap[id];
+    return { id, ranks, artist, name, url, artworkUrl };
   });
   res.json(merged);
 });

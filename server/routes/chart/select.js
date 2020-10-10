@@ -1,10 +1,8 @@
 const express = require('express');
 const { chart, chartEntry } = require('../../db');
-const { searchAppleCatalog } = require('./util');
+const { searchAppleCatalog, typeToApple } = require('./util');
 
 const router = express.Router();
-
-const typeToApple = { single: 'songs', album: 'albums' };
 
 function toFirstWeekMap(firstWeeks) {
   const map = {};

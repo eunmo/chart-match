@@ -71,8 +71,12 @@ export default () => {
     <div>
       <div className={classes.header}>Latest Charts</div>
       <div className={classes.subheader}>
-        <div style={{ textAlign: 'right' }}>Albums</div>
-        <div style={{ gridColumnStart: 3 }}>Singles</div>
+        <div style={{ textAlign: 'right' }}>
+          <Link to="/current/album">Albums</Link>
+        </div>
+        <div style={{ gridColumnStart: 3 }}>
+          <Link to="/current/single">Singles</Link>
+        </div>
       </div>
       <div className={classes.grid}>
         {charts.map(({ chart, song, album }) => [

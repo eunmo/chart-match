@@ -131,31 +131,32 @@ test.each(['us', 'jp'])('get current albums %s', async (store) => {
 });
 
 const songCount = { us: 35, jp: 36 };
-
-test.each(['us', 'jp'])('get current singles %s', async (store) => {
-  const response = await request(app).get(`/current/single/${store}`);
-  expect(response.statusCode).toBe(200);
-
-  const { body: songs } = response;
-  expect(songs.length).toBe(songCount[store]);
-  expect(songs[0].id).toEqual('1526746984'); // wap
-  expect(songs[0].name).toEqual('WAP (feat. Megan Thee Stallion)'); // wap
-  expect(songs[1].id).toEqual(dynamiteId[store]);
-  expect(songs[1].name).toEqual('Dynamite');
-});
-
 const albumCount = { us: 32, jp: 32 };
 
-test.each(['us', 'jp'])('get current albums %s', async (store) => {
-  const response = await request(app).get(`/current/album/${store}`);
-  expect(response.statusCode).toBe(200);
+describe.each(['', '/full'])('%s', (infix) => {
+  test.each(['us', 'jp'])('get current singles %s', async (store) => {
+    const response = await request(app).get(`/current${infix}/single/${store}`);
+    expect(response.statusCode).toBe(200);
 
-  const { body } = response;
-  expect(body.length).toBe(albumCount[store]);
-  expect(body[0].id).toEqual('1530247672');
-  expect(body[0].name).toEqual('Detroit 2');
-  expect(body[1].id).toEqual('1528149531');
-  expect(body[1].name).toEqual('24H - EP');
+    const { body: songs } = response;
+    expect(songs.length).toBe(songCount[store]);
+    expect(songs[0].id).toEqual('1526746984'); // wap
+    expect(songs[0].name).toEqual('WAP (feat. Megan Thee Stallion)'); // wap
+    expect(songs[1].id).toEqual(dynamiteId[store]);
+    expect(songs[1].name).toEqual('Dynamite');
+  });
+
+  test.each(['us', 'jp'])('get current albums %s', async (store) => {
+    const response = await request(app).get(`/current${infix}/album/${store}`);
+    expect(response.statusCode).toBe(200);
+
+    const { body } = response;
+    expect(body.length).toBe(albumCount[store]);
+    expect(body[0].id).toEqual('1530247672');
+    expect(body[0].name).toEqual('Detroit 2');
+    expect(body[1].id).toEqual('1528149531');
+    expect(body[1].name).toEqual('24H - EP');
+  });
 });
 
 describe.each(['single', 'album'])('%s', (type) => {

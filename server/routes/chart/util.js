@@ -92,6 +92,8 @@ function shouldUpdate(existing, toAdd) {
   return diffs.length > 5;
 }
 
+const typeToApple = { single: 'songs', album: 'albums' };
+
 module.exports = {
   queryAppleMusic,
   searchAppleCatalog,
@@ -99,4 +101,5 @@ module.exports = {
   refDateYMD,
   refDateWeek,
   shouldUpdate,
+  typeToApple,
 };
