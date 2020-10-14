@@ -154,7 +154,7 @@ export default () => {
         <div>
           <Flag chart={chart} />
         </div>
-        <div>Edit Single</div>
+        <div style={{ textTransform: 'capitalize' }}>{`Edit ${type}`}</div>
       </div>
       <div className={classes.grid}>
         <div className={classes.raw}>Raw</div>
@@ -221,7 +221,7 @@ export default () => {
           <Assignment />
         </IconButton>
       )}
-      <ManualInput onSubmit={manualInput} multiple={type === 'album'} />
+      <ManualInput onSubmit={manualInput} multiple />
     </Container>
   );
 };
