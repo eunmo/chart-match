@@ -58,7 +58,11 @@ router.get('/:store', async (req, res) => {
   const albumResponse = await queryAppleMusic(albumUrl);
   const albumSingleIds = [];
   albumResponse.data.forEach((album) => {
-    albumSingleIds.push(getRandom(album.relationships.tracks.data, 1));
+    const { 0: id } = getRandom(album.relationships.tracks.data, 1);
+
+    if (id) {
+      albumSingleIds.push(id);
+    }
   });
   const ids = shuffleArray(singleIds.concat(albumSingleIds));
   const dataMap = await searchAppleCatalog('songs', store, ids);
