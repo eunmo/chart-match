@@ -99,14 +99,14 @@ export default () => {
 
   function submitSearch(e) {
     e.preventDefault();
-    get(`/api/chart/search/${type}/${keyword}/${store}`, setSearchResults);
+    get(`/api/search/${type}/${keyword}/${store}`, setSearchResults);
   }
 
   function fillSearchBox() {
     const { raw } = entries[0];
     const newKeyword = `${raw.artist} ${raw.title}`;
     setKeyword(newKeyword);
-    get(`/api/chart/search/${type}/${newKeyword}/${store}`, setSearchResults);
+    get(`/api/search/${type}/${newKeyword}/${store}`, setSearchResults);
   }
 
   function clearSearch() {

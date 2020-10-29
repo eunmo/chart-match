@@ -1,5 +1,5 @@
 const express = require('express');
-const { queryAppleMusic } = require('./util');
+const { queryAppleMusic } = require('./chart/util');
 
 const router = express.Router();
 
@@ -30,8 +30,9 @@ router.get('/album/:keyword/:store', async (req, res) => {
 router.get('/tracks/:id/:store', async (req, res) => {
   const { id, store } = req.params;
   const queryUrl = `https://api.music.apple.com/v1/catalog/${store}/albums/${id}/tracks`;
-  const { data } = await queryAppleMusic(queryUrl);
-  res.json(data ?? []);
+  let { data } = await queryAppleMusic(queryUrl);
+  data = data?.filter(({ type }) => type === 'songs') ?? [];
+  res.json(data);
 });
 
 module.exports = router;
