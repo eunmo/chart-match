@@ -42,7 +42,8 @@ function getWeeks(type, store, weeks) {
     ON c.entry = m.entry
     WHERE m.store = '${store}'
     AND m.id IS NOT NULL
-    AND c.week in ('${weeks.join("','")}')`);
+    AND c.week in ('${weeks.join("','")}')
+    AND c.ranking <= 10`);
 }
 
 function getMatches(type, chart, week, store) {
