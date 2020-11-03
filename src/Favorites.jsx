@@ -57,7 +57,7 @@ export default () => {
   const classes = useStyles();
 
   useEffect(() => {
-    get(`/api/favorite-artists/${store}`, setEntries);
+    get(`/api/favorite-artist/list/${store}`, setEntries);
     setKeyword('');
     setSearchResults(null);
     setInEdit(null);
@@ -78,7 +78,7 @@ export default () => {
     setSearchResults(null);
     setInEdit(null);
     setEntries([]);
-    get(`/api/favorite-artists/${store}`, setEntries);
+    get(`/api/favorite-artist/list/${store}`, setEntries);
   }
 
   function getAlbum(e) {
@@ -99,21 +99,21 @@ export default () => {
     if (album) {
       ({ url: artwork } = album.artwork);
     }
-    put(`/api/favorite-artists/add`, { store, id, name, url, artwork }, () => {
+    put(`/api/favorite-artist/add`, { store, id, name, url, artwork }, () => {
       update();
     });
   }
 
   function remove() {
     const { id } = inEdit;
-    deleteBody(`/api/favorite-artists`, { store, id }, () => {
+    deleteBody(`/api/favorite-artist`, { store, id }, () => {
       update();
     });
   }
 
   function edit() {
     const { id } = inEdit;
-    put(`/api/favorite-artists/edit`, { store, id, gid }, () => {
+    put(`/api/favorite-artist/edit`, { store, id, gid }, () => {
       update();
     });
   }
@@ -167,7 +167,10 @@ export default () => {
           ) : (
             <div />
           )}
-          <Item title={e.name} subtitle={e.gid} />
+          <Item
+            title={e.name}
+            subtitle={`${e.gid} (${e.gidSongCount} Songs)`}
+          />
           {showEdit && (
             <IconButton
               onClick={() => {

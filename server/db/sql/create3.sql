@@ -1,7 +1,9 @@
 DROP TABLE favoriteArtists;
 DROP TABLE favoriteArtistSongs;
+DROP TABLE favoriteArtist;
+DROP TABLE favoriteArtistSong;
 
-CREATE TABLE favoriteArtists (
+CREATE TABLE favoriteArtist (
   store CHAR(2) NOT NULL,
   id VARCHAR(255) NOT NULL,
   gid VARCHAR(255) NOT NULL,
@@ -11,7 +13,7 @@ CREATE TABLE favoriteArtists (
   PRIMARY KEY (store, id)
 );
 
-CREATE TABLE favoriteArtistSongs (
+CREATE TABLE favoriteArtistSong (
   store CHAR(2) NOT NULL,
   id VARCHAR(255) NOT NULL,
   gid VARCHAR(255) NOT NULL,
