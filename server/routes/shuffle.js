@@ -1,5 +1,5 @@
 const express = require('express');
-const { chart } = require('../db');
+const { chart, favoriteArtist } = require('../db');
 const {
   refDateYMD,
   searchAppleCatalog,
@@ -44,13 +44,15 @@ function shuffleArray(array) {
 router.get('/:store', async (req, res) => {
   const { store } = req.params;
   const weeks = getWeeks();
-  let [singleIds, albumIds] = await Promise.all([
+  let [singleIds, albumIds, favoriteIds] = await Promise.all([
     chart.getWeeks('single', store, weeks),
     chart.getWeeks('album', store, weeks),
+    favoriteArtist.getSongs(store),
   ]);
 
-  singleIds = getRandom(singleIds, 25);
-  albumIds = getRandom(albumIds, 25);
+  singleIds = getRandom(singleIds, 20);
+  albumIds = getRandom(albumIds, 20);
+  favoriteIds = getRandom(favoriteIds, 10);
 
   const albumUrl = `https://api.music.apple.com/v1/catalog/${store}/albums?ids=${albumIds.join(
     ','
@@ -64,7 +66,7 @@ router.get('/:store', async (req, res) => {
       albumSingleIds.push(id);
     }
   });
-  const ids = shuffleArray(singleIds.concat(albumSingleIds));
+  const ids = shuffleArray([...singleIds, ...albumSingleIds, favoriteIds]);
   const dataMap = await searchAppleCatalog('songs', store, ids);
   const merged = [];
   ids.forEach((id) => {
