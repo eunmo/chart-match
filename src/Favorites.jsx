@@ -84,7 +84,12 @@ export default () => {
   }
 
   function entryToImage(e) {
-    const { attributes: album } = e.relationships.albums.data[0];
+    const { data } = e.relationships.albums;
+    if (data.length === 0) {
+      return <div />;
+    }
+
+    const { attributes: album } = data[0];
 
     return (
       <Link href={e.attributes.url}>
