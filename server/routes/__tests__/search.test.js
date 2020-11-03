@@ -25,3 +25,13 @@ test('album', async () => {
   const { body } = response;
   expect(body.data).not.toBe(null);
 });
+
+test('artist', async () => {
+  const url = encodeURI('/artist/IU/us');
+
+  const response = await request(app).get(url);
+  expect(response.statusCode).toBe(200);
+
+  const { body } = response;
+  expect(body.data).not.toBe(null);
+});

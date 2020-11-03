@@ -27,6 +27,13 @@ router.get('/album/:keyword/:store', async (req, res) => {
   res.json(results?.albums ?? {});
 });
 
+router.get('/artist/:keyword/:store', async (req, res) => {
+  const { keyword, store } = req.params;
+  const queryUrl = formQuery(store, keyword, 'artists', true);
+  const { results } = await queryAppleMusic(queryUrl);
+  res.json(results?.artists ?? {});
+});
+
 router.get('/tracks/:id/:store', async (req, res) => {
   const { id, store } = req.params;
   const queryUrl = `https://api.music.apple.com/v1/catalog/${store}/albums/${id}/tracks`;
