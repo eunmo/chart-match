@@ -30,7 +30,7 @@ router.get('/album/:keyword/:store', async (req, res) => {
 router.get('/artist/:keyword/:store', async (req, res) => {
   const { keyword, store } = req.params;
   const queryUrl = formQuery(store, keyword, 'artists', true);
-  const { results } = await queryAppleMusic(queryUrl);
+  const { results } = await queryAppleMusic(`${queryUrl}&include=albums`);
   res.json(results?.artists ?? {});
 });
 

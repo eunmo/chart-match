@@ -11,9 +11,10 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 
 import { Provider as StoreProvider } from './store';
 import AppBar from './AppBar';
-import Edit from './Edit';
 import ChartWeek from './ChartWeek';
 import Current from './Current';
+import Edit from './Edit';
+import Favorites from './Favorites';
 import SelectSongs from './SelectSongs';
 import Tops from './Tops';
 
@@ -52,6 +53,9 @@ export default () => {
             </Route>
             <Route path="/tops">
               <Tops />
+            </Route>
+            <Route path="/favorites">
+              <Favorites />
             </Route>
             <Redirect from="/" to="/tops" />
           </Switch>

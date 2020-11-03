@@ -2,11 +2,13 @@ const express = require('express');
 const path = require('path');
 
 const chart = require('./chart');
+const favoriteArtists = require('./favorite-artists');
 const search = require('./search');
 const shuffle = require('./shuffle');
 
 const router = express.Router();
 router.use('/api/chart', chart);
+router.use('/api/favorite-artists', favoriteArtists);
 router.use('/api/search', search);
 router.use('/api/shuffle', shuffle);
 
