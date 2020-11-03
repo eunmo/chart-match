@@ -50,9 +50,9 @@ router.get('/:store', async (req, res) => {
     favoriteArtist.getSongs(store),
   ]);
 
-  singleIds = getRandom(singleIds, 20);
-  albumIds = getRandom(albumIds, 20);
-  favoriteIds = getRandom(favoriteIds, 10);
+  singleIds = getRandom(singleIds, 25);
+  albumIds = getRandom(albumIds, 25);
+  favoriteIds = getRandom(favoriteIds, 0);
 
   const albumUrl = `https://api.music.apple.com/v1/catalog/${store}/albums?ids=${albumIds.join(
     ','
@@ -66,7 +66,7 @@ router.get('/:store', async (req, res) => {
       albumSingleIds.push(id);
     }
   });
-  const ids = shuffleArray([...singleIds, ...albumSingleIds, favoriteIds]);
+  const ids = shuffleArray([...singleIds, ...albumSingleIds, ...favoriteIds]);
   const dataMap = await searchAppleCatalog('songs', store, ids);
   const merged = [];
   ids.forEach((id) => {
