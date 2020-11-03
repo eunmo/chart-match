@@ -1,8 +1,5 @@
 const { dml } = require('@eunmo/mysql');
-
-function format(string) {
-  return string === undefined || string === null ? null : `'${string}'`;
-}
+const { format } = require('./util');
 
 function add(type, store, entries) {
   const values = entries.map(

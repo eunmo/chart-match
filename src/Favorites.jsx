@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import IconButton from '@material-ui/core/IconButton';
 import Link from '@material-ui/core/Link';
-import { Clear, Done, Loupe } from '@material-ui/icons';
+import TextField from '@material-ui/core/TextField';
+import { Clear, Done, Edit, Loupe } from '@material-ui/icons';
 
 import { useStore } from './store';
 import { get, put, deleteBody } from './util';
@@ -37,14 +39,20 @@ const useStyles = makeStyles((theme) => ({
     gridColumnGap: theme.spacing(1),
     lineHeight: '25px',
     marginBottom: theme.spacing(1),
+    '& button': {
+      marginTop: theme.spacing(1),
+      marginLeft: theme.spacing(1),
+    },
   },
 }));
 
 export default () => {
-  const [showDelete, setShowDelete] = useState(false);
+  const [showEdit, setShowEdit] = useState(false);
   const [keyword, setKeyword] = useState('');
   const [entries, setEntries] = useState([]);
   const [searchResults, setSearchResults] = useState(null);
+  const [inEdit, setInEdit] = useState(null);
+  const [gid, setGid] = useState('');
   const store = useStore();
   const classes = useStyles();
 
@@ -52,6 +60,7 @@ export default () => {
     get(`/api/favorite-artists/${store}`, setEntries);
     setKeyword('');
     setSearchResults(null);
+    setInEdit(null);
   }, [store]);
 
   function submitSearch(e) {
@@ -67,29 +76,53 @@ export default () => {
   function update() {
     setKeyword('');
     setSearchResults(null);
+    setInEdit(null);
     setEntries([]);
     get(`/api/favorite-artists/${store}`, setEntries);
   }
 
+  function getAlbum(e) {
+    const { data } = e.relationships.albums;
+    if (data.length === 0) {
+      return null;
+    }
+
+    const { attributes: album } = data[0];
+    return album;
+  }
+
   function choose(target) {
-    put(`/api/favorite-artists`, { store, id: target.id }, () => {
+    const { id } = target;
+    const { name, url } = target.attributes;
+    let artwork = null;
+    const album = getAlbum(target);
+    if (album) {
+      ({ url: artwork } = album.artwork);
+    }
+    put(`/api/favorite-artists/add`, { store, id, name, url, artwork }, () => {
       update();
     });
   }
 
-  function remove(target) {
-    deleteBody(`/api/favorite-artists`, { store, id: target.id }, () => {
+  function remove() {
+    const { id } = inEdit;
+    deleteBody(`/api/favorite-artists`, { store, id }, () => {
+      update();
+    });
+  }
+
+  function edit() {
+    const { id } = inEdit;
+    put(`/api/favorite-artists/edit`, { store, id, gid }, () => {
       update();
     });
   }
 
   function entryToImage(e) {
-    const { data } = e.relationships.albums;
-    if (data.length === 0) {
+    const album = getAlbum(e);
+    if (album === null) {
       return <div />;
     }
-
-    const { attributes: album } = data[0];
 
     return (
       <Link href={e.attributes.url}>
@@ -102,8 +135,8 @@ export default () => {
     <Container maxWidth="md">
       <div className={classes.header}>
         <div className={classes.headerText}>Favorite Artists</div>
-        <IconButton onClick={() => setShowDelete(!showDelete)}>
-          {showDelete ? <Clear /> : <Loupe />}
+        <IconButton onClick={() => setShowEdit(!showEdit)}>
+          {showEdit ? <Clear /> : <Loupe />}
         </IconButton>
       </div>
       <SearchBox
@@ -127,15 +160,38 @@ export default () => {
       ))}
       {entries.map((e) => (
         <div className={classes.entryGrid} key={e.id}>
-          {entryToImage(e)}
-          <Item
-            title={e.attributes.name}
-            subtitle={e.attributes.genreNames[0]}
-          />
-          {showDelete && (
-            <IconButton onClick={() => remove(e)}>
-              <Clear />
+          {e.artwork ? (
+            <Link href={e.url}>
+              <Image url={e.artwork} />
+            </Link>
+          ) : (
+            <div />
+          )}
+          <Item title={e.name} subtitle={e.gid} />
+          {showEdit && (
+            <IconButton
+              onClick={() => {
+                setInEdit(e);
+                setGid(e.gid);
+              }}
+            >
+              <Edit />
             </IconButton>
+          )}
+          {inEdit === e && (
+            <div className={classes.headerText}>
+              <TextField
+                label="Artist Group ID"
+                value={gid}
+                onChange={(event) => setGid(event.target.value)}
+              />
+              <Button variant="contained" color="primary" onClick={edit}>
+                Edit
+              </Button>
+              <Button variant="contained" color="secondary" onClick={remove}>
+                Remove
+              </Button>
+            </div>
           )}
         </div>
       ))}

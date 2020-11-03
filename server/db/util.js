@@ -2,4 +2,8 @@ function escape(string) {
   return string.replace(/'/g, "''");
 }
 
-module.exports = { escape };
+function format(string) {
+  return string === undefined || string === null ? null : `'${string}'`;
+}
+
+module.exports = { escape, format };

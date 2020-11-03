@@ -1,34 +1,31 @@
 const express = require('express');
 const { favoriteArtists } = require('../db');
-const { queryAppleMusic } = require('./chart/util');
+// const { queryAppleMusic } = require('./chart/util');
 
 const router = express.Router();
 
-router.put('/', async (req, res) => {
-  const { store, id: artist } = req.body;
-  await favoriteArtists.add(store, artist);
+router.put('/add', async (req, res) => {
+  const { store, id, name, url, artwork } = req.body;
+  await favoriteArtists.add(store, id, id, name, url, artwork);
+  res.sendStatus(200);
+});
+
+router.put('/edit', async (req, res) => {
+  const { store, id, gid } = req.body;
+  await favoriteArtists.edit(store, id, gid);
   res.sendStatus(200);
 });
 
 router.delete('/', async (req, res) => {
-  const { store, id: artist } = req.body;
-  await favoriteArtists.remove(store, artist);
+  const { store, id } = req.body;
+  await favoriteArtists.remove(store, id);
   res.sendStatus(200);
 });
 
 router.get('/:store', async (req, res) => {
   const { store } = req.params;
   const artists = await favoriteArtists.get(store);
-  if (artists.length === 0) {
-    res.json([]);
-    return;
-  }
-
-  const ids = artists.map(({ artist }) => artist).sort();
-  const query = `artists?ids=${ids.join(',')}&include=albums`;
-  const url = `https://api.music.apple.com/v1/catalog/${store}/${query}`;
-  const { data } = await queryAppleMusic(url);
-  res.json(data ?? []);
+  res.json(artists);
 });
 
 module.exports = router;
