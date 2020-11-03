@@ -6,6 +6,13 @@ function add(store, artist) {
     VALUES ('${store}', '${artist}')`);
 }
 
+function remove(store, artist) {
+  return dml(`
+    DELETE FROM favoriteArtists
+    WHERE store = '${store}'
+    AND artist = '${artist}'`);
+}
+
 function get(store) {
   return query(`
     SELECT artist
@@ -13,4 +20,4 @@ function get(store) {
     WHERE store = '${store}'`);
 }
 
-module.exports = { add, get };
+module.exports = { add, remove, get };

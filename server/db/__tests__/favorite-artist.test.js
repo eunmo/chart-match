@@ -1,5 +1,5 @@
 const { dml, query, cleanup } = require('@eunmo/mysql');
-const { add, get } = require('../favorite-artists');
+const { add, remove, get } = require('../favorite-artists');
 
 beforeAll(async () => {
   await dml('DROP TABLE IF EXISTS favoriteArtists');
@@ -27,5 +27,16 @@ test('add then get', async () => {
   expect(rows[0].artist).toBe('1');
 
   rows = await get('jp');
+  expect(rows.length).toBe(0);
+});
+
+test('add then remove', async () => {
+  await add('us', '1');
+  let rows = await get('us');
+  expect(rows.length).toBe(1);
+  expect(rows[0].artist).toBe('1');
+
+  await remove('us', '1');
+  rows = await get('us');
   expect(rows.length).toBe(0);
 });
