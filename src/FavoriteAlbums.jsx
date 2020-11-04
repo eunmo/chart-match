@@ -68,8 +68,17 @@ export default () => {
     setIncluded({ ...included, [id]: !included[id] });
   }
 
+  function turnOff() {
+    const newIncluded = {};
+    Object.keys(included).forEach((id) => {
+      newIncluded[id] = false;
+    });
+    setIncluded(newIncluded);
+  }
+
   return (
     <Container maxWidth="md">
+      <Button onClick={turnOff}>Unselect All</Button>
       {entries.map(({ id, attributes }) => (
         <div key={id} className={classes.entryGrid}>
           <Link href={attributes.url}>
