@@ -50,9 +50,9 @@ router.get('/:store', async (req, res) => {
     favoriteArtist.getSongs(store),
   ]);
 
-  singleIds = getRandom(singleIds, 25);
-  albumIds = getRandom(albumIds, 25);
-  favoriteIds = getRandom(favoriteIds, 0);
+  singleIds = getRandom(singleIds, 20);
+  albumIds = getRandom(albumIds, 20);
+  favoriteIds = getRandom(favoriteIds, 10);
 
   const albumUrl = `https://api.music.apple.com/v1/catalog/${store}/albums?ids=${albumIds.join(
     ','
