@@ -30,6 +30,37 @@ function get(store) {
     WHERE store = '${store}'`);
 }
 
+function clearAlbums(store, artist) {
+  return dml(`
+    DELETE FROM favoriteArtistAlbum
+    WHERE store = '${store}'
+    AND artist = '${artist}'`);
+}
+
+function addAlbums(store, artist, entries) {
+  const values = entries.map(({ id }) => `('${store}', '${id}', '${artist}')`);
+  return dml(`
+    INSERT IGNORE INTO favoriteArtistAlbum (store, id, artist)
+    VALUES ${values.join(',')}`);
+}
+
+function editAlbum(store, id, included) {
+  return dml(`
+    UPDATE favoriteArtistAlbum
+    SET included = ${included}
+    WHERE store = '${store}'
+    AND id = '${id}'`);
+}
+
+async function getAlbums(store, artist) {
+  const rows = await dml(`
+    SELECT id, included
+    FROM favoriteArtistAlbum
+    WHERE store = '${store}'
+    AND artist = '${artist}'`);
+  return rows.map(({ id, included }) => ({ id, included: !!included }));
+}
+
 function clearSongs(store) {
   return dml(`
     DELETE FROM favoriteArtistSong
@@ -65,6 +96,10 @@ module.exports = {
   edit,
   remove,
   get,
+  clearAlbums,
+  addAlbums,
+  editAlbum,
+  getAlbums,
   clearSongs,
   addSongs,
   getSongs,
