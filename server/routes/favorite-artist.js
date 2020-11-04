@@ -84,15 +84,25 @@ async function getArtistAlbums(store, id) {
   return data;
 }
 
+async function updateArtist(store, id) {
+  await favoriteArtist.clearAlbums(store, id);
+  const albums = await getArtistAlbums(store, id);
+  await favoriteArtist.addAlbums(store, id, albums);
+}
+
 router.get('/update-albums/:store', async (req, res) => {
   const { store } = req.params;
   const artists = await favoriteArtist.get(store);
   for (let i = 0; i < artists.length; i += 1) {
     const { id } = artists[i];
-    await favoriteArtist.clearAlbums(store, id);
-    const albums = await getArtistAlbums(store, id);
-    await favoriteArtist.addAlbums(store, id, albums);
+    await updateArtist(store, id);
   }
+  res.sendStatus(200);
+});
+
+router.get('/update-albums/:store/:artist', async (req, res) => {
+  const { store, artist } = req.params;
+  await updateArtist(store, artist);
   res.sendStatus(200);
 });
 
