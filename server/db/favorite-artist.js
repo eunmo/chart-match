@@ -1,8 +1,8 @@
 const { dml, query } = require('@eunmo/mysql');
-const { format } = require('./util');
+const { escape, format } = require('./util');
 
 function add(store, id, gid, name, url, artwork) {
-  const values = [store, id, gid, name, url].map(format);
+  const values = [store, id, gid, escape(name), url].map(format);
   return dml(`
     INSERT INTO favoriteArtist (store, id, gid, name, url, artwork)
     VALUES (${values.join(',')}, ${format(artwork)})`);
