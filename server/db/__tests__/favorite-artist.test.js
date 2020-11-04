@@ -6,7 +6,7 @@ const {
   get,
   clearAlbums,
   addAlbums,
-  editAlbum,
+  editAlbums,
   getAlbums,
   clearSongs,
   addSongs,
@@ -129,8 +129,7 @@ test('edit album', async () => {
     expect(included).toBe(true);
   });
 
-  await editAlbum('us', '1', false);
-  await editAlbum('us', '2', false);
+  await editAlbums('us', { 1: false, 2: false });
 
   rows = await getAlbums('us', artist);
   expect(rows.length).toBe(2);

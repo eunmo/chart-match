@@ -38,6 +38,40 @@ router.get('/list/:store', async (req, res) => {
   res.json(merged);
 });
 
+router.get('/albums/:store/:artist', async (req, res) => {
+  const { store, artist } = req.params;
+  const albums = await favoriteArtist.getAlbums(store, artist);
+
+  let albumData = [];
+  for (let i = 0; i < albums.length; i += 25) {
+    const ids = albums
+      .slice(i, i + 25)
+      .map(({ id }) => id)
+      .join(',');
+    const queryUrl = `https://api.music.apple.com/v1/catalog/${store}/albums?ids=${ids}`;
+    const { data } = await queryAppleMusic(queryUrl);
+    albumData = [...albumData, ...data];
+  }
+
+  const includedMap = {};
+  albums.forEach(({ id, included }) => {
+    includedMap[id] = included;
+  });
+
+  albumData = albumData.map(({ id, attributes }) => ({
+    id,
+    attributes,
+    included: includedMap[id],
+  }));
+  res.json(albumData);
+});
+
+router.put('/edit-albums', async (req, res) => {
+  const { store, included } = req.body;
+  await favoriteArtist.editAlbums(store, included);
+  res.sendStatus(200);
+});
+
 async function getArtistAlbums(store, id) {
   let queryUrl = `https://api.music.apple.com/v1/catalog/${store}/artists/${id}/albums`;
   let { next, data } = await queryAppleMusic(queryUrl);
@@ -49,6 +83,18 @@ async function getArtistAlbums(store, id) {
   }
   return data;
 }
+
+router.get('/update-albums/:store', async (req, res) => {
+  const { store } = req.params;
+  const artists = await favoriteArtist.get(store);
+  for (let i = 0; i < artists.length; i += 1) {
+    const { id } = artists[i];
+    await favoriteArtist.clearAlbums(store, id);
+    const albums = await getArtistAlbums(store, id);
+    await favoriteArtist.addAlbums(store, id, albums);
+  }
+  res.sendStatus(200);
+});
 
 async function getTracks(store, albums) {
   let songs = [];
@@ -62,10 +108,11 @@ async function getTracks(store, albums) {
   }
 
   for (let i = 0; i < albums.length; i += 25) {
-    const ids = albums.slice(i, i + 25).map(({ id }) => id);
-    const queryUrl = `https://api.music.apple.com/v1/catalog/${store}/albums?ids=${ids.join(
-      ','
-    )}&include=tracks`;
+    const ids = albums
+      .slice(i, i + 25)
+      .map(({ id }) => id)
+      .join(',');
+    const queryUrl = `https://api.music.apple.com/v1/catalog/${store}/albums?ids=${ids}&include=tracks`;
     const { data } = await queryAppleMusic(queryUrl);
     extractTrack(data);
   }
@@ -78,7 +125,8 @@ router.get('/update-songs/:store', async (req, res) => {
   const artists = await favoriteArtist.get(store);
   for (let i = 0; i < artists.length; i += 1) {
     const { id, gid } = artists[i];
-    const albums = await getArtistAlbums(store, id);
+    let albums = await favoriteArtist.getAlbums(store, id);
+    albums = albums.filter(({ included }) => included);
     const songs = await getTracks(store, albums);
     await favoriteArtist.addSongs(store, gid, songs);
   }

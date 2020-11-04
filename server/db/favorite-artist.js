@@ -44,12 +44,16 @@ function addAlbums(store, artist, entries) {
     VALUES ${values.join(',')}`);
 }
 
-function editAlbum(store, id, included) {
+function editAlbums(store, includedMap) {
+  const vals = Object.entries(includedMap)
+    .map(([id, included]) => `SELECT '${id}' as id, ${included} as included`)
+    .join(' UNION ');
+
   return dml(`
-    UPDATE favoriteArtistAlbum
-    SET included = ${included}
+    UPDATE favoriteArtistAlbum, (${vals}) vals
+    SET favoriteArtistAlbum.included = vals.included
     WHERE store = '${store}'
-    AND id = '${id}'`);
+    AND favoriteArtistAlbum.id = vals.id`);
 }
 
 async function getAlbums(store, artist) {
@@ -98,7 +102,7 @@ module.exports = {
   get,
   clearAlbums,
   addAlbums,
-  editAlbum,
+  editAlbums,
   getAlbums,
   clearSongs,
   addSongs,

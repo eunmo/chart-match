@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import IconButton from '@material-ui/core/IconButton';
 import Link from '@material-ui/core/Link';
 import TextField from '@material-ui/core/TextField';
-import { Clear, Done, Edit, Loupe } from '@material-ui/icons';
+import { Album, Clear, Done, Edit, Loupe } from '@material-ui/icons';
 
 import { useStore } from './store';
 import { get, put, deleteBody } from './util';
@@ -181,8 +182,17 @@ export default () => {
               <Edit />
             </IconButton>
           )}
-          {inEdit === e && (
-            <div className={classes.headerText}>
+          {inEdit === e && [
+            <div key="edit artist albums">
+              <IconButton
+                aria-label="favorites"
+                component={RouterLink}
+                to={`/favorite-albums/${e.id}`}
+              >
+                <Album />
+              </IconButton>
+            </div>,
+            <div key="edit artist">
               <TextField
                 label="Artist Group ID"
                 value={gid}
@@ -194,8 +204,8 @@ export default () => {
               <Button variant="contained" color="secondary" onClick={remove}>
                 Remove
               </Button>
-            </div>
-          )}
+            </div>,
+          ]}
         </div>
       ))}
     </Container>

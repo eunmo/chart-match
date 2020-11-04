@@ -14,6 +14,7 @@ import AppBar from './AppBar';
 import ChartWeek from './ChartWeek';
 import Current from './Current';
 import Edit from './Edit';
+import FavoriteAlbums from './FavoriteAlbums';
 import Favorites from './Favorites';
 import SelectSongs from './SelectSongs';
 import Tops from './Tops';
@@ -53,6 +54,9 @@ export default () => {
             </Route>
             <Route path="/tops">
               <Tops />
+            </Route>
+            <Route path="/favorite-albums/:artist">
+              <FavoriteAlbums />
             </Route>
             <Route path="/favorites">
               <Favorites />
