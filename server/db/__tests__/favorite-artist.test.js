@@ -4,7 +4,6 @@ const {
   edit,
   remove,
   get,
-  clearAlbums,
   addAlbums,
   editAlbums,
   getAlbums,
@@ -105,19 +104,6 @@ test('add albums then get', async () => {
   expect(rows.length).toBe(2);
 });
 
-test('add albums then clear', async () => {
-  const artist = 'artist';
-  const albums = [{ id: '1' }, { id: '2' }];
-  await addAlbums('us', artist, albums);
-
-  let rows = await getAlbums('us', artist);
-  expect(rows.length).toBe(2);
-
-  await clearAlbums('us', artist);
-  rows = await getAlbums('us', artist);
-  expect(rows.length).toBe(0);
-});
-
 test('edit album', async () => {
   const artist = 'artist';
   const albums = [{ id: '1' }, { id: '2' }];
@@ -135,6 +121,35 @@ test('edit album', async () => {
   expect(rows.length).toBe(2);
   rows.forEach(({ included }) => {
     expect(included).toBe(false);
+  });
+});
+
+test('add more albums', async () => {
+  const artist = 'artist';
+  let albums = [{ id: '1' }, { id: '2' }];
+  await addAlbums('us', artist, albums);
+
+  let rows = await getAlbums('us', artist);
+  expect(rows.length).toBe(2);
+  rows.forEach(({ included }) => {
+    expect(included).toBe(true);
+  });
+
+  await editAlbums('us', { 1: false, 2: false });
+
+  rows = await getAlbums('us', artist);
+  expect(rows.length).toBe(2);
+  rows.forEach(({ included }) => {
+    expect(included).toBe(false);
+  });
+
+  albums = [{ id: '1' }, { id: '2' }, { id: '3' }, { id: '4' }];
+  await addAlbums('us', artist, albums);
+
+  rows = await getAlbums('us', artist);
+  expect(rows.length).toBe(4);
+  rows.forEach(({ id, included }) => {
+    expect(included).toBe(id >= '3');
   });
 });
 

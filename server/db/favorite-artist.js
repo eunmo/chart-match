@@ -30,13 +30,6 @@ function get(store) {
     WHERE store = '${store}'`);
 }
 
-function clearAlbums(store, artist) {
-  return dml(`
-    DELETE FROM favoriteArtistAlbum
-    WHERE store = '${store}'
-    AND artist = '${artist}'`);
-}
-
 function addAlbums(store, artist, entries) {
   const values = entries.map(({ id }) => `('${store}', '${id}', '${artist}')`);
   return dml(`
@@ -100,7 +93,6 @@ module.exports = {
   edit,
   remove,
   get,
-  clearAlbums,
   addAlbums,
   editAlbums,
   getAlbums,

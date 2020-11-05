@@ -85,7 +85,6 @@ async function getArtistAlbums(store, id) {
 }
 
 async function updateArtist(store, id) {
-  await favoriteArtist.clearAlbums(store, id);
   const albums = await getArtistAlbums(store, id);
   await favoriteArtist.addAlbums(store, id, albums);
 }
