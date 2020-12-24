@@ -10,6 +10,7 @@ const app = express();
 app.use('/', router);
 
 const names = ['us', 'jp', 'gb', 'kr'];
+const year = '2020';
 const week = '2020-09-12';
 const ymd = '2020/09/12';
 
@@ -169,7 +170,59 @@ describe.each(['single', 'album'])('%s', (type) => {
     ['gb', 'jp'],
     ['kr', 'us'],
     ['kr', 'jp'],
-  ])('select %s %s', async (chartName, store) => {
+  ])('select year 1 %s %s', async (chartName, store) => {
+    const response = await request(app).get(
+      `/select/year/${type}/${chartName}/${year}/1/${store}`
+    );
+    expect(response.statusCode).toBe(200);
+
+    const { body } = response;
+    body.forEach(({ id, raw, catalog }) => {
+      expect(raw).not.toBe(null);
+      if (id === null) {
+        expect(catalog).toBe(undefined);
+      } else {
+        expect(catalog).not.toBe(undefined);
+      }
+    });
+  });
+
+  test.each([
+    ['us', 'us'],
+    ['us', 'jp'],
+    ['jp', 'us'],
+    ['jp', 'jp'],
+    ['gb', 'us'],
+    ['gb', 'jp'],
+    ['kr', 'us'],
+    ['kr', 'jp'],
+  ])('select year 10 %s %s', async (chartName, store) => {
+    const response = await request(app).get(
+      `/select/year/${type}/${chartName}/${year}/10/${store}`
+    );
+    expect(response.statusCode).toBe(200);
+
+    const { body } = response;
+    body.forEach(({ id, raw, catalog }) => {
+      expect(raw).not.toBe(null);
+      if (id === null) {
+        expect(catalog).toBe(undefined);
+      } else {
+        expect(catalog).not.toBe(undefined);
+      }
+    });
+  });
+
+  test.each([
+    ['us', 'us'],
+    ['us', 'jp'],
+    ['jp', 'us'],
+    ['jp', 'jp'],
+    ['gb', 'us'],
+    ['gb', 'jp'],
+    ['kr', 'us'],
+    ['kr', 'jp'],
+  ])('select week %s %s', async (chartName, store) => {
     const response = await request(app).get(
       `/select/week/${type}/${chartName}/${week}/${store}`
     );

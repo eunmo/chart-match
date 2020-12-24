@@ -12,6 +12,37 @@ function toFirstWeekMap(firstWeeks) {
   return map;
 }
 
+router.get('/year/:type/:chart/:year/:rank/:store', async (req, res) => {
+  const { type, chart: chartName, year, rank, store } = req.params;
+  const getFunction = rank === '1' ? chart.getYear1 : chart.getYear10;
+  const entries = await getFunction(type, chart.ids[chartName], year, store);
+  const ids = entries.map(({ id }) => id).filter((id) => id !== null);
+  const dataMap = await searchAppleCatalog(typeToApple[type], store, ids);
+  const merged = entries.map(({ ranking, entry, idx, id, artist, title }) => {
+    if (dataMap[id] === undefined) {
+      return { ranking, entry, idx, id, raw: { artist, title } };
+    }
+
+    const {
+      attributes: {
+        artistName,
+        name,
+        url,
+        artwork: { url: artworkUrl },
+      },
+    } = dataMap[id];
+    return {
+      ranking,
+      idx,
+      entry,
+      id,
+      raw: { artist, title },
+      catalog: { artist: artistName, title: name, url, artworkUrl },
+    };
+  });
+  res.json(merged);
+});
+
 router.get('/week/:type/:chart/:week/:store', async (req, res) => {
   const { type, chart: chartName, week, store } = req.params;
   const entries = await chart.getWeek(type, chart.ids[chartName], week, store);
