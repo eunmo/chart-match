@@ -29,7 +29,7 @@ function getWeeks(year) {
   );
 }
 
-export default ({ handleClose, week, urlPrefix, open }) => {
+export default ({ handleClose, week, type, chart, open }) => {
   const [inYear, setInYear] = useState(false);
   const [year, setYear] = useState(null);
   const classes = useStyles();
@@ -73,7 +73,7 @@ export default ({ handleClose, week, urlPrefix, open }) => {
         ) : (
           <div>
             <div className={classes.grid}>
-              <div style={{ gridColumnStart: 3 }}>
+              <div style={{ gridColumn: '1 / span 5', textAlign: 'center' }}>
                 <Button onClick={() => setInYear(true)}>{year}</Button>
               </div>
               {getWeeks(year).map((w) => {
@@ -89,12 +89,17 @@ export default ({ handleClose, week, urlPrefix, open }) => {
                     key={w}
                     style={style}
                     component={Link}
-                    to={`${urlPrefix}/${w}`}
+                    to={`/week/${type}/${chart}/${w}`}
                   >
                     {w.substring(5, 10).replace('-', '/')}
                   </Button>
                 );
               })}
+              <div style={{ gridColumn: '1 / span 5', textAlign: 'center' }}>
+                <Button component={Link} to={`/year/${type}/${chart}/${year}`}>
+                  Top 10 singles
+                </Button>
+              </div>
             </div>
           </div>
         )}

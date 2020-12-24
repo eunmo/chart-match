@@ -12,6 +12,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { Provider as StoreProvider } from './store';
 import AppBar from './AppBar';
 import ChartWeek from './ChartWeek';
+import ChartYear from './ChartYear';
 import Current from './Current';
 import Edit from './Edit';
 import FavoriteAlbums from './FavoriteAlbums';
@@ -45,6 +46,9 @@ export default () => {
             </Route>
             <Route path="/week/:type/:chart/:week">
               <ChartWeek />
+            </Route>
+            <Route path="/year/:type/:chart/:year">
+              <ChartYear />
             </Route>
             <Route path="/edit/:type/:chart/:entry">
               <Edit />

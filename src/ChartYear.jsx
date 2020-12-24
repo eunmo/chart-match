@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Link as RouterLink, useParams } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import Container from '@material-ui/core/Container';
 import IconButton from '@material-ui/core/IconButton';
 import Link from '@material-ui/core/Link';
@@ -51,48 +49,16 @@ const useStyles = makeStyles((theme) => ({
 export default () => {
   const [entries, setEntries] = useState(undefined);
   const [showButtons, setShowButtons] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
-  const { type, chart, week } = useParams();
+  const { type, chart, year } = useParams();
   const store = useStore();
   const classes = useStyles();
 
   useEffect(() => {
-    setEntries(undefined);
-    setOpenDialog(false);
     setShowButtons(false);
-    get(`/api/chart/select/week/${type}/${chart}/${week}/${store}`, setEntries);
-  }, [type, chart, week, store]);
-
-  async function fetchChart() {
-    setEntries(undefined);
-    setLoading(true);
-    await fetch(`/api/chart/fetch/${type}/${chart}/${week}`);
-    setLoading(false);
-    setShowButtons(false);
-    get(`/api/chart/select/week/${type}/${chart}/${week}/${store}`, setEntries);
-  }
-
-  async function matchChart() {
-    setEntries(undefined);
-    setLoading(true);
-    await fetch(`/api/chart/match/${type}/${chart}/${week}/us`);
-    await fetch(`/api/chart/match/${type}/${chart}/${week}/jp`);
-    setLoading(false);
-    setShowButtons(false);
-    get(`/api/chart/select/week/${type}/${chart}/${week}/${store}`, setEntries);
-  }
-
-  async function fetchMatchChart() {
-    setEntries(undefined);
-    setLoading(true);
-    await fetch(`/api/chart/fetch/${type}/${chart}/${week}`);
-    await fetch(`/api/chart/match/${type}/${chart}/${week}/us`);
-    await fetch(`/api/chart/match/${type}/${chart}/${week}/jp`);
-    setLoading(false);
-    setShowButtons(false);
-    get(`/api/chart/select/week/${type}/${chart}/${week}/${store}`, setEntries);
-  }
+    const url = `/api/chart/select/year/${type}/${chart}/${year}/10/${store}`;
+    get(url, setEntries);
+  }, [type, chart, year, store]);
 
   const grid = showButtons ? classes.editGrid : classes.showGrid;
 
@@ -105,7 +71,7 @@ export default () => {
         </div>
         <div>
           <Button onClick={() => setOpenDialog(true)}>
-            {week} {type}s
+            {year} Top 10 {type}s
           </Button>
         </div>
         <div style={{ textAlign: 'right' }}>
@@ -118,7 +84,7 @@ export default () => {
         <div className={grid} key={`${entry.entry} ${entry.track}`}>
           {entry.catalog ? (
             <Link href={entry.catalog.url}>
-              <Image url={entry.catalog.artworkUrl} isNew={entry.isNew} />
+              <Image url={entry.catalog.artworkUrl} />
             </Link>
           ) : (
             <div />
@@ -151,21 +117,9 @@ export default () => {
             ]}
         </div>
       ))}
-      {loading && (
-        <div>
-          <CircularProgress />
-        </div>
-      )}
-      {(showButtons || entries?.length === 0) && !loading && (
-        <ButtonGroup>
-          <Button onClick={() => fetchChart()}>Fetch</Button>
-          <Button onClick={() => matchChart()}>Match</Button>
-          <Button onClick={() => fetchMatchChart()}>Do Both</Button>
-        </ButtonGroup>
-      )}
       <WeekDialog
         handleClose={() => setOpenDialog(false)}
-        week={week}
+        week={year}
         type={type}
         chart={chart}
         open={openDialog}
