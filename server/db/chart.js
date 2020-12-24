@@ -34,6 +34,38 @@ function getWeek(type, chart, week, store) {
     ORDER BY ranking`);
 }
 
+function getYear1(type, chart, year, store) {
+  return query(`
+    SELECT ranking, c.entry, idx, m.id, artist, title
+    FROM ${type}Chart c
+    LEFT JOIN (SELECT * FROM ${type}ChartMatch WHERE store='${store}') m
+    ON c.entry = m.entry
+    INNER JOIN ${type}ChartEntry e
+    ON c.entry = e.id
+    WHERE c.chart = ${chart}
+    AND YEAR(c.week) = ${year}
+    AND ranking = 1
+    ORDER BY week`);
+}
+
+function getYear10(type, chart, year, store) {
+  return query(`
+    SELECT ranking, c.entry, idx, m.id, artist, title
+    FROM (
+        SELECT min(week) as week, min(ranking) as ranking, entry
+        FROM ${type}Chart
+        WHERE chart = ${chart}
+        AND ranking <= 10
+        GROUP BY entry
+    ) c
+    LEFT JOIN (SELECT * FROM ${type}ChartMatch WHERE store='${store}') m
+    ON c.entry = m.entry
+    INNER JOIN ${type}ChartEntry e
+    ON c.entry = e.id
+    WHERE YEAR(c.week) = ${year}
+    ORDER BY week, ranking`);
+}
+
 function getWeeks(type, store, weeks) {
   return query(`
     SELECT DISTINCT m.id
@@ -108,6 +140,8 @@ module.exports = {
   add,
   getRaw,
   getWeek,
+  getYear1,
+  getYear10,
   getWeeks,
   getMatches,
   getNonMatches,
