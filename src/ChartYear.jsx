@@ -55,6 +55,8 @@ export default () => {
   const classes = useStyles();
 
   useEffect(() => {
+    setEntries(undefined);
+    setOpenDialog(false);
     setShowButtons(false);
     const url = `/api/chart/select/year/${type}/${chart}/${year}/10/${store}`;
     get(url, setEntries);
