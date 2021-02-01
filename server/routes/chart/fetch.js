@@ -23,6 +23,7 @@ router.get('/:type/:chartName/:date', async (req, res) => {
     chart.getRaw(type, chartId, week),
     fetchChart[chartName](type, date),
   ]);
+
   if (!shouldUpdate(existing, ranks)) {
     res.sendStatus(200);
     return;
