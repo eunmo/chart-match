@@ -1,44 +1,48 @@
-const { dml, query } = require('@eunmo/mysql');
-const { escape } = require('./util');
+const { insertMultiple, query } = require('@eunmo/mysql');
 
 function addMissing(type, chart, entries) {
-  const values = entries.map(
-    ({ artist, title }) => `(${chart}, '${escape(artist)}', '${escape(title)}')`
-  );
+  const values = entries.map(({ artist, title }) => [chart, artist, title]);
 
-  return dml(`
+  return insertMultiple(
+    `
     INSERT IGNORE INTO ${type}ChartEntry (chart, artist, title)
-    VALUES ${values.join(',')}`);
+    VALUES ?`,
+    values
+  );
 }
 
 function getIds(type, chart, entries) {
   const temp = entries
-    .map(
-      ({ artist, title }) =>
-        `SELECT ${chart} as chart, '${escape(artist)}' as artist, '${escape(
-          title
-        )}' as title`
-    )
+    .map(() => `SELECT ? as chart, ? as artist, ? as title`)
     .join(' UNION ');
+  const values = entries
+    .map(({ artist, title }) => [chart, artist, title])
+    .flat();
 
-  return query(`
+  return query(
+    `
     SELECT id
     FROM (${temp}) t
     LEFT JOIN ${type}ChartEntry s
     ON t.chart = s.chart
     AND t.artist = s.artist
-    AND t.title = s.title`);
+    AND t.title = s.title`,
+    values
+  );
 }
 
 function getFull(type, chart, entry, store) {
-  return query(`
+  return query(
+    `
     SELECT idx, m.id, artist, title
     FROM ${type}ChartEntry e
-    LEFT JOIN (SELECT * FROM ${type}ChartMatch WHERE store='${store}') m
+    LEFT JOIN (SELECT * FROM ${type}ChartMatch WHERE store= ?) m
     ON e.id = m.entry
-    WHERE e.chart=${chart}
-    AND e.id=${entry}
-    ORDER BY idx`);
+    WHERE e.chart = ?
+    AND e.id = ?
+    ORDER BY idx`,
+    [store, chart, entry]
+  );
 }
 
 module.exports = {

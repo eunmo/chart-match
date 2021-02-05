@@ -1,40 +1,54 @@
-const { dml, query } = require('@eunmo/mysql');
-const { escape, format } = require('./util');
+const { dml, insertMultiple, query } = require('@eunmo/mysql');
 
 function add(store, id, gid, name, url, artwork) {
-  const values = [store, id, gid, escape(name), url].map(format);
-  return dml(`
+  const values = [store, id, gid, name, url, artwork];
+  return insertMultiple(
+    `
     INSERT INTO favoriteArtist (store, id, gid, name, url, artwork)
-    VALUES (${values.join(',')}, ${format(artwork)})`);
+    VALUES ?`,
+    [values]
+  );
 }
 
 function edit(store, id, gid) {
-  return dml(`
+  return dml(
+    `
     UPDATE favoriteArtist
-    SET gid = ${format(gid)}
-    WHERE store = ${format(store)}
-    AND id = ${format(id)}`);
+    SET gid = ?
+    WHERE store = ?
+    AND id = ?`,
+    [gid, store, id]
+  );
 }
 
 function remove(store, id) {
-  return dml(`
+  return dml(
+    `
     DELETE FROM favoriteArtist
-    WHERE store = '${store}'
-    AND id = '${id}'`);
+    WHERE store = ?
+    AND id = ?`,
+    [store, id]
+  );
 }
 
 function get(store) {
-  return query(`
+  return query(
+    `
     SELECT id, gid, name, url, artwork
     FROM favoriteArtist
-    WHERE store = '${store}'`);
+    WHERE store = ?`,
+    [store]
+  );
 }
 
 function addAlbums(store, artist, entries) {
-  const values = entries.map(({ id }) => `('${store}', '${id}', '${artist}')`);
-  return dml(`
+  const values = entries.map(({ id }) => [store, id, artist]);
+  return insertMultiple(
+    `
     INSERT IGNORE INTO favoriteArtistAlbum (store, id, artist)
-    VALUES ${values.join(',')}`);
+    VALUES ?`,
+    values
+  );
 }
 
 function editAlbums(store, includedMap) {
@@ -42,50 +56,66 @@ function editAlbums(store, includedMap) {
     .map(([id, included]) => `SELECT '${id}' as id, ${included} as included`)
     .join(' UNION ');
 
-  return dml(`
+  return dml(
+    `
     UPDATE favoriteArtistAlbum, (${vals}) vals
     SET favoriteArtistAlbum.included = vals.included
-    WHERE store = '${store}'
-    AND favoriteArtistAlbum.id = vals.id`);
+    WHERE store = ?
+    AND favoriteArtistAlbum.id = vals.id`,
+    store
+  );
 }
 
 async function getAlbums(store, artist) {
-  const rows = await dml(`
+  const rows = await dml(
+    `
     SELECT id, included
     FROM favoriteArtistAlbum
-    WHERE store = '${store}'
-    AND artist = '${artist}'`);
+    WHERE store = ?
+    AND artist = ?`,
+    [store, artist]
+  );
   return rows.map(({ id, included }) => ({ id, included: !!included }));
 }
 
 function clearSongs(store) {
-  return dml(`
+  return dml(
+    `
     DELETE FROM favoriteArtistSong
-    WHERE store = '${store}'`);
+    WHERE store = ?`,
+    store
+  );
 }
 
 function addSongs(store, gid, entries) {
-  const values = entries.map(
-    ({ id }) => `(${format(store)}, ${format(id)}, ${format(gid)})`
-  );
-  return dml(`
+  const values = entries.map(({ id }) => [store, id, gid]);
+  return insertMultiple(
+    `
     INSERT IGNORE INTO favoriteArtistSong (store, id, gid)
-    VALUES ${values.join(',')}`);
+    VALUES ?`,
+    values
+  );
 }
 
 function getSongs(store) {
-  return query(`
+  return query(
+    `
     SELECT id, gid
     FROM favoriteArtistSong
-    WHERE store = '${store}'`);
+    WHERE store = ?`,
+    store
+  );
 }
 
 function getSongCounts(store) {
-  return query(`
+  return query(
+    `
     SELECT gid, count(*) as count
     FROM favoriteArtistSong
-    WHERE store = '${store}'
-    GROUP BY gid`);
+    WHERE store = ?
+    GROUP BY gid`,
+    store
+  );
 }
 
 module.exports = {

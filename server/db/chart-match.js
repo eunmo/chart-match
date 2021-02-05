@@ -1,21 +1,24 @@
-const { dml } = require('@eunmo/mysql');
-const { format } = require('./util');
+const { dml, insertMultiple } = require('@eunmo/mysql');
 
 function add(type, store, entries) {
-  const values = entries.map(
-    ({ entry, idx, id }) => `(${entry}, '${store}', ${idx}, ${format(id)})`
-  );
+  const values = entries.map(({ entry, idx, id }) => [entry, store, idx, id]);
 
-  return dml(`
+  return insertMultiple(
+    `
     INSERT INTO ${type}ChartMatch (entry, store, idx, id)
-    VALUES ${values.join(',')}`);
+    VALUES ?`,
+    values
+  );
 }
 
 function remove(type, store, entry) {
-  return dml(`
+  return dml(
+    `
     DELETE FROM ${type}ChartMatch
-    WHERE store='${store}'
-    AND entry=${entry}`);
+    WHERE store = ?
+    AND entry = ?`,
+    [store, entry]
+  );
 }
 
 module.exports = {

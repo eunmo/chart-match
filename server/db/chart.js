@@ -1,108 +1,130 @@
-const { dml, query } = require('@eunmo/mysql');
+const { insertMultiple, query } = require('@eunmo/mysql');
 
 function add(type, chart, week, entryIds) {
-  const values = entryIds.map(
-    ({ id }, index) => `(${chart}, '${week}', ${index + 1}, ${id})`
-  );
+  const values = entryIds.map(({ id }, index) => [chart, week, index + 1, id]);
 
-  return dml(`
+  return insertMultiple(
+    `
     INSERT INTO ${type}Chart (chart, week, ranking, entry)
-    VALUES ${values.join(',')}`);
+    VALUES ?`,
+    values
+  );
 }
 
 function getRaw(type, chart, week) {
-  return query(`
+  return query(
+    `
     SELECT ranking, artist, title
     FROM ${type}Chart c
     LEFT JOIN ${type}ChartEntry e
     ON c.entry = e.id
-    WHERE c.chart=${chart}
-    AND c.week='${week}'
-    ORDER BY ranking`);
+    WHERE c.chart = ?
+    AND c.week = ?
+    ORDER BY ranking`,
+    [chart, week]
+  );
 }
 
 function getWeek(type, chart, week, store) {
-  return query(`
+  return query(
+    `
     SELECT ranking, c.entry, idx, m.id, artist, title
     FROM ${type}Chart c
-    LEFT JOIN (SELECT * FROM ${type}ChartMatch WHERE store='${store}') m
+    LEFT JOIN (SELECT * FROM ${type}ChartMatch WHERE store = ?) m
     ON c.entry = m.entry
     INNER JOIN ${type}ChartEntry e
     ON c.entry = e.id
-    WHERE c.chart=${chart}
-    AND c.week='${week}'
-    ORDER BY ranking`);
+    WHERE c.chart = ?
+    AND c.week = ?
+    ORDER BY ranking`,
+    [store, chart, week]
+  );
 }
 
 function getYear1(type, chart, year, store) {
-  return query(`
+  return query(
+    `
     SELECT ranking, c.entry, idx, m.id, artist, title
     FROM ${type}Chart c
-    LEFT JOIN (SELECT * FROM ${type}ChartMatch WHERE store='${store}') m
+    LEFT JOIN (SELECT * FROM ${type}ChartMatch WHERE store = ?) m
     ON c.entry = m.entry
     INNER JOIN ${type}ChartEntry e
     ON c.entry = e.id
-    WHERE c.chart = ${chart}
-    AND YEAR(c.week) = ${year}
+    WHERE c.chart = ?
+    AND YEAR(c.week) = ?
     AND ranking = 1
-    ORDER BY week`);
+    ORDER BY week`,
+    [store, chart, year]
+  );
 }
 
 function getYear10(type, chart, year, store) {
-  return query(`
+  return query(
+    `
     SELECT ranking, c.entry, idx, m.id, artist, title
     FROM (
         SELECT min(week) as week, min(ranking) as ranking, entry
         FROM ${type}Chart
-        WHERE chart = ${chart}
+        WHERE chart = ?
         AND ranking <= 10
         GROUP BY entry
     ) c
-    LEFT JOIN (SELECT * FROM ${type}ChartMatch WHERE store='${store}') m
+    LEFT JOIN (SELECT * FROM ${type}ChartMatch WHERE store = ?) m
     ON c.entry = m.entry
     INNER JOIN ${type}ChartEntry e
     ON c.entry = e.id
-    WHERE YEAR(c.week) = ${year}
-    ORDER BY week, ranking`);
+    WHERE YEAR(c.week) = ?
+    ORDER BY week, ranking`,
+    [chart, store, year]
+  );
 }
 
 function getWeeks(type, store, weeks) {
-  return query(`
+  return query(
+    `
     SELECT DISTINCT m.id
     FROM ${type}Chart c
     INNER JOIN ${type}ChartMatch m
     ON c.entry = m.entry
-    WHERE m.store = '${store}'
+    WHERE m.store = ?
     AND m.id IS NOT NULL
-    AND c.week in ('${weeks.join("','")}')
-    AND c.ranking <= 10`);
+    AND c.week in ?
+    AND c.ranking <= 10`,
+    [store, [weeks]]
+  );
 }
 
 function getMatches(type, chart, week, store) {
-  return query(`
+  return query(
+    `
     SELECT ranking, idx, id
     FROM ${type}Chart c
     LEFT JOIN ${type}ChartMatch m
     ON c.entry = m.entry
-    WHERE c.chart=${chart}
-    AND c.week='${week}'
-    AND m.store in (null, '${store}')
-    ORDER BY ranking, idx`);
+    WHERE c.chart = ?
+    AND c.week = ?
+    AND m.store in (null, ?)
+    ORDER BY ranking, idx`,
+    [chart, week, store]
+  );
 }
 
 function getNonMatches(type, chart, week, store) {
-  return query(`
+  return query(
+    `
     SELECT ranking, artist, title, entry
     FROM ${type}Chart c
     LEFT JOIN ${type}ChartEntry e
     ON c.entry = e.id
-    WHERE c.chart=${chart}
-    AND c.week='${week}'
+    WHERE c.chart = ?
+    AND c.week = ?
     AND NOT EXISTS (SELECT m.entry
                     FROM ${type}ChartMatch m
                     WHERE c.entry = m.entry
-                    AND m.store='${store}')
-    ORDER BY ranking`);
+                    AND m.store = ?)
+    ORDER BY ranking`,
+    [chart, week, store]
+  );
 }
 
 function getLatestWeeks(type) {
@@ -118,12 +140,15 @@ function getFirstWeeks(type, entries) {
     return [];
   }
 
-  return query(`
+  return query(
+    `
     SELECT min(week) as week, entry
     FROM ${type}Chart
-    WHERE entry in (${entries.join(',')})
+    WHERE entry in ?
     AND ranking <= 10
-    GROUP BY entry`);
+    GROUP BY entry`,
+    [[entries]]
+  );
 }
 
 const ids = {
