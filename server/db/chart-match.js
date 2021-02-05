@@ -1,13 +1,13 @@
-const { dml, insertMultiple } = require('@eunmo/mysql');
+const { dml } = require('@eunmo/mysql');
 
 function add(type, store, entries) {
   const values = entries.map(({ entry, idx, id }) => [entry, store, idx, id]);
 
-  return insertMultiple(
+  return dml(
     `
     INSERT INTO ${type}ChartMatch (entry, store, idx, id)
     VALUES ?`,
-    values
+    [values]
   );
 }
 

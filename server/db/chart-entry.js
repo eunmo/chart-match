@@ -1,13 +1,13 @@
-const { insertMultiple, query } = require('@eunmo/mysql');
+const { dml, query } = require('@eunmo/mysql');
 
 function addMissing(type, chart, entries) {
   const values = entries.map(({ artist, title }) => [chart, artist, title]);
 
-  return insertMultiple(
+  return dml(
     `
     INSERT IGNORE INTO ${type}ChartEntry (chart, artist, title)
     VALUES ?`,
-    values
+    [values]
   );
 }
 

@@ -1,11 +1,11 @@
-const { dml, insertMultiple, query } = require('@eunmo/mysql');
+const { dml, query } = require('@eunmo/mysql');
 
 function add(store, id, gid, name, url, artwork) {
   const values = [store, id, gid, name, url, artwork];
-  return insertMultiple(
+  return dml(
     `
     INSERT INTO favoriteArtist (store, id, gid, name, url, artwork)
-    VALUES ?`,
+    VALUES (?)`,
     [values]
   );
 }
@@ -43,11 +43,11 @@ function get(store) {
 
 function addAlbums(store, artist, entries) {
   const values = entries.map(({ id }) => [store, id, artist]);
-  return insertMultiple(
+  return dml(
     `
     INSERT IGNORE INTO favoriteArtistAlbum (store, id, artist)
     VALUES ?`,
-    values
+    [values]
   );
 }
 
@@ -89,11 +89,11 @@ function clearSongs(store) {
 
 function addSongs(store, gid, entries) {
   const values = entries.map(({ id }) => [store, id, gid]);
-  return insertMultiple(
+  return dml(
     `
     INSERT IGNORE INTO favoriteArtistSong (store, id, gid)
     VALUES ?`,
-    values
+    [values]
   );
 }
 
