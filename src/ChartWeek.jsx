@@ -6,13 +6,12 @@ import ButtonGroup from '@material-ui/core/ButtonGroup';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Container from '@material-ui/core/Container';
 import IconButton from '@material-ui/core/IconButton';
-import Link from '@material-ui/core/Link';
 import { Clear, Edit, Loupe } from '@material-ui/icons';
 
 import { useStore } from './store';
 import { get } from './util';
+import ChartEntry from './ChartEntry';
 import Flag from './Flag';
-import Image from './Image';
 import Item from './Item';
 import WeekDialog from './WeekDialog';
 
@@ -116,18 +115,7 @@ export default () => {
       </div>
       {entries?.map((entry) => (
         <div className={grid} key={`${entry.entry} ${entry.track}`}>
-          {entry.catalog ? (
-            <Link href={entry.catalog.url}>
-              <Image url={entry.catalog.artworkUrl} isNew={entry.isNew} />
-            </Link>
-          ) : (
-            <div />
-          )}
-          <div className={classes.rank}>{entry.ranking}</div>
-          <Item
-            title={entry.catalog ? entry.catalog.title : entry.raw.title}
-            subtitle={entry.catalog ? entry.catalog.artist : entry.raw.artist}
-          />
+          <ChartEntry entry={entry} />
           {showButtons && (
             <IconButton
               component={RouterLink}
