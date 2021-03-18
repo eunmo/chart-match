@@ -187,31 +187,33 @@ export default () => {
         onClear={clearSearch}
       />
       {searchResults && 'Search Results:'}
-      {searchResults?.data?.map((e) => (
-        <div className={classes[`${type}SearchGrid`]} key={e.id}>
-          {type === 'single' && (
-            <IconButton onClick={() => setSelected(e)}>
-              <DoneAll />
-            </IconButton>
-          )}
-          <IconButton onClick={() => chooseEntry(e)}>
-            <Done />
-          </IconButton>
-          <Link href={e.attributes.url}>
-            <Image url={e.attributes.artwork.url} />
-          </Link>
-          <Item
-            title={<Explicit target={e} />}
-            subtitle={e.attributes.artistName}
-          />
-          {selected === e &&
-            [2, 3, 4].map((count) => (
-              <IconButton key={count} onClick={() => chooseEntries(e, count)}>
-                {`+${count}`}
+      {searchResults?.data
+        ?.filter((e) => e.attributes)
+        .map((e) => (
+          <div className={classes[`${type}SearchGrid`]} key={e.id}>
+            {type === 'single' && (
+              <IconButton onClick={() => setSelected(e)}>
+                <DoneAll />
               </IconButton>
-            ))}
-        </div>
-      ))}
+            )}
+            <IconButton onClick={() => chooseEntry(e)}>
+              <Done />
+            </IconButton>
+            <Link href={e.attributes.url}>
+              <Image url={e.attributes.artwork.url} />
+            </Link>
+            <Item
+              title={<Explicit target={e} />}
+              subtitle={e.attributes.artistName}
+            />
+            {selected === e &&
+              [2, 3, 4].map((count) => (
+                <IconButton key={count} onClick={() => chooseEntries(e, count)}>
+                  {`+${count}`}
+                </IconButton>
+              ))}
+          </div>
+        ))}
       {searchResults && (
         <IconButton
           className={classes.assignment}
