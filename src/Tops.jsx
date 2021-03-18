@@ -45,6 +45,10 @@ const useStyles = makeStyles((theme) => ({
   gridCenter: {
     gridColumn: '2/3',
   },
+  fill: {
+    height: '100%',
+    width: '100%',
+  },
 }));
 
 export default () => {
@@ -88,12 +92,16 @@ export default () => {
         {charts.map(({ chart, song, album }) => [
           <div key={`${chart} album`}>
             <Link to={`/week/album/${chart}/${album.week}`}>
-              <div className={classes.albumGrid}>
-                <Item title={album.name} subtitle={album.artist} />
-                <div>
-                  <Image url={album.url} />
+              {album.url ? (
+                <div className={classes.albumGrid}>
+                  <Item title={album.name} subtitle={album.artist} />
+                  <div>
+                    <Image url={album.url} />
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <div className={classes.fill} />
+              )}
             </Link>
           </div>,
           <div key={`${chart} flag`}>
@@ -101,12 +109,16 @@ export default () => {
           </div>,
           <div key={`${chart} song`}>
             <Link to={`/week/single/${chart}/${song.week}`}>
-              <div className={classes.songGrid}>
-                <div>
-                  <Image url={song.url} />
+              {song.url ? (
+                <div className={classes.songGrid}>
+                  <div>
+                    <Image url={song.url} />
+                  </div>
+                  <Item title={song.name} subtitle={song.artist} />
                 </div>
-                <Item title={song.name} subtitle={song.artist} />
-              </div>
+              ) : (
+                <div className={classes.fill} />
+              )}
             </Link>
           </div>,
         ])}
