@@ -41,6 +41,21 @@ router.get('/tops/:store', async (req, res) => {
   res.json({ songs: mergedSongs, albums: mergedAlbums });
 });
 
+function getAttributes(array, dataMap, type) {
+  return array
+    .filter(({ id }) => dataMap[id] !== undefined)
+    .map(({ id, rank }) => {
+      const {
+        attributes: { artistName, name, url },
+      } = dataMap[id];
+      const out = { id, rank, artist: artistName, name };
+      if (type === 'album') {
+        out.url = url;
+      }
+      return out;
+    });
+}
+
 router.get('/:type/:store', async (req, res) => {
   const { type, store } = req.params;
   const songs = await chartCurrent.getSorted(type, store);
@@ -49,15 +64,7 @@ router.get('/:type/:store', async (req, res) => {
     .filter(({ rank }) => rank <= 10);
   const ids = shrinked.map(({ id }) => id);
   const dataMap = await searchAppleCatalog(typeToApple[type], store, ids);
-  const merged = shrinked
-    .filter(({ id }) => dataMap[id] !== undefined)
-    .map(({ id, rank }) => {
-      const {
-        attributes: { artistName, name },
-      } = dataMap[id];
-      return { id, rank, artist: artistName, name };
-    });
-  res.json(merged);
+  res.json(getAttributes(shrinked, dataMap, type));
 });
 
 router.get('/full/:type/:store', async (req, res) => {
