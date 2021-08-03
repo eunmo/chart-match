@@ -15,7 +15,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const years = Array.from({ length: 21 }, (x, i) => `${i + 2000}`);
+const years = Array.from({ length: 22 }, (x, i) => `${i + 2000}`);
 
 function refDateYMD(year, weekDiff, dayDiff) {
   const utc = new Date(Date.UTC(year, 0, 1));
