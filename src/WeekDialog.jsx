@@ -97,7 +97,7 @@ export default ({ handleClose, week, type, chart, open }) => {
               })}
               <div style={{ gridColumn: '1 / span 5', textAlign: 'center' }}>
                 <Button component={Link} to={`/year/${type}/${chart}/${year}`}>
-                  Top 10 singles
+                  {`Top 10 ${type}s`}
                 </Button>
               </div>
             </div>
