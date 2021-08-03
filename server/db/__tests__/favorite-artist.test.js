@@ -13,15 +13,6 @@ const {
   getSongCounts,
 } = require('../favorite-artist');
 
-beforeAll(async () => {
-  await dml('DROP TABLE IF EXISTS favoriteArtist');
-  await dml('DROP TABLE IF EXISTS favoriteArtistAlbum');
-  await dml('DROP TABLE IF EXISTS favoriteArtistSong');
-  await dml('CREATE TABLE favoriteArtist LIKE chart.favoriteArtist');
-  await dml('CREATE TABLE favoriteArtistAlbum LIKE chart.favoriteArtistAlbum');
-  await dml('CREATE TABLE favoriteArtistSong LIKE chart.favoriteArtistSong');
-});
-
 beforeEach(async () => {
   await dml('TRUNCATE TABLE favoriteArtistAlbum');
   await dml('TRUNCATE TABLE favoriteArtist');
@@ -29,9 +20,9 @@ beforeEach(async () => {
 });
 
 afterAll(async () => {
-  await dml('DROP TABLE IF EXISTS favoriteArtistAlbum');
-  await dml('DROP TABLE IF EXISTS favoriteArtist');
-  await dml('DROP TABLE IF EXISTS favoriteArtistSong');
+  await dml('TRUNCATE TABLE favoriteArtistAlbum');
+  await dml('TRUNCATE TABLE favoriteArtist');
+  await dml('TRUNCATE TABLE favoriteArtistSong');
   await cleanup();
 });
 
@@ -183,25 +174,34 @@ test('add songs then clear', async () => {
   expect(rows.length).toBe(0);
 });
 
-test('cascade on delete', async () => {
-  await dml(`
-    ALTER TABLE favoriteArtistAlbum
-    ADD CONSTRAINT faa_fk FOREIGN KEY (store, artist) REFERENCES favoriteArtist (store, id) ON DELETE CASCADE`);
-  const artist = '1';
-  await add('us', artist, '2', 'name', 'url', 'artwork');
-  let rows = await query('SELECT * FROM favoriteArtist');
-  expect(rows.length).toBe(1);
+describe('foreign key', () => {
+  beforeEach(async () => {
+    await dml(`
+      ALTER TABLE favoriteArtistAlbum
+      ADD CONSTRAINT faa_fk FOREIGN KEY (store, artist) REFERENCES favoriteArtist (store, id) ON DELETE CASCADE`);
+  });
 
-  const albums = [{ id: '1' }, { id: '2' }];
-  await addAlbums('us', artist, albums);
+  afterEach(async () => {
+    await dml('ALTER TABLE favoriteArtistAlbum DROP FOREIGN KEY faa_fk');
+  });
 
-  rows = await getAlbums('us', artist);
-  expect(rows.length).toBe(2);
+  test('cascade on delete', async () => {
+    const artist = '1';
+    await add('us', artist, '2', 'name', 'url', 'artwork');
+    let rows = await query('SELECT * FROM favoriteArtist');
+    expect(rows.length).toBe(1);
 
-  await remove('us', artist);
-  rows = await get('us');
-  expect(rows.length).toBe(0);
+    const albums = [{ id: '1' }, { id: '2' }];
+    await addAlbums('us', artist, albums);
 
-  rows = await getAlbums('us', artist);
-  expect(rows.length).toBe(0);
+    rows = await getAlbums('us', artist);
+    expect(rows.length).toBe(2);
+
+    await remove('us', artist);
+    rows = await get('us');
+    expect(rows.length).toBe(0);
+
+    rows = await getAlbums('us', artist);
+    expect(rows.length).toBe(0);
+  });
 });

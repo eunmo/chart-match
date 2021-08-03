@@ -18,17 +18,21 @@ let ids;
 let entries;
 
 afterAll(async () => {
+  await Promise.all(
+    ['single', 'album'].map(async (type) => {
+      await dml(`TRUNCATE TABLE ${type}Chart`);
+      await dml(`TRUNCATE TABLE ${type}ChartMatch`);
+      await dml(`TRUNCATE TABLE ${type}ChartEntry`);
+    })
+  );
   await cleanup();
 });
 
 describe.each(['single', 'album'])('%s', (type) => {
   beforeAll(async () => {
-    await dml(`DROP TABLE IF EXISTS ${type}Chart`);
-    await dml(`DROP TABLE IF EXISTS ${type}ChartMatch`);
-    await dml(`DROP TABLE IF EXISTS ${type}ChartEntry`);
-    await dml(`CREATE TABLE ${type}ChartEntry LIKE chart.${type}ChartEntry`);
-    await dml(`CREATE TABLE ${type}Chart LIKE chart.${type}Chart`);
-    await dml(`CREATE TABLE ${type}ChartMatch LIKE chart.${type}ChartMatch`);
+    await dml(`TRUNCATE TABLE ${type}Chart`);
+    await dml(`TRUNCATE TABLE ${type}ChartMatch`);
+    await dml(`TRUNCATE TABLE ${type}ChartEntry`);
     await addMissing(type, 0, dummyEntries);
     await addMissing(type, 1, dummyEntries);
     ids = [];
@@ -69,9 +73,9 @@ describe.each(['single', 'album'])('%s', (type) => {
   });
 
   afterAll(async () => {
-    await dml(`DROP TABLE ${type}Chart`);
-    await dml(`DROP TABLE ${type}ChartMatch`);
-    await dml(`DROP TABLE ${type}ChartEntry`);
+    await dml(`TRUNCATE TABLE ${type}Chart`);
+    await dml(`TRUNCATE TABLE ${type}ChartMatch`);
+    await dml(`TRUNCATE TABLE ${type}ChartEntry`);
   });
 
   beforeEach(async () => {

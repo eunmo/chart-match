@@ -27,13 +27,8 @@ afterAll(async () => {
 });
 
 describe.each(['single', 'album'])('%s', (type) => {
-  beforeAll(async () => {
-    await dml(`DROP TABLE IF EXISTS ${type}ChartEntry`);
-    await dml(`CREATE TABLE ${type}ChartEntry LIKE chart.${type}ChartEntry`);
-  });
-
   afterAll(async () => {
-    await dml(`DROP TABLE ${type}ChartEntry`);
+    await dml(`TRUNCATE TABLE ${type}ChartEntry`);
   });
 
   beforeEach(async () => {

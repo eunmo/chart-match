@@ -1,0 +1,12 @@
+version: "3.8"
+services:
+  db:
+    image: mysql
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - 3306:3306
+    tmpfs:
+      - /var/lib/mysql
+    volumes:
+      - ./initdb:/docker-entrypoint-initdb.d

@@ -1,6 +1,8 @@
-DROP TABLE favoriteArtistAlbum;
-DROP TABLE favoriteArtist;
-DROP TABLE favoriteArtistSong;
+USE chart;
+
+DROP TABLE IF EXISTS favoriteArtistAlbum;
+DROP TABLE IF EXISTS favoriteArtist;
+DROP TABLE IF EXISTS favoriteArtistSong;
 
 CREATE TABLE favoriteArtist (
   store CHAR(2) NOT NULL,

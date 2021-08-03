@@ -34,20 +34,17 @@ describe.each(['single', 'album'])('%s', (type) => {
   let ids;
 
   beforeAll(async () => {
-    await dml(`DROP TABLE IF EXISTS ${type}Chart`);
-    await dml(`DROP TABLE IF EXISTS ${type}ChartMatch`);
-    await dml(`DROP TABLE IF EXISTS ${type}ChartEntry`);
-    await dml(`CREATE TABLE ${type}ChartEntry LIKE chart.${type}ChartEntry`);
-    await dml(`CREATE TABLE ${type}Chart LIKE chart.${type}Chart`);
-    await dml(`CREATE TABLE ${type}ChartMatch LIKE chart.${type}ChartMatch`);
+    await dml(`TRUNCATE TABLE ${type}Chart`);
+    await dml(`TRUNCATE TABLE ${type}ChartMatch`);
+    await dml(`TRUNCATE TABLE ${type}ChartEntry`);
 
     ids = await populate('us');
   });
 
   afterAll(async () => {
-    await dml(`DROP TABLE ${type}Chart`);
-    await dml(`DROP TABLE ${type}ChartMatch`);
-    await dml(`DROP TABLE ${type}ChartEntry`);
+    await dml(`TRUNCATE TABLE ${type}Chart`);
+    await dml(`TRUNCATE TABLE ${type}ChartMatch`);
+    await dml(`TRUNCATE TABLE ${type}ChartEntry`);
   });
 
   beforeEach(async () => {

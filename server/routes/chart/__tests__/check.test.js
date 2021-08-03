@@ -28,10 +28,8 @@ describe.each(['single', 'album'])('%s', (type) => {
   }
 
   beforeAll(async () => {
-    await dml(`DROP TABLE IF EXISTS ${type}Chart`);
-    await dml(`DROP TABLE IF EXISTS ${type}ChartEntry`);
-    await dml(`CREATE TABLE ${type}ChartEntry LIKE chart.${type}ChartEntry`);
-    await dml(`CREATE TABLE ${type}Chart LIKE chart.${type}Chart`);
+    await dml(`TRUNCATE TABLE ${type}Chart`);
+    await dml(`TRUNCATE TABLE ${type}ChartEntry`);
 
     fetch.mockImplementation((url) => {
       if (/billboard.*2020-09-10/.test(url)) {
@@ -52,8 +50,8 @@ describe.each(['single', 'album'])('%s', (type) => {
   });
 
   afterAll(async () => {
-    await dml(`DROP TABLE ${type}Chart`);
-    await dml(`DROP TABLE ${type}ChartEntry`);
+    await dml(`TRUNCATE TABLE ${type}Chart`);
+    await dml(`TRUNCATE TABLE ${type}ChartEntry`);
   });
 
   test('check', async () => {

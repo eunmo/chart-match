@@ -57,30 +57,25 @@ async function populate(name) {
 }
 
 beforeAll(async () => {
-  await dml('DROP TABLE IF EXISTS singleChart;');
-  await dml('DROP TABLE IF EXISTS singleChartMatch;');
-  await dml('DROP TABLE IF EXISTS singleChartEntry;');
-  await dml('DROP TABLE IF EXISTS albumChart;');
-  await dml('DROP TABLE IF EXISTS albumChartMatch;');
-  await dml('DROP TABLE IF EXISTS albumChartEntry;');
-
-  await dml('CREATE TABLE singleChartEntry LIKE chart.singleChartEntry;');
-  await dml('CREATE TABLE singleChart LIKE chart.singleChart;');
-  await dml('CREATE TABLE singleChartMatch LIKE chart.singleChartMatch;');
-  await dml('CREATE TABLE albumChartEntry LIKE chart.albumChartEntry;');
-  await dml('CREATE TABLE albumChart LIKE chart.albumChart;');
-  await dml('CREATE TABLE albumChartMatch LIKE chart.albumChartMatch;');
+  await Promise.all(
+    ['single', 'album'].map(async (type) => {
+      await dml(`TRUNCATE TABLE ${type}Chart`);
+      await dml(`TRUNCATE TABLE ${type}ChartMatch`);
+      await dml(`TRUNCATE TABLE ${type}ChartEntry`);
+    })
+  );
 
   await Promise.all(names.map((name) => populate(name)));
 });
 
 afterAll(async () => {
-  await dml('DROP TABLE singleChart;');
-  await dml('DROP TABLE singleChartMatch;');
-  await dml('DROP TABLE singleChartEntry;');
-  await dml('DROP TABLE albumChart;');
-  await dml('DROP TABLE albumChartMatch;');
-  await dml('DROP TABLE albumChartEntry;');
+  await Promise.all(
+    ['single', 'album'].map(async (type) => {
+      await dml(`TRUNCATE TABLE ${type}Chart`);
+      await dml(`TRUNCATE TABLE ${type}ChartMatch`);
+      await dml(`TRUNCATE TABLE ${type}ChartEntry`);
+    })
+  );
   await cleanup();
 });
 
