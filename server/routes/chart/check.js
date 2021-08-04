@@ -1,5 +1,6 @@
 const express = require('express');
 const { chart, chartEntry } = require('../../db');
+const { matchSingle, matchAlbum } = require('./match');
 const { refDateYMD, shouldUpdate } = require('./util');
 const us = require('./us');
 const jp = require('./jp');
@@ -11,6 +12,10 @@ const fetchChart = {
   [chart.ids.jp]: jp,
   [chart.ids.gb]: gb,
   [chart.ids.kr]: kr,
+};
+const match = {
+  album: matchAlbum,
+  single: matchSingle,
 };
 const router = express.Router();
 
@@ -33,6 +38,9 @@ router.get('/:type', async (req, res) => {
       await chartEntry.addMissing(type, chartId, ranks);
       const entryIds = await chartEntry.getIds(type, chartId, ranks);
       await chart.add(type, chartId, nextWeek, entryIds);
+
+      await match[type](chartId, nextWeek, 'us');
+      await match[type](chartId, nextWeek, 'jp');
     })
   );
 

@@ -15,6 +15,7 @@ app.use('/', router);
 
 jest.mock('node-fetch');
 const { Response } = jest.requireActual('node-fetch');
+jest.mock('../match');
 
 afterAll(async () => {
   await cleanup();

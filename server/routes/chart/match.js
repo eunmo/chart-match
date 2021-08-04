@@ -90,20 +90,12 @@ async function querySong(store, chartId, artist, title) {
   return [song];
 }
 
-router.get('/single/:chartName/:date/:store', async (req, res) => {
-  const { chartName, date, store } = req.params;
+async function matchSingle(chartId, date, store) {
   const week = refDateYMD(date, 0, 6);
-
-  const chartId = chartIds[chartName];
-  if (chartId === undefined) {
-    res.sendStatus(200);
-    return;
-  }
 
   let raw = await chart.getNonMatches('single', chartId, week, store);
   raw = raw.filter(({ ranking }) => ranking <= 10);
   if (raw.length === 0) {
-    res.sendStatus(200);
     return;
   }
 
@@ -125,6 +117,17 @@ router.get('/single/:chartName/:date/:store', async (req, res) => {
   });
 
   await chartMatch.add('single', store, toAdd);
+}
+
+router.get('/single/:chartName/:date/:store', async (req, res) => {
+  const { chartName, date, store } = req.params;
+  const chartId = chartIds[chartName];
+  if (chartId === undefined) {
+    res.sendStatus(200);
+    return;
+  }
+
+  await matchSingle(chartId, date, store);
   res.sendStatus(200);
 });
 
@@ -153,20 +156,12 @@ async function queryAlbum(store, chartId, artist, title) {
   );
 }
 
-router.get('/album/:chartName/:date/:store', async (req, res) => {
-  const { chartName, date, store } = req.params;
+async function matchAlbum(chartId, date, store) {
   const week = refDateYMD(date, 0, 6);
-
-  const chartId = chartIds[chartName];
-  if (chartId === undefined) {
-    res.sendStatus(200);
-    return;
-  }
 
   let raw = await chart.getNonMatches('album', chartId, week, store);
   raw = raw.filter(({ ranking }) => ranking <= 10);
   if (raw.length === 0) {
-    res.sendStatus(200);
     return;
   }
 
@@ -186,7 +181,18 @@ router.get('/album/:chartName/:date/:store', async (req, res) => {
   });
 
   await chartMatch.add('album', store, toAdd);
+}
+
+router.get('/album/:chartName/:date/:store', async (req, res) => {
+  const { chartName, date, store } = req.params;
+  const chartId = chartIds[chartName];
+  if (chartId === undefined) {
+    res.sendStatus(200);
+    return;
+  }
+
+  await matchAlbum(chartId, date, store);
   res.sendStatus(200);
 });
 
-module.exports = router;
+module.exports = { matchSingle, matchAlbum, router };
