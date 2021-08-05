@@ -160,7 +160,10 @@ const ids = {
   kr: 5,
 };
 
-const names = Object.assign({}, ...Object.entries(ids).map(([a,b]) => ({ [b]: a })))
+const names = Object.assign(
+  {},
+  ...Object.entries(ids).map(([a, b]) => ({ [b]: a }))
+);
 
 module.exports = {
   ids,
