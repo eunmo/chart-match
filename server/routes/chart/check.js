@@ -1,7 +1,7 @@
 const express = require('express');
 const { chart, chartEntry } = require('../../db');
 const { matchSingle, matchAlbum } = require('./match');
-const { refDateYMD, shouldUpdate } = require('./util');
+const { refDateYMD, shouldUpdate, sendAPN } = require('./util');
 const us = require('./us');
 const jp = require('./jp');
 const gb = require('./gb');
@@ -41,6 +41,9 @@ router.get('/:type', async (req, res) => {
 
       await match[type](chartId, nextWeek, 'us');
       await match[type](chartId, nextWeek, 'jp');
+
+      const chartName = chart.names[chartId].toUpperCase();
+      await sendAPN(chartName, type);
     })
   );
 

@@ -17,6 +17,10 @@ jest.mock('node-fetch');
 const { Response } = jest.requireActual('node-fetch');
 jest.mock('../match');
 
+jest.mock('../util', () => {
+  return { ...jest.requireActual('../util'), sendAPN: jest.fn() };
+});
+
 afterAll(async () => {
   await cleanup();
 });

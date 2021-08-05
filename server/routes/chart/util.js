@@ -1,3 +1,5 @@
+const apn = require('apn');
+const path = require('path');
 const { URL } = require('url');
 const { TextDecoder } = require('util');
 const fetch = require('node-fetch');
@@ -94,6 +96,24 @@ function shouldUpdate(existing, toAdd) {
 
 const typeToApple = { single: 'songs', album: 'albums' };
 
+async function sendAPN(chart, type) {
+  const { device, keyId, teamId } = config.get('apn');
+  const key = path.join(__dirname, '../../../authkey.p8');
+  const options = { token: { key, keyId, teamId }, production: false };
+  const apnProvider = new apn.Provider(options);
+
+  const notification = new apn.Notification();
+  notification.expiry = Math.floor(Date.now() / 1000) + 24 * 3600; // will expire in 24 hours from now
+  notification.badge = 1;
+  notification.alert = `${chart} ${type} chart updated`;
+  notification.payload = { messageFrom: 'Chart Match' };
+
+  notification.topic = 'be.eunmo.ChartMatch';
+
+  await apnProvider.send(notification, device);
+  apnProvider.shutdown();
+}
+
 module.exports = {
   queryAppleMusic,
   searchAppleCatalog,
@@ -102,4 +122,5 @@ module.exports = {
   refDateWeek,
   shouldUpdate,
   typeToApple,
+  sendAPN,
 };
