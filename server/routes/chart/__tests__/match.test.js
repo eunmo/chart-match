@@ -11,7 +11,7 @@ jest.setTimeout(10000);
 const app = express();
 app.use('/', router);
 
-const names = ['us', 'jp', 'gb', 'kr'];
+const names = ['us', 'jp', 'gb', 'fr', 'kr'];
 const week = '2020-09-12';
 const ymd = '2020/09/12';
 
@@ -56,6 +56,8 @@ describe.each(['single', 'album'])('%s', (type) => {
     ['jp', 'jp'],
     ['gb', 'us'],
     ['gb', 'jp'],
+    ['fr', 'us'],
+    ['fr', 'jp'],
     ['kr', 'us'],
     ['kr', 'jp'],
   ])('match %s %s', async (name, store) => {
@@ -81,6 +83,8 @@ describe.each(['single', 'album'])('%s', (type) => {
     ['jp', 'jp'],
     ['gb', 'us'],
     ['gb', 'jp'],
+    ['fr', 'us'],
+    ['fr', 'jp'],
     ['kr', 'us'],
     ['kr', 'jp'],
   ])('match partial %s %s', async (name, store) => {

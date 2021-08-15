@@ -37,7 +37,7 @@
     "eject": "react-scripts eject",
     "lint": "eslint --fix \"src/**/*.{js,jsx}\" \"server/**/*.js\" \"scripts/**/*.js\"",
     "jest": "jest -w 1 --watch --only-changed --roots server/",
-    "test": "jest -w 1",
+    "test1": "jest -w 1 --runTestsByPath",
     "server": "nodemon --watch server server/chart-match.js"
   },
   "proxy": "http://localhost:3010",

@@ -4,9 +4,10 @@ const { refDateYMD, shouldUpdate } = require('./util');
 const us = require('./us');
 const jp = require('./jp');
 const gb = require('./gb');
+const fr = require('./fr');
 const kr = require('./kr');
 
-const fetchChart = { us, jp, gb, kr };
+const fetchChart = { us, jp, gb, fr, kr };
 const router = express.Router();
 
 router.get('/:type/:chartName/:date', async (req, res) => {

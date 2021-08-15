@@ -44,6 +44,16 @@ const expectedRanks = {
       [6, 6],
       [8, 8],
     ],
+    fr: [
+      [0, 0],
+      [1, 1],
+      [2, 4],
+      [3, 2],
+      [4, 3],
+      [5, 5],
+      [6, 7],
+      [7, 6],
+    ],
     kr: [
       [0, 0],
       [1, 2],
@@ -73,6 +83,13 @@ const expectedRanks = {
       [8, 6],
       [9, 5],
     ],
+    fr: [
+      [0, 2],
+      [1, 1],
+      [2, 5],
+      [5, 7],
+      [8, 8],
+    ],
     kr: [
       [0, 4],
       [1, 1],
@@ -86,11 +103,13 @@ const expectedSum = {
   single: {
     us: 111,
     gb: 111,
+    fr: 118,
     kr: 107,
   },
   album: {
     us: 113,
     gb: 113,
+    fr: 109,
     kr: 133,
   },
 };
@@ -110,7 +129,7 @@ describe.each(['single', 'album'])('%s', (type) => {
     await dml(`TRUNCATE TABLE ${type}ChartEntry`);
   });
 
-  describe.each(['us', 'gb', 'kr'])('%s', (chartName) => {
+  describe.each(['us', 'gb', 'fr', 'kr'])('%s', (chartName) => {
     const chartId = chartIds[chartName];
 
     const prevData = fs.readFileSync(
