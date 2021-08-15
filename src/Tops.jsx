@@ -63,6 +63,7 @@ export default () => {
         { id: 0, chart: 'us' },
         { id: 1, chart: 'jp' },
         { id: 2, chart: 'gb' },
+        { id: 4, chart: 'fr' },
         { id: 5, chart: 'kr' },
       ];
       songs.forEach((song) => {

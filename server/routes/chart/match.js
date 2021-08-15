@@ -54,7 +54,12 @@ async function queryNormalizedKoreanSong(store, artist, title) {
 }
 
 async function querySong(store, chartId, artist, title) {
-  const url = formQuery(store, `${artist} ${title}`, 'songs', chartId === chartIds.gb);
+  const url = formQuery(
+    store,
+    `${artist} ${title}`,
+    'songs',
+    chartId === chartIds.gb
+  );
   const { results } = await queryAppleMusic(url);
   const song = findExplicitSong(results);
 

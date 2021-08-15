@@ -18,18 +18,33 @@ const useStyles = makeStyles((theme) => ({
   },
   grid: {
     display: 'grid',
-    gridTemplateColumns: '50px 30px 50px 1fr',
+    gridTemplateColumns: '50px 30px 75px 1fr',
     gridColumnGap: theme.spacing(1),
     lineHeight: '25px',
     marginBottom: theme.spacing(1),
   },
   flagGrid: {
     display: 'grid',
-    gridTemplateColumns: '25px 25px',
+    gridTemplateColumns: 'repeat(6, 1fr)',
     lineHeight: '25px',
     '& div': {
       height: '25px',
     },
+  },
+  us: {
+    gridColumn: '2 / 4',
+  },
+  jp: {
+    gridColumn: '4 / 6',
+  },
+  gb: {
+    gridColumn: '1 / 3',
+  },
+  fr: {
+    gridColumn: '3 / 5',
+  },
+  kr: {
+    gridColumn: '5 / 7',
   },
   index: {
     fontSize: '1.2em',
@@ -41,6 +56,9 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.divider,
   },
 }));
+
+const charts = ['us', 'jp', 'gb', 'fr', 'kr'];
+const chartIds = { us: 0, jp: 1, gb: 2, fr: 4, kr: 5 };
 
 export default () => {
   const [entries, setEntries] = useState(undefined);
@@ -59,8 +77,8 @@ export default () => {
         <div />
         <div />
         <div className={classes.flagGrid}>
-          {['us', 'jp', 'gb', 'kr'].map((chart) => (
-            <div key={chart}>
+          {charts.map((chart) => (
+            <div key={chart} className={classes[chart]}>
               <Flag chart={chart} size="25" />
             </div>
           ))}
@@ -74,15 +92,19 @@ export default () => {
           </Link>
           <div className={classes.index}>{index + 1}</div>
           <div className={classes.flagGrid}>
-            {[0, 1, 2, 5].map((chart) => {
-              const rank = entry.ranks.find((r) => r.chart === chart);
+            {charts.map((chart) => {
+              const chartId = chartIds[chart];
+              const rank = entry.ranks.find((r) => r.chart === chartId);
 
               if (rank === undefined) {
-                return <div key={chart} />;
+                return <div key={chart} className={classes[chart]} />;
               }
 
               return (
-                <div className={classes.rank} key={chart}>
+                <div
+                  key={chart}
+                  className={`${classes.rank} ${classes[chart]}`}
+                >
                   {rank.ranking}
                 </div>
               );

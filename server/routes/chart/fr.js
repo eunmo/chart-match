@@ -7,10 +7,10 @@ function extract(doc) {
   const query = 'div[class="description"]';
   Array.from(doc.querySelectorAll(query)).some((td) => {
     const titleQuery = 'div[class="titre"]';
-    let { textContent: title } = td.querySelector(titleQuery);
+    const { textContent: title } = td.querySelector(titleQuery);
 
     const artistQuery = 'div[class="artiste"]';
-    let { textContent: artist } = td.querySelector(artistQuery);
+    const { textContent: artist } = td.querySelector(artistQuery);
 
     ranks.push({ rank, artist, title });
     rank += 1;
