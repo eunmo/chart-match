@@ -34,7 +34,7 @@ async function fetch(type, date) {
   const [year, refWeek] = refDateWeek(date, 0, 3);
   let url = `https://snepmusique.com/les-tops/le-top-de-la-semaine/top-albums/?semaine=${refWeek}?&annee=${year}`;
   if (type === 'single') {
-    url += 'categorie=Top%20Singles';
+    url += '&categorie=Top%20Singles';
   }
   return extract(await getDoc(url));
 }
