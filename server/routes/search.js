@@ -1,17 +1,7 @@
 const express = require('express');
-const { queryAppleMusic } = require('./chart/util');
+const { formQuery, queryAppleMusic } = require('../apple');
 
 const router = express.Router();
-
-function formQuery(store, keyword, type, replaceFT = false) {
-  let query = keyword.split(' ').join('+');
-  query = query.replace(/&/g, '%26');
-  if (replaceFT) {
-    query = query.replace(/\+FT\+/g, '+Feat+');
-  }
-  query = `term=${query}&types=artists,${type}`;
-  return `https://api.music.apple.com/v1/catalog/${store}/search?${query}`;
-}
 
 router.get('/single/:keyword/:store', async (req, res) => {
   const { keyword, store } = req.params;

@@ -3,6 +3,8 @@ const request = require('supertest');
 
 const router = require('../search');
 
+jest.mock('../../apple/query');
+
 const app = express();
 app.use('/', router);
 

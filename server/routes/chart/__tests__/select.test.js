@@ -5,6 +5,8 @@ const { chart, chartEntry, chartMatch } = require('../../../db');
 const { albums, singles, expected } = require('./test-data');
 const router = require('..');
 
+jest.mock('../../../apple/query');
+
 jest.setTimeout(10000);
 const app = express();
 app.use('/', router);
@@ -84,12 +86,17 @@ const dynamiteId = {
   jp: '1528831888',
 };
 
-const bonVoyageId = {
-  us: '1530216879',
-  jp: '1530379595',
+const seventeen = {
+  us: { id: '1274653476', name: '17' },
+  jp: { id: '1528149531', name: '24H - EP' },
 };
 
-test.each(['us', 'jp'])('get current albums %s', async (store) => {
+const goatsHeadSoup = {
+  us: { id: '1440852826', name: 'Goats Head Soup' },
+  jp: { id: '1521993582', name: 'Goats Head Soup (2020)' },
+};
+
+test.each(['us', 'jp'])('get tops %s', async (store) => {
   const response = await request(app).get(`/current/tops/${store}`);
   expect(response.statusCode).toBe(200);
 
@@ -113,20 +120,22 @@ test.each(['us', 'jp'])('get current albums %s', async (store) => {
 
   expect(resAlbums.length).toBe(4);
   expect(resAlbums[0].chart).toBe(0);
-  expect(resAlbums[0].id).toEqual('1530247672');
-  expect(resAlbums[0].name).toEqual('Detroit 2');
+  expect(resAlbums[0].id).toEqual('1537026144');
+  expect(resAlbums[0].name).toEqual('Detroit 2: Spirit - EP');
   expect(resAlbums[1].chart).toBe(1);
-  expect(resAlbums[1].id).toEqual('1528149531');
-  expect(resAlbums[1].name).toEqual('24H - EP');
+  expect(resAlbums[1].id).toEqual(seventeen[store].id);
+  expect(resAlbums[1].name).toEqual(seventeen[store].name);
   expect(resAlbums[2].chart).toBe(2);
-  expect(resAlbums[2].id).toEqual('1440852826');
-  expect(resAlbums[2].name).toEqual('Goats Head Soup');
+  expect(resAlbums[2].id).toEqual(goatsHeadSoup[store].id);
+  expect(resAlbums[2].name).toEqual(goatsHeadSoup[store].name);
   expect(resAlbums[3].chart).toBe(5);
-  expect(resAlbums[3].id).toEqual(bonVoyageId[store]);
-  expect(resAlbums[3].name).toEqual('Bon Voyage - EP');
+  expect(resAlbums[3].id).toEqual('1530317819');
+  expect(resAlbums[3].name).toEqual(
+    'Never Gonna Dance Again : Act 1 - The 3rd Album'
+  );
 });
 
-const songCount = { us: 35, jp: 36 };
+const songCount = { us: 36, jp: 36 };
 const albumCount = { us: 32, jp: 32 };
 
 describe.each(['', '/full'])('%s', (infix) => {
@@ -148,10 +157,10 @@ describe.each(['', '/full'])('%s', (infix) => {
 
     const { body } = response;
     expect(body.length).toBe(albumCount[store]);
-    expect(body[0].id).toEqual('1530247672');
-    expect(body[0].name).toEqual('Detroit 2');
-    expect(body[1].id).toEqual('1528149531');
-    expect(body[1].name).toEqual('24H - EP');
+    expect(body[0].id).toEqual('1537026144');
+    expect(body[0].name).toEqual('Detroit 2: Spirit - EP');
+    expect(body[1].id).toEqual(seventeen[store].id);
+    expect(body[1].name).toEqual(seventeen[store].name);
   });
 });
 

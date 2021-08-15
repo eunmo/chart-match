@@ -1,10 +1,7 @@
 const express = require('express');
 const { chart, favoriteArtist } = require('../db');
-const {
-  refDateYMD,
-  searchAppleCatalog,
-  queryAppleMusic,
-} = require('./chart/util');
+const { refDateYMD } = require('./chart/util');
+const { queryAppleMusic, searchAppleCatalog } = require('../apple');
 
 const router = express.Router();
 

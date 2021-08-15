@@ -5,6 +5,8 @@ const { chart, chartEntry } = require('../../../db');
 const router = require('..');
 const { singles, albums, expected } = require('./test-data');
 
+jest.mock('../../../apple/query');
+
 jest.setTimeout(10000);
 const app = express();
 app.use('/', router);

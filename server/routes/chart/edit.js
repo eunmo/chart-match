@@ -1,6 +1,6 @@
 const express = require('express');
 const { chartMatch } = require('../../db');
-const { queryAppleMusic } = require('./util');
+const { queryAppleMusic } = require('../../apple');
 
 const router = express.Router();
 

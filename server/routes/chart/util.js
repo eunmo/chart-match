@@ -1,37 +1,9 @@
 const apn = require('apn');
 const path = require('path');
-const { URL } = require('url');
 const { TextDecoder } = require('util');
 const fetch = require('node-fetch');
 const config = require('config');
 const { JSDOM } = require('jsdom');
-
-const token = config.get('appleMusicToken');
-
-async function queryAppleMusic(url) {
-  const response = await fetch(new URL(url), {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  return response.json();
-}
-
-async function searchAppleCatalog(type, store, ids) {
-  if (ids.length === 0) {
-    return {};
-  }
-
-  const query = `${type}?ids=${ids.join(',')}`;
-  const url = `https://api.music.apple.com/v1/catalog/${store}/${query}`;
-  const { data } = await queryAppleMusic(url);
-  const dataMap = {};
-  data.forEach((row) => {
-    dataMap[row.id] = row;
-  });
-  return dataMap;
-}
 
 async function getDoc(url, charset = 'utf-8') {
   const response = await fetch(url);
@@ -94,8 +66,6 @@ function shouldUpdate(existing, toAdd) {
   return diffs.length > 5;
 }
 
-const typeToApple = { single: 'songs', album: 'albums' };
-
 async function sendAPN(chart, type) {
   const { device, keyId, teamId } = config.get('apn');
   const key = path.join(__dirname, '../../../authkey.p8');
@@ -115,12 +85,9 @@ async function sendAPN(chart, type) {
 }
 
 module.exports = {
-  queryAppleMusic,
-  searchAppleCatalog,
   getDoc,
   refDateYMD,
   refDateWeek,
   shouldUpdate,
-  typeToApple,
   sendAPN,
 };

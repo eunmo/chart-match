@@ -1,7 +1,8 @@
 /* eslint no-constant-condition: ["error", { "checkLoops": false }] */
 const express = require('express');
 const { chart, chartMatch } = require('../../db');
-const { queryAppleMusic, refDateYMD } = require('./util');
+const { formQuery, queryAppleMusic } = require('../../apple');
+const { refDateYMD } = require('./util');
 
 const router = express.Router();
 const { ids: chartIds } = chart;
@@ -27,16 +28,6 @@ async function queryAllAppleMusic(url, path) {
   return candidates;
 }
 
-function formQuery(store, artist, title, type, replaceFT = false) {
-  let query = artist.split(' ').concat(title.split(' ')).join('+');
-  query = query.replace(/&/g, '%26');
-  if (replaceFT) {
-    query = query.replace(/\+FT\+/g, '+Feat+');
-  }
-  query = `term=${query}&types=artists,${type}`;
-  return `https://api.music.apple.com/v1/catalog/${store}/search?${query}`;
-}
-
 function findExplicitSong(results) {
   return results.songs?.data.find(
     ({ attributes: { contentRating } }) =>
@@ -48,7 +39,7 @@ async function queryNormalizedKoreanSong(store, artist, title) {
   const artistNorm = artist.replace(/\(.*\)/g, '').trim();
   const titleNorm = title.replace(/\(.*\)/g, '').trim();
   if (artistNorm !== artist || titleNorm !== title) {
-    const url = formQuery(store, artistNorm, titleNorm, 'songs');
+    const url = formQuery(store, `${artistNorm} ${titleNorm}`, 'songs');
     const { results } = await queryAppleMusic(url);
     const song = findExplicitSong(results);
 
@@ -63,7 +54,7 @@ async function queryNormalizedKoreanSong(store, artist, title) {
 }
 
 async function querySong(store, chartId, artist, title) {
-  const url = formQuery(store, artist, title, 'songs', chartId === chartIds.gb);
+  const url = formQuery(store, `${artist} ${title}`, 'songs', chartId === chartIds.gb);
   const { results } = await queryAppleMusic(url);
   const song = findExplicitSong(results);
 
@@ -132,7 +123,7 @@ router.get('/single/:chartName/:date/:store', async (req, res) => {
 });
 
 async function queryAlbum(store, chartId, artist, title) {
-  const url = formQuery(store, artist, title, 'albums');
+  const url = formQuery(store, `${artist} ${title}`, 'albums');
   const { results } = await queryAppleMusic(url);
   const data = results.albums?.data;
   if (data === undefined) {

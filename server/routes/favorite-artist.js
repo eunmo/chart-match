@@ -1,7 +1,7 @@
 /* eslint-disable no-await-in-loop */
 const express = require('express');
 const { favoriteArtist } = require('../db');
-const { queryAppleMusic } = require('./chart/util');
+const { queryAppleMusic } = require('../apple');
 
 const router = express.Router();
 

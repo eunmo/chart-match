@@ -6,6 +6,8 @@ const { chart, chartEntry, chartMatch } = require('../../../db');
 const { singles, albums, expected } = require('./test-data');
 const router = require('../edit');
 
+jest.mock('../../../apple/query');
+
 jest.setTimeout(10000);
 const app = express();
 app.use(bodyParser.json());

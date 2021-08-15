@@ -1,6 +1,6 @@
 const express = require('express');
 const { chart, chartEntry } = require('../../db');
-const { searchAppleCatalog, typeToApple } = require('./util');
+const { searchAppleCatalog, typeToApple } = require('../../apple');
 
 const router = express.Router();
 
