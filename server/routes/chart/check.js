@@ -5,12 +5,14 @@ const { refDateYMD, shouldUpdate, sendAPN } = require('./util');
 const us = require('./us');
 const jp = require('./jp');
 const gb = require('./gb');
+const fr = require('./fr');
 const kr = require('./kr');
 
 const fetchChart = {
   [chart.ids.us]: us,
   [chart.ids.jp]: jp,
   [chart.ids.gb]: gb,
+  [chart.ids.fr]: fr,
   [chart.ids.kr]: kr,
 };
 const match = {
