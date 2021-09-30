@@ -28,7 +28,7 @@ async function fetch(type, date) {
     type === 'single'
       ? `https://www.officialcharts.com/charts/singles-chart/${ymd}/7501`
       : `https://www.officialcharts.com/charts/albums-chart/${ymd}/7502`;
-  return extract(await getDoc(url));
+  return extract(await getDoc(url, { useAgent: true }));
 }
 
 module.exports = fetch;

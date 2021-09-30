@@ -4,9 +4,15 @@ const { TextDecoder } = require('util');
 const fetch = require('node-fetch');
 const config = require('config');
 const { JSDOM } = require('jsdom');
+const https = require('https');
 
-async function getDoc(url, charset = 'utf-8') {
-  const response = await fetch(url);
+async function getDoc(url, { charset = 'utf-8', useAgent = false } = {}) {
+  let fetchOptions = {};
+  if (useAgent) {
+    const agent = new https.Agent({ rejectUnauthorized: false });
+    fetchOptions = { agent };
+  }
+  const response = await fetch(url, fetchOptions);
   let html;
   if (charset === 'utf-8') {
     html = await response.text();

@@ -29,7 +29,7 @@ async function fetch(type, date) {
       : `https://www.oricon.co.jp/rank/coa/w/${ymd}/${p > 1 ? `p/${p}/` : ''}`
   );
   return extract(
-    await Promise.all(urls.map((url) => getDoc(url, 'shift_jis')))
+    await Promise.all(urls.map((url) => getDoc(url, { charset: 'shift_jis' })))
   );
 }
 
