@@ -10,6 +10,7 @@ const { singles, albums } = require('./test-data');
 
 const { ids: chartIds } = chart;
 
+jest.setTimeout(10000);
 const app = express();
 app.use('/', router);
 
