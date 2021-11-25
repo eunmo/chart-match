@@ -4,15 +4,15 @@ function extract(doc) {
   const ranks = [];
   let rank = 1;
 
-  const query = 'span[class="chart-element__information"]';
+  const query = 'div[class="o-chart-results-list-row-container"]';
   Array.from(doc.querySelectorAll(query)).some((span) => {
-    const titleQuery = 'span[class*="chart-element__information__song"]';
+    const titleQuery = 'h3[class*="c-title"]';
     const { textContent: title } = span.querySelector(titleQuery);
 
-    const artistQuery = 'span[class*="chart-element__information__artist"]';
+    const artistQuery = 'ul li ul li span[class*="c-label"]';
     const { textContent: artist } = span.querySelector(artistQuery);
 
-    ranks.push({ rank, artist, title });
+    ranks.push({ rank, artist: artist.trim(), title: title.trim() });
     rank += 1;
 
     return rank > 100;
