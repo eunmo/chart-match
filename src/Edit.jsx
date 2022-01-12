@@ -132,7 +132,7 @@ export default function Edit() {
       {searchResults?.data
         ?.filter((e) => e.attributes)
         .map((e) => (
-          <Grid cols={searchCols} rg={1} mb={1} key={e.id}>
+          <Grid cols={searchCols} key={e.id}>
             {type === 'single' && (
               <IconButton onClick={() => setSelected(e)} size="large">
                 <DoneAll />

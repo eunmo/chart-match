@@ -50,7 +50,7 @@ export default function WeekDialog({ handleClose, week, type, chart, open }) {
         {inYear ? 'Select Year' : 'Select Week'}
       </DialogTitle>
       <DialogContent>
-        <Grid cols="repeat(5, 1fr)" cg={0}>
+        <Grid cols="repeat(5, 1fr)" cg={0} rg={0} mb={0}>
           {inYear ? (
             years.map((y) => {
               const style = {};

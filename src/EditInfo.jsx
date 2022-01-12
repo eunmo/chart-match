@@ -21,7 +21,7 @@ export default function EditInfo({ chart, title, entries }) {
           {title}
         </div>
       </Header>
-      <Grid cols="50px 1fr" mb={1}>
+      <Grid cols="50px 1fr">
         <Box lineHeight="50px" textAlign="center">
           Raw
         </Box>

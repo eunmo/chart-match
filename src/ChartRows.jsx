@@ -15,7 +15,7 @@ export default function ChartRows({ type, chart, entries, showButtons }) {
   }, [showButtons]);
 
   return (
-    <Grid cols={columns} rg={1} sx={{ mb: 1 }}>
+    <Grid cols={columns}>
       {entries?.map((entry) => (
         <Fragment key={`${entry.entry} ${entry.track}`}>
           <ChartEntry entry={entry} />

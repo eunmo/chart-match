@@ -4,9 +4,9 @@ import Box from '@mui/material/Box';
 export default function Grid({
   cols,
   cg = 1,
-  rg = 0,
+  rg = 1,
   lh = 25,
-  mb = 0,
+  mb = 1,
   sx = {},
   children,
 }) {

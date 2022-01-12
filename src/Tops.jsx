@@ -53,7 +53,7 @@ export default function Tops() {
           <Link to="/current/single">Singles</Link>
         </div>
       </Grid>
-      <Grid cols="1fr 50px 1fr" sx={{ mb: 1 }}>
+      <Grid cols="1fr 50px 1fr" rg={0}>
         {charts.map(({ chart, song, album }) => (
           <Fragment key={chart}>
             <div>

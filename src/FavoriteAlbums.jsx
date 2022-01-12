@@ -69,7 +69,7 @@ export default function FavoriteAlbums() {
   return (
     <>
       <Button onClick={turnOff}>Unselect All</Button>
-      <Grid cols="50px 1fr 50px" rg={1} mb={1}>
+      <Grid cols="50px 1fr 50px">
         {entries.map(({ id, attributes }) => (
           <Fragment key={id}>
             <Link href={attributes.url}>

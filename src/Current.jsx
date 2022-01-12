@@ -37,10 +37,12 @@ export default function Current() {
   }, [type, store]);
 
   return (
-    <Grid cols="50px 30px 75px 1fr" rg={1} sx={{ mb: 1 }}>
+    <Grid cols="50px 30px 75px 1fr">
       <Grid
         cols="repeat(6, 1fr)"
         cg={0}
+        rg={0}
+        mb={0}
         sx={{ ...flagGridSx, gridColumnStart: 3 }}
       >
         {charts.map((chart) => (
@@ -64,7 +66,7 @@ export default function Current() {
           <Box fontSize="1.2em" lineHeight="50px" textAlign="center">
             {index + 1}
           </Box>
-          <Grid cols="repeat(6, 1fr)" cg={0} sx={flagGridSx}>
+          <Grid cols="repeat(6, 1fr)" cg={0} rg={0} mb={0} sx={flagGridSx}>
             {charts.map((chart) => {
               const chartId = chartIds[chart];
               const rank = entry.ranks.find((r) => r.chart === chartId);

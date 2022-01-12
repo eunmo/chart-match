@@ -128,7 +128,7 @@ export default function Favorites() {
       />
       {searchResults && 'Search Results:'}
       {searchResults?.data?.map((e) => (
-        <Grid cols="50px 50px 1fr" mb={1} key={e.id}>
+        <Grid cols="50px 50px 1fr" key={e.id}>
           <IconButton onClick={() => choose(e)} size="large">
             <Done />
           </IconButton>

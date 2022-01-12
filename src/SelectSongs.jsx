@@ -129,7 +129,7 @@ export default function SelectSongs() {
       />
       {searchResults && 'Search Results:'}
       {searchResults?.data?.map((e) => (
-        <Grid cols="50px 50px 1fr" rg={1} mb={1} key={e.id}>
+        <Grid cols="50px 50px 1fr" key={e.id}>
           <IconButton onClick={() => chooseAlbum(e)} size="large">
             <Done />
           </IconButton>
