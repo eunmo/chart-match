@@ -3,7 +3,7 @@ import {
   BrowserRouter as Router,
   Redirect,
   Route,
-  Switch,
+  Routes,
 } from 'react-router-dom';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { createTheme, ThemeProvider } from '@material-ui/core/styles';
@@ -20,7 +20,7 @@ import Favorites from './Favorites';
 import SelectSongs from './SelectSongs';
 import Tops from './Tops';
 
-export default () => {
+export default function App() {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
 
   const theme = React.useMemo(
@@ -40,35 +40,36 @@ export default () => {
       <StoreProvider>
         <Router>
           <AppBar />
-          <Switch>
-            <Route path="/current/:type">
+          <Routes>
+            <Route path="current/:type">
               <Current />
             </Route>
-            <Route path="/week/:type/:chart/:week">
+            <Route path="week/:type/:chart/:week">
               <ChartWeek />
             </Route>
-            <Route path="/year/:type/:chart/:year">
+            <Route path="year/:type/:chart/:year">
               <ChartYear />
             </Route>
-            <Route path="/edit/:type/:chart/:entry">
+            <Route path="edit/:type/:chart/:entry">
               <Edit />
             </Route>
-            <Route path="/select-songs/:chart/:entry">
+            <Route path="select-songs/:chart/:entry">
               <SelectSongs />
             </Route>
-            <Route path="/tops">
+            <Route path="tops">
               <Tops />
             </Route>
-            <Route path="/favorite-albums/:artist">
+            <Route path="favorite-albums/:artist">
               <FavoriteAlbums />
             </Route>
-            <Route path="/favorites">
+            <Route path="favorites">
               <Favorites />
             </Route>
-            <Redirect from="/" to="/tops" />
-          </Switch>
+            <Redirect from="/" to="tops" />
+            <Route path="/" render={() => <Redirect to="tops" />} />
+          </Routes>
         </Router>
       </StoreProvider>
     </ThemeProvider>
   );
-};
+}
