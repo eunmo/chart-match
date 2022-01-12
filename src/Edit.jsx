@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link as RouterLink, useParams } from 'react-router-dom';
-import makeStyles from '@mui/styles/makeStyles';
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Link from '@mui/material/Link';
@@ -8,50 +8,13 @@ import { ArrowDownward, Assignment, Done, DoneAll } from '@mui/icons-material';
 
 import { useStore } from './store';
 import { get, put, deleteBody } from './util';
+import EditInfo from './EditInfo';
 import Explicit from './Explicit';
-import Header from './Header';
+import Grid from './Grid';
 import Image from './Image';
 import Item from './Item';
 import ManualInput from './ManualInput';
 import SearchBox from './SearchBox';
-
-const useStyles = makeStyles((theme) => ({
-  grid: {
-    display: 'grid',
-    gridTemplateColumns: '50px 1fr',
-    gridColumnGap: theme.spacing(1),
-    lineHeight: '25px',
-    marginBottom: theme.spacing(1),
-  },
-  raw: {
-    lineHeight: '50px',
-    textAlign: 'center',
-  },
-  buttons: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    marginBottom: theme.spacing(1),
-  },
-  singleSearchGrid: {
-    display: 'grid',
-    gridTemplateColumns: '50px 50px 50px 1fr',
-    gridRowGap: theme.spacing(1),
-    gridColumnGap: theme.spacing(1),
-    lineHeight: '25px',
-    marginBottom: theme.spacing(1),
-  },
-  albumSearchGrid: {
-    display: 'grid',
-    gridTemplateColumns: '50px 50px 1fr',
-    gridRowGap: theme.spacing(1),
-    gridColumnGap: theme.spacing(1),
-    lineHeight: '25px',
-    marginBottom: theme.spacing(1),
-  },
-  assignment: {
-    width: '50px',
-  },
-}));
 
 export default function Edit() {
   const [keyword, setKeyword] = useState('');
@@ -60,7 +23,6 @@ export default function Edit() {
   const [selected, setSelected] = useState(null);
   const { type, chart, entry } = useParams();
   const store = useStore();
-  const classes = useStyles();
 
   useEffect(() => {
     get(
@@ -140,41 +102,26 @@ export default function Edit() {
     [entry, store, type, update]
   );
 
+  const searchCols = useMemo(() => {
+    const postfix = '50px 50px 1fr';
+    return type === 'single' ? `50px ${postfix}` : postfix;
+  }, [type]);
+
   if (entries.length === 0) {
     return null;
   }
 
-  const { raw } = entries[0];
-
   return (
     <>
-      <Header chart={chart}>
-        <div style={{ textTransform: 'capitalize' }}>{`Edit ${type}`}</div>
-      </Header>
-      <div className={classes.grid}>
-        <div className={classes.raw}>Raw</div>
-        <Item title={raw.title} subtitle={raw.artist} />
-        {entries
-          .filter(({ catalog }) => catalog)
-          .map((e) => [
-            <Link href={e.catalog.url} key={`${e.track} image`}>
-              <Image url={e.catalog.artworkUrl} />
-            </Link>,
-            <Item
-              key={`${e.track} item`}
-              title={e.catalog.title}
-              subtitle={e.catalog.artist}
-            />,
-          ])}
-      </div>
-      <div className={classes.buttons}>
+      <EditInfo chart={chart} title={`edit ${type}s`} entries={entries} />
+      <Box display="flex" justifyContent="space-between" mb={1}>
         <IconButton onClick={() => fillSearchBox()} size="large">
           <ArrowDownward />
         </IconButton>
         <Button color="secondary" onClick={clear}>
           Clear
         </Button>
-      </div>
+      </Box>
       <SearchBox
         keyword={keyword}
         onChange={setKeyword}
@@ -185,7 +132,7 @@ export default function Edit() {
       {searchResults?.data
         ?.filter((e) => e.attributes)
         .map((e) => (
-          <div className={classes[`${type}SearchGrid`]} key={e.id}>
+          <Grid cols={searchCols} rg={1} mb={1} key={e.id}>
             {type === 'single' && (
               <IconButton onClick={() => setSelected(e)} size="large">
                 <DoneAll />
@@ -211,11 +158,11 @@ export default function Edit() {
                   {`+${count}`}
                 </IconButton>
               ))}
-          </div>
+          </Grid>
         ))}
       {searchResults && (
         <IconButton
-          className={classes.assignment}
+          width="50px"
           component={RouterLink}
           to={`/select-songs/${chart}/${entry}`}
           size="large"

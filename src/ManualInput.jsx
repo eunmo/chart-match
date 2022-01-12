@@ -47,7 +47,7 @@ export default function ManualInput({ multiple, onSubmit }) {
       <Button
         variant="contained"
         color="primary"
-        sx={{ marginTop: 3 }}
+        sx={{ mt: 3 }}
         onClick={() => onSubmit(ids.filter((id) => id !== ''))}
         aria-label="edit"
       >

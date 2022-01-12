@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, Fragment } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import makeStyles from '@mui/styles/makeStyles';
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Link from '@mui/material/Link';
@@ -9,42 +9,11 @@ import { Album, Clear, Done, Edit, Loupe } from '@mui/icons-material';
 
 import { useStore } from './store';
 import { get, put, deleteBody } from './util';
+import Grid from './Grid';
+import Header from './Header';
 import Image from './Image';
 import Item from './Item';
 import SearchBox from './SearchBox';
-
-const useStyles = makeStyles((theme) => ({
-  header: {
-    display: 'grid',
-    gridTemplateColumns: '50px 1fr 50px',
-    fontSize: '1.5em',
-    lineHeight: '50px',
-    textAlign: 'center',
-  },
-  headerText: {
-    gridColumn: '2/3',
-  },
-  searchGrid: {
-    display: 'grid',
-    gridTemplateColumns: '50px 50px 1fr',
-    gridRowGap: theme.spacing(1),
-    gridColumnGap: theme.spacing(1),
-    lineHeight: '25px',
-    marginBottom: theme.spacing(1),
-  },
-  entryGrid: {
-    display: 'grid',
-    gridTemplateColumns: '50px 1fr 50px',
-    gridRowGap: theme.spacing(1),
-    gridColumnGap: theme.spacing(1),
-    lineHeight: '25px',
-    marginBottom: theme.spacing(1),
-    '& button': {
-      marginTop: theme.spacing(1),
-      marginLeft: theme.spacing(1),
-    },
-  },
-}));
 
 function getAlbum(e) {
   const { data } = e.relationships.albums;
@@ -77,7 +46,6 @@ export default function Favorites() {
   const [inEdit, setInEdit] = useState(null);
   const [gid, setGid] = useState('');
   const store = useStore();
-  const classes = useStyles();
 
   useEffect(() => {
     get(`/api/favorite-artist/list/${store}`, setEntries);
@@ -137,14 +105,21 @@ export default function Favorites() {
     });
   }, [inEdit, gid, store, update]);
 
+  const startEdit = useCallback((entry) => {
+    setInEdit(entry);
+    setGid(entry.gid);
+  }, []);
+
   return (
     <>
-      <div className={classes.header}>
-        <div className={classes.headerText}>Favorite Artists</div>
-        <IconButton onClick={() => setShowEdit(!showEdit)} size="large">
-          {showEdit ? <Clear /> : <Loupe />}
-        </IconButton>
-      </div>
+      <Header chart={store} lh={50} sx={{ textAlign: 'center' }}>
+        <div>Favorite Artists</div>
+        <Box textAlign="right">
+          <IconButton onClick={() => setShowEdit(!showEdit)} size="large">
+            {showEdit ? <Clear /> : <Loupe />}
+          </IconButton>
+        </Box>
+      </Header>
       <SearchBox
         keyword={keyword}
         onChange={setKeyword}
@@ -153,7 +128,7 @@ export default function Favorites() {
       />
       {searchResults && 'Search Results:'}
       {searchResults?.data?.map((e) => (
-        <div className={classes.searchGrid} key={e.id}>
+        <Grid cols="50px 50px 1fr" mb={1} key={e.id}>
           <IconButton onClick={() => choose(e)} size="large">
             <Done />
           </IconButton>
@@ -162,59 +137,70 @@ export default function Favorites() {
             title={e.attributes.name}
             subtitle={e.attributes.genreNames[0]}
           />
-        </div>
+        </Grid>
       ))}
-      {entries.map((e) => (
-        <div className={classes.entryGrid} key={e.id}>
-          {e.artwork ? (
-            <Link href={e.url}>
-              <Image url={e.artwork} />
-            </Link>
-          ) : (
-            <div />
-          )}
-          <Item
-            title={e.name}
-            subtitle={`${e.gid} (${e.gidSongCount} Songs)`}
-          />
-          {showEdit && (
-            <IconButton
-              onClick={() => {
-                setInEdit(e);
-                setGid(e.gid);
-              }}
-              size="large"
-            >
-              <Edit />
-            </IconButton>
-          )}
-          {inEdit === e && [
-            <div key="edit artist albums">
-              <IconButton
-                aria-label="favorites"
-                component={RouterLink}
-                to={`/favorite-albums/${e.id}`}
-                size="large"
-              >
-                <Album />
+      <Grid cols="50px 1fr 50px" rg={1}>
+        {entries.map((e) => (
+          <Fragment key={e.id}>
+            {e.artwork ? (
+              <Link href={e.url}>
+                <Image url={e.artwork} />
+              </Link>
+            ) : (
+              <div />
+            )}
+            <Item
+              title={e.name}
+              subtitle={`${e.gid} (${e.gidSongCount} Songs)`}
+            />
+            {showEdit ? (
+              <IconButton onClick={() => startEdit(e)} size="large">
+                <Edit />
               </IconButton>
-            </div>,
-            <div key="edit artist">
-              <TextField
-                label="Artist Group ID"
-                value={gid}
-                onChange={(event) => setGid(event.target.value)}
-              />
-              <Button variant="contained" color="primary" onClick={edit}>
-                Edit
-              </Button>
-              <Button variant="contained" color="secondary" onClick={remove}>
-                Remove
-              </Button>
-            </div>,
-          ]}
-        </div>
-      ))}
+            ) : (
+              <div />
+            )}
+            {inEdit === e && (
+              <>
+                <div>
+                  <IconButton
+                    aria-label="favorites"
+                    component={RouterLink}
+                    to={`/favorite-albums/${e.id}`}
+                    sx={{ mt: 0.5 }}
+                    size="large"
+                  >
+                    <Album />
+                  </IconButton>
+                </div>
+                <div style={{ gridColumn: '2 / span 2' }}>
+                  <TextField
+                    label="Artist Group ID"
+                    value={gid}
+                    onChange={(event) => setGid(event.target.value)}
+                  />
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    sx={{ m: 1 }}
+                    onClick={edit}
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    sx={{ my: 1 }}
+                    onClick={remove}
+                  >
+                    Remove
+                  </Button>
+                </div>
+              </>
+            )}
+          </Fragment>
+        ))}
+      </Grid>
     </>
   );
 }

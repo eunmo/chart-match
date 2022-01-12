@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import makeStyles from '@mui/styles/makeStyles';
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Link from '@mui/material/Link';
@@ -8,53 +8,12 @@ import { ArrowDownward, Done } from '@mui/icons-material';
 
 import { useStore } from './store';
 import { get, put, deleteBody } from './util';
+import EditInfo from './EditInfo';
 import Explicit from './Explicit';
-import Header from './Header';
+import Grid from './Grid';
 import Image from './Image';
 import Item from './Item';
 import SearchBox from './SearchBox';
-
-const useStyles = makeStyles((theme) => ({
-  grid: {
-    display: 'grid',
-    gridTemplateColumns: '50px 1fr',
-    gridColumnGap: theme.spacing(1),
-    lineHeight: '25px',
-    marginBottom: theme.spacing(1),
-  },
-  rank: {
-    fontSize: '1.2em',
-    lineHeight: '50px',
-    textAlign: 'center',
-  },
-  raw: {
-    lineHeight: '50px',
-    textAlign: 'center',
-  },
-  buttons: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    marginBottom: theme.spacing(1),
-  },
-  searchGrid: {
-    display: 'grid',
-    gridTemplateColumns: '50px 50px 1fr',
-    gridRowGap: theme.spacing(1),
-    gridColumnGap: theme.spacing(1),
-    lineHeight: '25px',
-    marginBottom: theme.spacing(1),
-  },
-  track: {
-    display: 'flex',
-    height: '40px',
-    lineHeight: '40px',
-  },
-  bottomButtons: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    marginTop: theme.spacing(2),
-  },
-}));
 
 export default function SelectSongs() {
   const [keyword, setKeyword] = useState('');
@@ -64,7 +23,6 @@ export default function SelectSongs() {
   const [selectedSongs, setSelectedSongs] = useState([]);
   const { chart, entry } = useParams();
   const store = useStore();
-  const classes = useStyles();
   const type = 'single';
 
   useEffect(() => {
@@ -152,37 +110,17 @@ export default function SelectSongs() {
     return null;
   }
 
-  const { raw } = entries[0];
-
   return (
     <>
-      <Header chart={chart}>
-        <div>Select Singles</div>
-      </Header>
-      <div className={classes.grid}>
-        <div className={classes.raw}>Raw</div>
-        <Item title={raw.title} subtitle={raw.artist} />
-        {entries
-          .filter(({ catalog }) => catalog)
-          .map((e) => [
-            <Link href={e.catalog.url} key={`${e.track} image`}>
-              <Image url={e.catalog.artworkUrl} />
-            </Link>,
-            <Item
-              key={`${e.track} item`}
-              title={e.catalog.title}
-              subtitle={e.catalog.artist}
-            />,
-          ])}
-      </div>
-      <div className={classes.buttons}>
+      <EditInfo chart={chart} title="select singles" entries={entries} />
+      <Box display="flex" justifyContent="space-between" mb={1}>
         <IconButton onClick={() => fillSearchBox()} size="large">
           <ArrowDownward />
         </IconButton>
         <Button color="secondary" onClick={() => clear()}>
           Clear
         </Button>
-      </div>
+      </Box>
       <SearchBox
         keyword={keyword}
         onChange={setKeyword}
@@ -191,7 +129,7 @@ export default function SelectSongs() {
       />
       {searchResults && 'Search Results:'}
       {searchResults?.data?.map((e) => (
-        <div className={classes.searchGrid} key={e.id}>
+        <Grid cols="50px 50px 1fr" rg={1} mb={1} key={e.id}>
           <IconButton onClick={() => chooseAlbum(e)} size="large">
             <Done />
           </IconButton>
@@ -202,26 +140,26 @@ export default function SelectSongs() {
             title={<Explicit target={e} />}
             subtitle={e.attributes.artistName}
           />
-        </div>
+        </Grid>
       ))}
       {tracks.map((track) => {
         const index = selectedSongs.indexOf(track.id);
         return (
-          <div className={classes.track} key={track.id}>
+          <Box display="flex" height="40px" lineHeight="40px" key={track.id}>
             <Button onClick={() => toggleTrack(track)}>
               {index === -1 ? <Done /> : index + 1}
             </Button>
             <div>{track.attributes.name}</div>
-          </div>
+          </Box>
         );
       })}
       {tracks.length > 0 && (
-        <div className={classes.bottomButtons}>
+        <Box display="flex" justifyContent="space-between" mt={2}>
           <Button variant="contained" color="primary" onClick={() => submit()}>
             edit
           </Button>
           <Button onClick={() => setSelectedSongs([])}>clear</Button>
-        </div>
+        </Box>
       )}
     </>
   );

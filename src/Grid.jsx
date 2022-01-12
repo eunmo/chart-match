@@ -6,6 +6,7 @@ export default function Grid({
   cg = 1,
   rg = 0,
   lh = 25,
+  mb = 0,
   sx = {},
   children,
 }) {
@@ -15,6 +16,7 @@ export default function Grid({
       gridTemplateColumns={cols}
       columnGap={cg}
       rowGap={rg}
+      mb={mb}
       lineHeight={`${lh}px`}
       sx={sx}
     >
