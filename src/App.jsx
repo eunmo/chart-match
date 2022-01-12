@@ -1,16 +1,10 @@
 import React from 'react';
-import {
-  BrowserRouter as Router,
-  Navigate,
-  Route,
-  Routes,
-} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import {
   createTheme,
   ThemeProvider,
   StyledEngineProvider,
-  adaptV4Theme,
 } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 
@@ -30,14 +24,12 @@ export default function App() {
 
   const theme = React.useMemo(
     () =>
-      createTheme(
-        adaptV4Theme({
-          palette: {
-            mode: prefersDarkMode ? 'dark' : 'light',
-            flag: prefersDarkMode ? 'darkGray' : 'lightGray',
-          },
-        })
-      ),
+      createTheme({
+        palette: {
+          mode: prefersDarkMode ? 'dark' : 'light',
+          flag: prefersDarkMode ? 'darkGray' : 'lightGray',
+        },
+      }),
     [prefersDarkMode]
   );
 
@@ -49,31 +41,20 @@ export default function App() {
           <Router>
             <AppBar />
             <Routes>
-              <Route path="current/:type">
-                <Current />
-              </Route>
-              <Route path="week/:type/:chart/:week">
-                <ChartWeek />
-              </Route>
-              <Route path="year/:type/:chart/:year">
-                <ChartYear />
-              </Route>
-              <Route path="edit/:type/:chart/:entry">
-                <Edit />
-              </Route>
-              <Route path="select-songs/:chart/:entry">
-                <SelectSongs />
-              </Route>
-              <Route path="tops">
-                <Tops />
-              </Route>
-              <Route path="favorite-albums/:artist">
-                <FavoriteAlbums />
-              </Route>
-              <Route path="favorites">
-                <Favorites />
-              </Route>
-              <Route path="/" render={() => <Navigate to="tops" />} />
+              <Route index element={<Tops />} />
+              <Route path="current/:type" element={<Current />} />
+              <Route path="week/:type/:chart/:week" element={<ChartWeek />} />
+              <Route path="year/:type/:chart/:year" element={<ChartYear />} />
+              <Route path="edit/:type/:chart/:entry" element={<Edit />} />
+              <Route
+                path="select-songs/:chart/:entry"
+                element={<SelectSongs />}
+              />
+              <Route
+                path="favorite-albums/:artist"
+                element={<FavoriteAlbums />}
+              />
+              <Route path="favorites" element={<Favorites />} />
             </Routes>
           </Router>
         </StoreProvider>

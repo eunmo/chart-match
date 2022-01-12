@@ -1,21 +1,11 @@
 import React from 'react';
 import Link from '@mui/material/Link';
-import makeStyles from '@mui/styles/makeStyles';
+import Box from '@mui/material/Box';
 
 import Image from './Image';
 import Item from './Item';
 
-const useStyles = makeStyles(() => ({
-  rank: {
-    fontSize: '1.2em',
-    lineHeight: '50px',
-    textAlign: 'center',
-  },
-}));
-
 export default function ChartEntry({ entry }) {
-  const classes = useStyles();
-
   let image = <div />;
   let dataSource = entry.raw;
 
@@ -27,9 +17,8 @@ export default function ChartEntry({ entry }) {
       </Link>
     );
   } else if (entry.id !== null) {
-    const size = 50;
     image = (
-      <div style={{ width: size, height: size }}>
+      <Box width={50} height={50}>
         <svg viewBox="0 0 70 70" style={{ width: '100%' }}>
           <polygon
             points="0,20 0,50 20,70 50,70 70,50 70,20 50,0 20,0"
@@ -49,14 +38,16 @@ export default function ChartEntry({ entry }) {
             ?
           </text>
         </svg>
-      </div>
+      </Box>
     );
   }
 
   return (
     <>
       {image}
-      <div className={classes.rank}>{entry.ranking}</div>
+      <Box fontSize="1.2em" lineHeight="50px" textAlign="center">
+        {entry.ranking}
+      </Box>
       <Item title={dataSource.title} subtitle={dataSource.artist} />
     </>
   );

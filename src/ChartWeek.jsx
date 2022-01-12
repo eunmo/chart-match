@@ -1,51 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { Link as RouterLink, useParams } from 'react-router-dom';
-import makeStyles from '@mui/styles/makeStyles';
+import { useParams } from 'react-router-dom';
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import CircularProgress from '@mui/material/CircularProgress';
 import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
-import { Clear, Edit, Loupe } from '@mui/icons-material';
+import { Clear, Loupe } from '@mui/icons-material';
 
 import { useStore } from './store';
 import { get } from './util';
-import ChartEntry from './ChartEntry';
+import ChartRows from './ChartRows';
 import Flag from './Flag';
-import Item from './Item';
 import WeekDialog from './WeekDialog';
-
-const useStyles = makeStyles((theme) => ({
-  header: {
-    display: 'grid',
-    gridTemplateColumns: '1fr 50px auto 1fr',
-    gridColumnGap: theme.spacing(1),
-    lineHeight: '50px',
-  },
-  showGrid: {
-    display: 'grid',
-    gridTemplateColumns: '50px 30px 1fr',
-    gridColumnGap: theme.spacing(1),
-    lineHeight: '25px',
-    marginBottom: theme.spacing(1),
-  },
-  editGrid: {
-    display: 'grid',
-    gridTemplateColumns: '50px 30px 1fr 50px',
-    gridColumnGap: theme.spacing(1),
-    lineHeight: '25px',
-    marginBottom: theme.spacing(1),
-  },
-  rank: {
-    fontSize: '1.2em',
-    lineHeight: '50px',
-    textAlign: 'center',
-  },
-  raw: {
-    lineHeight: '50px',
-    textAlign: 'center',
-  },
-}));
 
 export default function ChartWeek() {
   const [entries, setEntries] = useState(undefined);
@@ -54,7 +21,6 @@ export default function ChartWeek() {
   const [openDialog, setOpenDialog] = useState(false);
   const { type, chart, week } = useParams();
   const store = useStore();
-  const classes = useStyles();
 
   useEffect(() => {
     setEntries(undefined);
@@ -93,13 +59,15 @@ export default function ChartWeek() {
     get(`/api/chart/select/week/${type}/${chart}/${week}/${store}`, setEntries);
   }
 
-  const grid = showButtons ? classes.editGrid : classes.showGrid;
-
   return (
     <Container maxWidth="md">
-      <div className={classes.header}>
-        <div />
-        <div>
+      <Box
+        display="grid"
+        gridTemplateColumns="1fr 50px auto 1fr"
+        columnGap={1}
+        lineHeight="50px"
+      >
+        <div style={{ gridColumnStart: 2 }}>
           <Flag chart={chart} />
         </div>
         <div>
@@ -107,39 +75,18 @@ export default function ChartWeek() {
             {week} {type}s
           </Button>
         </div>
-        <div style={{ textAlign: 'right' }}>
+        <Box textAlign="right">
           <IconButton onClick={() => setShowButtons(!showButtons)} size="large">
             {showButtons ? <Clear /> : <Loupe />}
           </IconButton>
-        </div>
-      </div>
-      {entries?.map((entry) => (
-        <div className={grid} key={`${entry.entry} ${entry.track}`}>
-          <ChartEntry entry={entry} />
-          {showButtons && (
-            <IconButton
-              component={RouterLink}
-              to={`/edit/${type}/${chart}/${entry.entry}`}
-              size="large"
-            >
-              <Edit />
-            </IconButton>
-          )}
-          {showButtons &&
-            entry.catalog && [
-              <div
-                className={classes.raw}
-                style={{ gridColumnStart: 2 }}
-                key="raw"
-              >
-                Raw
-              </div>,
-              <div key="item">
-                <Item title={entry.raw.title} subtitle={entry.raw.artist} />
-              </div>,
-            ]}
-        </div>
-      ))}
+        </Box>
+      </Box>
+      <ChartRows
+        type={type}
+        chart={chart}
+        entries={entries}
+        showButtons={showButtons}
+      />
       {loading && (
         <div>
           <CircularProgress />

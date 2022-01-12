@@ -1,50 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { Link as RouterLink, useParams } from 'react-router-dom';
-import makeStyles from '@mui/styles/makeStyles';
+import { useParams } from 'react-router-dom';
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
-import Link from '@mui/material/Link';
-import { Clear, Edit, Loupe } from '@mui/icons-material';
+import { Clear, Loupe } from '@mui/icons-material';
 
 import { useStore } from './store';
 import { get } from './util';
+import ChartRows from './ChartRows';
 import Flag from './Flag';
-import Image from './Image';
-import Item from './Item';
 import WeekDialog from './WeekDialog';
-
-const useStyles = makeStyles((theme) => ({
-  header: {
-    display: 'grid',
-    gridTemplateColumns: '1fr 50px auto 1fr',
-    gridColumnGap: theme.spacing(1),
-    lineHeight: '50px',
-  },
-  showGrid: {
-    display: 'grid',
-    gridTemplateColumns: '50px 30px 1fr',
-    gridColumnGap: theme.spacing(1),
-    lineHeight: '25px',
-    marginBottom: theme.spacing(1),
-  },
-  editGrid: {
-    display: 'grid',
-    gridTemplateColumns: '50px 30px 1fr 50px',
-    gridColumnGap: theme.spacing(1),
-    lineHeight: '25px',
-    marginBottom: theme.spacing(1),
-  },
-  rank: {
-    fontSize: '1.2em',
-    lineHeight: '50px',
-    textAlign: 'center',
-  },
-  raw: {
-    lineHeight: '50px',
-    textAlign: 'center',
-  },
-}));
 
 export default function ChartYear() {
   const [entries, setEntries] = useState(undefined);
@@ -52,7 +18,6 @@ export default function ChartYear() {
   const [openDialog, setOpenDialog] = useState(false);
   const { type, chart, year } = useParams();
   const store = useStore();
-  const classes = useStyles();
 
   useEffect(() => {
     setEntries(undefined);
@@ -62,13 +27,15 @@ export default function ChartYear() {
     get(url, setEntries);
   }, [type, chart, year, store]);
 
-  const grid = showButtons ? classes.editGrid : classes.showGrid;
-
   return (
     <Container maxWidth="md">
-      <div className={classes.header}>
-        <div />
-        <div>
+      <Box
+        display="grid"
+        gridTemplateColumns="1fr 50px auto 1fr"
+        columnGap={1}
+        lineHeight="50px"
+      >
+        <div style={{ gridColumnStart: 2 }}>
           <Flag chart={chart} />
         </div>
         <div>
@@ -81,45 +48,13 @@ export default function ChartYear() {
             {showButtons ? <Clear /> : <Loupe />}
           </IconButton>
         </div>
-      </div>
-      {entries?.map((entry) => (
-        <div className={grid} key={`${entry.entry} ${entry.track}`}>
-          {entry.catalog ? (
-            <Link href={entry.catalog.url}>
-              <Image url={entry.catalog.artworkUrl} />
-            </Link>
-          ) : (
-            <div />
-          )}
-          <div className={classes.rank}>{entry.ranking}</div>
-          <Item
-            title={entry.catalog ? entry.catalog.title : entry.raw.title}
-            subtitle={entry.catalog ? entry.catalog.artist : entry.raw.artist}
-          />
-          {showButtons && (
-            <IconButton
-              component={RouterLink}
-              to={`/edit/${type}/${chart}/${entry.entry}`}
-              size="large"
-            >
-              <Edit />
-            </IconButton>
-          )}
-          {showButtons &&
-            entry.catalog && [
-              <div
-                className={classes.raw}
-                style={{ gridColumnStart: 2 }}
-                key="raw"
-              >
-                Raw
-              </div>,
-              <div key="item">
-                <Item title={entry.raw.title} subtitle={entry.raw.artist} />
-              </div>,
-            ]}
-        </div>
-      ))}
+      </Box>
+      <ChartRows
+        type={type}
+        chart={chart}
+        entries={entries}
+        showButtons={showButtons}
+      />
       <WeekDialog
         handleClose={() => setOpenDialog(false)}
         week={year}
