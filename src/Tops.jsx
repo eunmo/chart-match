@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Fragment } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import makeStyles from '@mui/styles/makeStyles';
+import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 
@@ -11,50 +11,19 @@ import Image from './Image';
 import Item from './Item';
 import Link from './Link';
 
-const useStyles = makeStyles((theme) => ({
-  header: {
-    fontSize: '1.5em',
-    lineHeight: '50px',
-    textAlign: 'center',
-  },
-  subheader: {
-    display: 'grid',
-    gridTemplateColumns: '1fr 50px 1fr',
-    gridColumnGap: theme.spacing(1),
-    fontSize: '1.2em',
-    lineHeight: '50px',
-  },
-  grid: {
-    display: 'grid',
-    gridTemplateColumns: '1fr 50px 1fr',
-    gridColumnGap: theme.spacing(1),
-    lineHeight: '25px',
-    marginBottom: theme.spacing(1),
-  },
-  albumGrid: {
-    display: 'grid',
-    gridTemplateColumns: '1fr 50px',
-    gridColumnGap: theme.spacing(1),
-    textAlign: 'right',
-  },
-  songGrid: {
-    display: 'grid',
-    gridTemplateColumns: '50px 1fr',
-    gridColumnGap: theme.spacing(1),
-  },
-  gridCenter: {
-    gridColumn: '2/3',
-  },
-  fill: {
-    height: '100%',
-    width: '100%',
-  },
-}));
+const baseGridSx = { columnGap: 1, display: 'grid' };
+const gridSx = { ...baseGridSx, gridTemplateColumns: '1fr 50px 1fr' };
+const albumGridSx = {
+  ...baseGridSx,
+  gridTemplateColumns: '1fr 50px',
+  textAlign: 'right',
+};
+const songGridSx = { ...baseGridSx, gridTemplateColumns: '50px 1fr' };
+const filler = <Box height="100%" width="100%" />;
 
 export default function Tops() {
   const [charts, setCharts] = useState([]);
   const store = useStore();
-  const classes = useStyles();
 
   useEffect(() => {
     get(`/api/chart/current/tops/${store}`, (data) => {
@@ -79,51 +48,55 @@ export default function Tops() {
   }, [store]);
 
   return (
-    <div>
-      <div className={classes.header}>Latest Charts</div>
-      <div className={classes.subheader}>
+    <>
+      <Box fontSize="1.5em" lineHeight="50px" textAlign="center">
+        Latest Charts
+      </Box>
+      <Box sx={{ ...gridSx, lineHeight: '50px', fontSize: '1.2em' }}>
         <div style={{ textAlign: 'right' }}>
           <Link to="/current/album">Albums</Link>
         </div>
         <div style={{ gridColumnStart: 3 }}>
           <Link to="/current/single">Singles</Link>
         </div>
-      </div>
-      <div className={classes.grid}>
-        {charts.map(({ chart, song, album }) => [
-          <div key={`${chart} album`}>
-            <Link to={`/week/album/${chart}/${album.week}`}>
-              {album.url ? (
-                <div className={classes.albumGrid}>
-                  <Item title={album.name} subtitle={album.artist} />
-                  <div>
-                    <Image url={album.url} />
-                  </div>
-                </div>
-              ) : (
-                <div className={classes.fill} />
-              )}
-            </Link>
-          </div>,
-          <div key={`${chart} flag`}>
-            <Flag chart={chart} />
-          </div>,
-          <div key={`${chart} song`}>
-            <Link to={`/week/single/${chart}/${song.week}`}>
-              {song.url ? (
-                <div className={classes.songGrid}>
-                  <div>
-                    <Image url={song.url} />
-                  </div>
-                  <Item title={song.name} subtitle={song.artist} />
-                </div>
-              ) : (
-                <div className={classes.fill} />
-              )}
-            </Link>
-          </div>,
-        ])}
-        <div className={classes.gridCenter}>
+      </Box>
+      <Box sx={{ ...gridSx, lineHeight: '25px', mb: 1 }}>
+        {charts.map(({ chart, song, album }) => (
+          <Fragment key={chart}>
+            <div>
+              <Link to={`/week/album/${chart}/${album.week}`}>
+                {album.url ? (
+                  <Box sx={albumGridSx}>
+                    <Item title={album.name} subtitle={album.artist} />
+                    <div>
+                      <Image url={album.url} />
+                    </div>
+                  </Box>
+                ) : (
+                  filler
+                )}
+              </Link>
+            </div>
+            <div>
+              <Flag chart={chart} />
+            </div>
+            <div>
+              <Link to={`/week/single/${chart}/${song.week}`}>
+                {song.url ? (
+                  <Box sx={songGridSx}>
+                    <div>
+                      <Image url={song.url} />
+                    </div>
+                    <Item title={song.name} subtitle={song.artist} />
+                  </Box>
+                ) : (
+                  filler
+                )}
+              </Link>
+            </div>
+          </Fragment>
+        ))}
+        <Box sx={{ gridColumn: '2 / 3' }}>
           <IconButton
             color="primary"
             aria-label="favorites"
@@ -133,8 +106,8 @@ export default function Tops() {
           >
             <FavoriteIcon />
           </IconButton>
-        </div>
-      </div>
-    </div>
+        </Box>
+      </Box>
+    </>
   );
 }

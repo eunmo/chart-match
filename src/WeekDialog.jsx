@@ -1,20 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
-import makeStyles from '@mui/styles/makeStyles';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-
-const useStyles = makeStyles(() => ({
-  grid: {
-    display: 'grid',
-    gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr',
-  },
-}));
 
 const years = Array.from({ length: 23 }, (x, i) => `${i + 2000}`);
 
@@ -33,7 +26,6 @@ function getWeeks(year) {
 export default function WeekDialog({ handleClose, week, type, chart, open }) {
   const [inYear, setInYear] = useState(false);
   const [year, setYear] = useState(null);
-  const classes = useStyles();
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
@@ -57,9 +49,9 @@ export default function WeekDialog({ handleClose, week, type, chart, open }) {
         {inYear ? 'Select Year' : 'Select Week'}
       </DialogTitle>
       <DialogContent>
-        {inYear ? (
-          <div className={classes.grid}>
-            {years.map((y) => {
+        <Box display="grid" gridTemplateColumns="repeat(5, 1fr)">
+          {inYear ? (
+            years.map((y) => {
               const style = {};
               if (y === year) {
                 style.fontWeight = 'bold';
@@ -69,11 +61,9 @@ export default function WeekDialog({ handleClose, week, type, chart, open }) {
                   {y}
                 </Button>
               );
-            })}
-          </div>
-        ) : (
-          <div>
-            <div className={classes.grid}>
+            })
+          ) : (
+            <>
               <div style={{ gridColumn: '1 / span 5', textAlign: 'center' }}>
                 <Button onClick={() => setInYear(true)}>{year}</Button>
               </div>
@@ -101,9 +91,9 @@ export default function WeekDialog({ handleClose, week, type, chart, open }) {
                   {`Top 10 ${type}s`}
                 </Button>
               </div>
-            </div>
-          </div>
-        )}
+            </>
+          )}
+        </Box>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Close</Button>

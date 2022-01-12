@@ -1,24 +1,12 @@
 import React, { useState } from 'react';
-import makeStyles from '@mui/styles/makeStyles';
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
-const useStyles = makeStyles({
-  header: {
-    margin: '16px 0px',
-    display: 'flex',
-    justifyContent: 'space-between',
-  },
-  button: {
-    marginTop: '24px',
-  },
-});
-
 export default function ManualInput({ multiple, onSubmit }) {
   const [ids, setIds] = useState(['']);
-  const classes = useStyles();
 
   function onChange(event, index) {
     const newIds = [...ids];
@@ -28,7 +16,7 @@ export default function ManualInput({ multiple, onSubmit }) {
 
   return (
     <>
-      <div className={classes.header}>
+      <Box my={2} display="flex" sx={{ justifyContent: 'space-between' }}>
         <Typography variant="h5">Manual Input</Typography>
         {multiple && (
           <Button
@@ -40,7 +28,7 @@ export default function ManualInput({ multiple, onSubmit }) {
             +1
           </Button>
         )}
-      </div>
+      </Box>
       <Grid container spacing={2}>
         {ids.map((id, index) => {
           const label = multiple && ids.length > 1 ? `ID ${index + 1}` : 'ID';
@@ -59,7 +47,7 @@ export default function ManualInput({ multiple, onSubmit }) {
       <Button
         variant="contained"
         color="primary"
-        className={classes.button}
+        sx={{ marginTop: 3 }}
         onClick={() => onSubmit(ids.filter((id) => id !== ''))}
         aria-label="edit"
       >

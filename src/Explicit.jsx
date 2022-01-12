@@ -23,6 +23,7 @@ export default function Explicit({ target }) {
 
   return (
     <div className={classes.root}>
+      {name}
       <Avatar className={classes.avatar}>
         {contentRating[0].toUpperCase()}
       </Avatar>

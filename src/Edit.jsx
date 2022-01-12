@@ -31,11 +31,6 @@ const useStyles = makeStyles((theme) => ({
     lineHeight: '25px',
     marginBottom: theme.spacing(1),
   },
-  rank: {
-    fontSize: '1.2em',
-    lineHeight: '50px',
-    textAlign: 'center',
-  },
   raw: {
     lineHeight: '50px',
     textAlign: 'center',
