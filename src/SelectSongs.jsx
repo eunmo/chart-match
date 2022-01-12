@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Container from '@material-ui/core/Container';
-import IconButton from '@material-ui/core/IconButton';
-import Link from '@material-ui/core/Link';
-import { ArrowDownward, Done } from '@material-ui/icons';
+import makeStyles from '@mui/styles/makeStyles';
+import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
+import IconButton from '@mui/material/IconButton';
+import Link from '@mui/material/Link';
+import { ArrowDownward, Done } from '@mui/icons-material';
 
 import { useStore } from './store';
 import { get, put, deleteBody } from './util';
@@ -84,58 +84,63 @@ export default function SelectSongs() {
     setSearchResults(null);
   }, [type, chart, entry, store]);
 
-  if (entries.length === 0) {
-    return null;
-  }
-
-  function clear() {
+  const clear = useCallback(() => {
     deleteBody(`/api/chart/edit/${type}`, { store, entry }, () => {
       get(
         `/api/chart/select/entry/${type}/${chart}/${entry}/${store}`,
         setEntries
       );
     });
-  }
+  }, [chart, entry, store, type]);
 
-  function submitSearch(e) {
-    e.preventDefault();
-    get(`/api/search/${type}/${keyword}/${store}`, setSearchResults);
-  }
+  const submitSearch = useCallback(
+    (e) => {
+      e.preventDefault();
+      get(`/api/search/${type}/${keyword}/${store}`, setSearchResults);
+    },
+    [keyword, store, type]
+  );
 
-  function fillSearchBox() {
+  const fillSearchBox = useCallback(() => {
     const { raw } = entries[0];
     const newKeyword = `${raw.artist} ${raw.title}`;
     setKeyword(newKeyword);
     get(`/api/search/${type}/${newKeyword}/${store}`, setSearchResults);
-  }
+  }, [entries, store, type]);
 
-  function clearSearch() {
+  const clearSearch = useCallback(() => {
     setKeyword('');
     setSearchResults(null);
-  }
+  }, []);
 
-  function chooseAlbum(song) {
-    const found = song.attributes.url.match(/\/(\d+)\?i/);
-    const albumId = found[1];
-    get(`/api/search/tracks/${albumId}/${store}`, (data) => {
-      clearSearch();
-      setSelectedSongs([]);
-      setTracks(data);
-    });
-  }
+  const chooseAlbum = useCallback(
+    (song) => {
+      const found = song.attributes.url.match(/\/(\d+)\?i/);
+      const albumId = found[1];
+      get(`/api/search/tracks/${albumId}/${store}`, (data) => {
+        clearSearch();
+        setSelectedSongs([]);
+        setTracks(data);
+      });
+    },
+    [clearSearch, store]
+  );
 
-  function toggleTrack(track) {
-    const index = selectedSongs.indexOf(track.id);
-    if (index === -1) {
-      setSelectedSongs([...selectedSongs, track.id]);
-    } else {
-      const newSongs = [...selectedSongs];
-      newSongs.splice(index, 1);
-      setSelectedSongs(newSongs);
-    }
-  }
+  const toggleTrack = useCallback(
+    (track) => {
+      const index = selectedSongs.indexOf(track.id);
+      if (index === -1) {
+        setSelectedSongs([...selectedSongs, track.id]);
+      } else {
+        const newSongs = [...selectedSongs];
+        newSongs.splice(index, 1);
+        setSelectedSongs(newSongs);
+      }
+    },
+    [selectedSongs]
+  );
 
-  function submit() {
+  const submit = useCallback(() => {
     if (selectedSongs.length > 0) {
       put(
         `/api/chart/edit/ids/${type}`,
@@ -149,6 +154,10 @@ export default function SelectSongs() {
         }
       );
     }
+  }, [chart, entry, selectedSongs, store, type]);
+
+  if (entries.length === 0) {
+    return null;
   }
 
   const { raw } = entries[0];
@@ -179,7 +188,7 @@ export default function SelectSongs() {
           ])}
       </div>
       <div className={classes.buttons}>
-        <IconButton onClick={() => fillSearchBox()}>
+        <IconButton onClick={() => fillSearchBox()} size="large">
           <ArrowDownward />
         </IconButton>
         <Button color="secondary" onClick={() => clear()}>
@@ -195,7 +204,7 @@ export default function SelectSongs() {
       {searchResults && 'Search Results:'}
       {searchResults?.data?.map((e) => (
         <div className={classes.searchGrid} key={e.id}>
-          <IconButton onClick={() => chooseAlbum(e)}>
+          <IconButton onClick={() => chooseAlbum(e)} size="large">
             <Done />
           </IconButton>
           <Link href={e.attributes.url}>

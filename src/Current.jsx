@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import Link from '@material-ui/core/Link';
+import makeStyles from '@mui/styles/makeStyles';
+import Container from '@mui/material/Container';
+import Link from '@mui/material/Link';
 
 import { get } from './util';
 import { useStore } from './store';

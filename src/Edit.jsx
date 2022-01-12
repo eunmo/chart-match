@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Link as RouterLink, useParams } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Container from '@material-ui/core/Container';
-import IconButton from '@material-ui/core/IconButton';
-import Link from '@material-ui/core/Link';
-import { ArrowDownward, Assignment, Done, DoneAll } from '@material-ui/icons';
+import makeStyles from '@mui/styles/makeStyles';
+import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
+import IconButton from '@mui/material/IconButton';
+import Link from '@mui/material/Link';
+import { ArrowDownward, Assignment, Done, DoneAll } from '@mui/icons-material';
 
 import { useStore } from './store';
 import { get, put, deleteBody } from './util';
@@ -82,39 +82,38 @@ export default function Edit() {
     );
     setKeyword('');
     setSearchResults(null);
-  }, [type, chart, entry, store]);
+  }, [chart, entry, store, type]);
 
-  if (entries.length === 0) {
-    return null;
-  }
-
-  function clear() {
+  const clear = useCallback(() => {
     deleteBody(`/api/chart/edit/${type}`, { store, entry }, () => {
       get(
         `/api/chart/select/entry/${type}/${chart}/${entry}/${store}`,
         setEntries
       );
     });
-  }
+  }, [chart, entry, store, type]);
 
-  function submitSearch(e) {
-    e.preventDefault();
-    get(`/api/search/${type}/${keyword}/${store}`, setSearchResults);
-  }
+  const submitSearch = useCallback(
+    (e) => {
+      e.preventDefault();
+      get(`/api/search/${type}/${keyword}/${store}`, setSearchResults);
+    },
+    [keyword, type, store]
+  );
 
-  function fillSearchBox() {
+  const fillSearchBox = useCallback(() => {
     const { raw } = entries[0];
     const newKeyword = `${raw.artist} ${raw.title}`;
     setKeyword(newKeyword);
     get(`/api/search/${type}/${newKeyword}/${store}`, setSearchResults);
-  }
+  }, [entries, store, type]);
 
-  function clearSearch() {
+  const clearSearch = useCallback(() => {
     setKeyword('');
     setSearchResults(null);
-  }
+  }, []);
 
-  function update() {
+  const update = useCallback(() => {
     setKeyword('');
     setSearchResults(null);
     setEntries([]);
@@ -122,27 +121,40 @@ export default function Edit() {
       `/api/chart/select/entry/${type}/${chart}/${entry}/${store}`,
       setEntries
     );
-  }
+  }, [chart, entry, store, type]);
 
-  function chooseEntry(target) {
-    put(`/api/chart/edit/id/${type}`, { store, entry, id: target.id }, () => {
-      update();
-    });
-  }
-
-  function chooseEntries(target, count) {
-    const { url } = target.attributes;
-    put('/api/chart/edit/singles', { store, entry, url, count }, () => {
-      update();
-    });
-  }
-
-  function manualInput(ids) {
-    if (ids.length > 0) {
-      put(`/api/chart/edit/ids/${type}`, { store, entry, ids }, () => {
+  const chooseEntry = useCallback(
+    (target) => {
+      put(`/api/chart/edit/id/${type}`, { store, entry, id: target.id }, () => {
         update();
       });
-    }
+    },
+    [entry, store, type, update]
+  );
+
+  const chooseEntries = useCallback(
+    (target, count) => {
+      const { url } = target.attributes;
+      put('/api/chart/edit/singles', { store, entry, url, count }, () => {
+        update();
+      });
+    },
+    [entry, store, update]
+  );
+
+  const manualInput = useCallback(
+    (ids) => {
+      if (ids.length > 0) {
+        put(`/api/chart/edit/ids/${type}`, { store, entry, ids }, () => {
+          update();
+        });
+      }
+    },
+    [entry, store, type, update]
+  );
+
+  if (entries.length === 0) {
+    return null;
   }
 
   const { raw } = entries[0];
@@ -173,10 +185,10 @@ export default function Edit() {
           ])}
       </div>
       <div className={classes.buttons}>
-        <IconButton onClick={() => fillSearchBox()}>
+        <IconButton onClick={() => fillSearchBox()} size="large">
           <ArrowDownward />
         </IconButton>
-        <Button color="secondary" onClick={() => clear()}>
+        <Button color="secondary" onClick={clear}>
           Clear
         </Button>
       </div>
@@ -192,11 +204,11 @@ export default function Edit() {
         .map((e) => (
           <div className={classes[`${type}SearchGrid`]} key={e.id}>
             {type === 'single' && (
-              <IconButton onClick={() => setSelected(e)}>
+              <IconButton onClick={() => setSelected(e)} size="large">
                 <DoneAll />
               </IconButton>
             )}
-            <IconButton onClick={() => chooseEntry(e)}>
+            <IconButton onClick={() => chooseEntry(e)} size="large">
               <Done />
             </IconButton>
             <Link href={e.attributes.url}>
@@ -208,7 +220,11 @@ export default function Edit() {
             />
             {selected === e &&
               [2, 3, 4].map((count) => (
-                <IconButton key={count} onClick={() => chooseEntries(e, count)}>
+                <IconButton
+                  key={count}
+                  onClick={() => chooseEntries(e, count)}
+                  size="large"
+                >
                   {`+${count}`}
                 </IconButton>
               ))}
@@ -219,6 +235,7 @@ export default function Edit() {
           className={classes.assignment}
           component={RouterLink}
           to={`/select-songs/${chart}/${entry}`}
+          size="large"
         >
           <Assignment />
         </IconButton>

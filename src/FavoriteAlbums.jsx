@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Checkbox from '@material-ui/core/Checkbox';
-import Container from '@material-ui/core/Container';
-import Link from '@material-ui/core/Link';
+import makeStyles from '@mui/styles/makeStyles';
+import Button from '@mui/material/Button';
+import Checkbox from '@mui/material/Checkbox';
+import Container from '@mui/material/Container';
+import Link from '@mui/material/Link';
 
 import { useStore } from './store';
 import { get, put } from './util';
@@ -58,23 +58,26 @@ export default function FavoriteAlbums() {
     fetch();
   }, [fetch]);
 
-  function update() {
+  const update = useCallback(() => {
     put(`/api/favorite-artist/edit-albums`, { store, included }, () => {
       fetch();
     });
-  }
+  }, [fetch, included, store]);
 
-  function onChange(id) {
-    setIncluded({ ...included, [id]: !included[id] });
-  }
+  const onChange = useCallback(
+    (id) => {
+      setIncluded({ ...included, [id]: !included[id] });
+    },
+    [included]
+  );
 
-  function turnOff() {
+  const turnOff = useCallback(() => {
     const newIncluded = {};
     Object.keys(included).forEach((id) => {
       newIncluded[id] = false;
     });
     setIncluded(newIncluded);
-  }
+  }, [included]);
 
   return (
     <Container maxWidth="md">

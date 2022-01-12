@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Container from '@material-ui/core/Container';
-import IconButton from '@material-ui/core/IconButton';
-import Link from '@material-ui/core/Link';
-import TextField from '@material-ui/core/TextField';
-import { Album, Clear, Done, Edit, Loupe } from '@material-ui/icons';
+import makeStyles from '@mui/styles/makeStyles';
+import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
+import IconButton from '@mui/material/IconButton';
+import Link from '@mui/material/Link';
+import TextField from '@mui/material/TextField';
+import { Album, Clear, Done, Edit, Loupe } from '@mui/icons-material';
 
 import { useStore } from './store';
 import { get, put, deleteBody } from './util';
@@ -47,6 +47,29 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+function getAlbum(e) {
+  const { data } = e.relationships.albums;
+  if (data.length === 0) {
+    return null;
+  }
+
+  const { attributes: album } = data[0];
+  return album;
+}
+
+function entryToImage(e) {
+  const album = getAlbum(e);
+  if (album === null) {
+    return <div />;
+  }
+
+  return (
+    <Link href={e.attributes.url}>
+      <Image url={album.artwork.url} />
+    </Link>
+  );
+}
+
 export default function Favorites() {
   const [showEdit, setShowEdit] = useState(false);
   const [keyword, setKeyword] = useState('');
@@ -64,79 +87,62 @@ export default function Favorites() {
     setInEdit(null);
   }, [store]);
 
-  function submitSearch(e) {
-    e.preventDefault();
-    get(`/api/search/artist/${keyword}/${store}`, setSearchResults);
-  }
+  const submitSearch = useCallback(
+    (e) => {
+      e.preventDefault();
+      get(`/api/search/artist/${keyword}/${store}`, setSearchResults);
+    },
+    [keyword, store]
+  );
 
-  function clearSearch() {
+  const clearSearch = useCallback(() => {
     setKeyword('');
     setSearchResults(null);
-  }
+  }, []);
 
-  function update() {
+  const update = useCallback(() => {
     setKeyword('');
     setSearchResults(null);
     setInEdit(null);
     setEntries([]);
     get(`/api/favorite-artist/list/${store}`, setEntries);
-  }
+  }, [store]);
 
-  function getAlbum(e) {
-    const { data } = e.relationships.albums;
-    if (data.length === 0) {
-      return null;
-    }
+  const choose = useCallback(
+    (target) => {
+      const { id } = target;
+      const { name, url } = target.attributes;
+      let artwork = null;
+      const album = getAlbum(target);
+      if (album) {
+        ({ url: artwork } = album.artwork);
+      }
+      put(`/api/favorite-artist/add`, { store, id, name, url, artwork }, () => {
+        update();
+      });
+    },
+    [store, update]
+  );
 
-    const { attributes: album } = data[0];
-    return album;
-  }
-
-  function choose(target) {
-    const { id } = target;
-    const { name, url } = target.attributes;
-    let artwork = null;
-    const album = getAlbum(target);
-    if (album) {
-      ({ url: artwork } = album.artwork);
-    }
-    put(`/api/favorite-artist/add`, { store, id, name, url, artwork }, () => {
-      update();
-    });
-  }
-
-  function remove() {
+  const remove = useCallback(() => {
     const { id } = inEdit;
     deleteBody(`/api/favorite-artist`, { store, id }, () => {
       update();
     });
-  }
+  }, [inEdit, store, update]);
 
-  function edit() {
+  const edit = useCallback(() => {
     const { id } = inEdit;
     put(`/api/favorite-artist/edit`, { store, id, gid }, () => {
       update();
     });
-  }
-
-  function entryToImage(e) {
-    const album = getAlbum(e);
-    if (album === null) {
-      return <div />;
-    }
-
-    return (
-      <Link href={e.attributes.url}>
-        <Image url={album.artwork.url} />
-      </Link>
-    );
-  }
+  }, [inEdit, gid, store, update]);
 
   return (
     <Container maxWidth="md">
       <div className={classes.header}>
         <div className={classes.headerText}>Favorite Artists</div>
-        <IconButton onClick={() => setShowEdit(!showEdit)}>
+        <IconButton onClick={() => setShowEdit(!showEdit)} size="large">
           {showEdit ? <Clear /> : <Loupe />}
         </IconButton>
       </div>
@@ -149,7 +155,7 @@ export default function Favorites() {
       {searchResults && 'Search Results:'}
       {searchResults?.data?.map((e) => (
         <div className={classes.searchGrid} key={e.id}>
-          <IconButton onClick={() => choose(e)}>
+          <IconButton onClick={() => choose(e)} size="large">
             <Done />
           </IconButton>
           {entryToImage(e)}
@@ -178,6 +184,7 @@ export default function Favorites() {
                 setInEdit(e);
                 setGid(e.gid);
               }}
+              size="large"
             >
               <Edit />
             </IconButton>
@@ -188,6 +195,7 @@ export default function Favorites() {
                 aria-label="favorites"
                 component={RouterLink}
                 to={`/favorite-albums/${e.id}`}
+                size="large"
               >
                 <Album />
               </IconButton>

@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { AppBar as MuiAppBar } from '@material-ui/core/AppBar';
-import Button from '@material-ui/core/Button';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
+import makeStyles from '@mui/styles/makeStyles';
+import MuiAppBar from '@mui/material/AppBar';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
 
 import { Context } from './store';
 import Link from './Link';

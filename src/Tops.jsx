@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
-import IconButton from '@material-ui/core/IconButton';
-import FavoriteIcon from '@material-ui/icons/Favorite';
+import makeStyles from '@mui/styles/makeStyles';
+import IconButton from '@mui/material/IconButton';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 
 import { useStore } from './store';
 import { get } from './util';
@@ -129,6 +129,7 @@ export default function Tops() {
             aria-label="favorites"
             component={RouterLink}
             to="/favorites"
+            size="large"
           >
             <FavoriteIcon />
           </IconButton>

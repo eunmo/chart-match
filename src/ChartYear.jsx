@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Link as RouterLink, useParams } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Container from '@material-ui/core/Container';
-import IconButton from '@material-ui/core/IconButton';
-import Link from '@material-ui/core/Link';
-import { Clear, Edit, Loupe } from '@material-ui/icons';
+import makeStyles from '@mui/styles/makeStyles';
+import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
+import IconButton from '@mui/material/IconButton';
+import Link from '@mui/material/Link';
+import { Clear, Edit, Loupe } from '@mui/icons-material';
 
 import { useStore } from './store';
 import { get } from './util';
@@ -77,7 +77,7 @@ export default function ChartYear() {
           </Button>
         </div>
         <div style={{ textAlign: 'right' }}>
-          <IconButton onClick={() => setShowButtons(!showButtons)}>
+          <IconButton onClick={() => setShowButtons(!showButtons)} size="large">
             {showButtons ? <Clear /> : <Loupe />}
           </IconButton>
         </div>
@@ -100,6 +100,7 @@ export default function ChartYear() {
             <IconButton
               component={RouterLink}
               to={`/edit/${type}/${chart}/${entry.entry}`}
+              size="large"
             >
               <Edit />
             </IconButton>

@@ -5,9 +5,14 @@ import {
   Route,
   Routes,
 } from 'react-router-dom';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
-import { createTheme, ThemeProvider } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import {
+  createTheme,
+  ThemeProvider,
+  StyledEngineProvider,
+  adaptV4Theme,
+} from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
 
 import { Provider as StoreProvider } from './store';
 import AppBar from './AppBar';
@@ -25,50 +30,54 @@ export default function App() {
 
   const theme = React.useMemo(
     () =>
-      createTheme({
-        palette: {
-          type: prefersDarkMode ? 'dark' : 'light',
-          flag: prefersDarkMode ? 'darkGray' : 'lightGray',
-        },
-      }),
+      createTheme(
+        adaptV4Theme({
+          palette: {
+            mode: prefersDarkMode ? 'dark' : 'light',
+            flag: prefersDarkMode ? 'darkGray' : 'lightGray',
+          },
+        })
+      ),
     [prefersDarkMode]
   );
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <StoreProvider>
-        <Router>
-          <AppBar />
-          <Routes>
-            <Route path="current/:type">
-              <Current />
-            </Route>
-            <Route path="week/:type/:chart/:week">
-              <ChartWeek />
-            </Route>
-            <Route path="year/:type/:chart/:year">
-              <ChartYear />
-            </Route>
-            <Route path="edit/:type/:chart/:entry">
-              <Edit />
-            </Route>
-            <Route path="select-songs/:chart/:entry">
-              <SelectSongs />
-            </Route>
-            <Route path="tops">
-              <Tops />
-            </Route>
-            <Route path="favorite-albums/:artist">
-              <FavoriteAlbums />
-            </Route>
-            <Route path="favorites">
-              <Favorites />
-            </Route>
-            <Route path="/" render={() => <Navigate to="tops" />} />
-          </Routes>
-        </Router>
-      </StoreProvider>
-    </ThemeProvider>
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <StoreProvider>
+          <Router>
+            <AppBar />
+            <Routes>
+              <Route path="current/:type">
+                <Current />
+              </Route>
+              <Route path="week/:type/:chart/:week">
+                <ChartWeek />
+              </Route>
+              <Route path="year/:type/:chart/:year">
+                <ChartYear />
+              </Route>
+              <Route path="edit/:type/:chart/:entry">
+                <Edit />
+              </Route>
+              <Route path="select-songs/:chart/:entry">
+                <SelectSongs />
+              </Route>
+              <Route path="tops">
+                <Tops />
+              </Route>
+              <Route path="favorite-albums/:artist">
+                <FavoriteAlbums />
+              </Route>
+              <Route path="favorites">
+                <Favorites />
+              </Route>
+              <Route path="/" render={() => <Navigate to="tops" />} />
+            </Routes>
+          </Router>
+        </StoreProvider>
+      </ThemeProvider>
+    </StyledEngineProvider>
   );
 }

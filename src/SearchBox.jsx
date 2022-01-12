@@ -1,9 +1,9 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import InputBase from '@material-ui/core/InputBase';
-import IconButton from '@material-ui/core/IconButton';
-import Paper from '@material-ui/core/Paper';
-import { Clear, Search } from '@material-ui/icons';
+import makeStyles from '@mui/styles/makeStyles';
+import InputBase from '@mui/material/InputBase';
+import IconButton from '@mui/material/IconButton';
+import Paper from '@mui/material/Paper';
+import { Clear, Search } from '@mui/icons-material';
 
 const useStyles = makeStyles((theme) => ({
   searchBox: {
@@ -34,6 +34,7 @@ export default function SearchBox({ keyword, onChange, onSubmit, onClear }) {
         type="submit"
         className={classes.iconButton}
         aria-label="search"
+        size="large"
       >
         <Search />
       </IconButton>
@@ -48,6 +49,7 @@ export default function SearchBox({ keyword, onChange, onSubmit, onClear }) {
         className={classes.iconButton}
         aria-label="clear search"
         onClick={onClear}
+        size="large"
       >
         <Clear />
       </IconButton>

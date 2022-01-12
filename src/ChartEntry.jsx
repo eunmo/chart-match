@@ -1,6 +1,6 @@
 import React from 'react';
-import Link from '@material-ui/core/Link';
-import { makeStyles } from '@material-ui/core/styles';
+import Link from '@mui/material/Link';
+import makeStyles from '@mui/styles/makeStyles';
 
 import Image from './Image';
 import Item from './Item';

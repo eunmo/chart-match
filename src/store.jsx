@@ -8,9 +8,7 @@ export function useStore() {
 }
 
 export function Provider({ children }) {
-  const [store, setStore] = useState('jp');
+  const storeState = useState('jp');
 
-  return (
-    <Context.Provider value={[store, setStore]}>{children}</Context.Provider>
-  );
+  return <Context.Provider value={storeState}>{children}</Context.Provider>;
 }
