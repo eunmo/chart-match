@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default () => {
+export default function Favorites() {
   const [showEdit, setShowEdit] = useState(false);
   const [keyword, setKeyword] = useState('');
   const [entries, setEntries] = useState([]);
@@ -210,4 +210,4 @@ export default () => {
       ))}
     </Container>
   );
-};
+}

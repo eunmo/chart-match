@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default () => {
+export default function FavoriteAlbums() {
   const [entries, setEntries] = useState([]);
   const [included, setIncluded] = useState({});
   const { artist } = useParams();
@@ -96,4 +96,4 @@ export default () => {
       </Button>
     </Container>
   );
-};
+}

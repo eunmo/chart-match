@@ -7,7 +7,7 @@ import { ReactComponent as GB } from './gb.svg';
 import { ReactComponent as FR } from './fr.svg';
 import { ReactComponent as KR } from './kr.svg';
 
-export default ({ chart, size = 50 }) => {
+export default function Flag({ chart, size = 50 }) {
   const theme = useTheme();
   const Flag = { us: US, jp: JP, gb: GB, fr: FR, kr: KR }[chart];
   if (Flag === undefined) {
@@ -27,4 +27,4 @@ export default ({ chart, size = 50 }) => {
       />
     </svg>
   );
-};
+}

@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default ({ keyword, onChange, onSubmit, onClear }) => {
+export default function SearchBox({ keyword, onChange, onSubmit, onClear }) {
   const classes = useStyles();
 
   return (
@@ -53,4 +53,4 @@ export default ({ keyword, onChange, onSubmit, onClear }) => {
       </IconButton>
     </Paper>
   );
-};
+}

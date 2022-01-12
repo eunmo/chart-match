@@ -5,7 +5,7 @@ function replaceUrl(url, size) {
   return url.replace('{w}', sizeString).replace('{h}', sizeString);
 }
 
-export default ({ url, isNew = false, size = 50 }) => {
+export default function Image({ url, isNew = false, size = 50 }) {
   const imageUrl = replaceUrl(url, size);
   const srcset = [1, 2, 3]
     .map((n) => `${replaceUrl(url, size * n)} ${n}x`)
@@ -19,4 +19,4 @@ export default ({ url, isNew = false, size = 50 }) => {
       <img src={imageUrl} srcSet={srcset} alt={url} style={style} />
     </div>
   );
-};
+}

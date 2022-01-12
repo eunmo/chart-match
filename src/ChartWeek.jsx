@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default () => {
+export default function ChartWeek() {
   const [entries, setEntries] = useState(undefined);
   const [showButtons, setShowButtons] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -160,4 +160,4 @@ export default () => {
       />
     </Container>
   );
-};
+}

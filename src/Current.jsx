@@ -60,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
 const charts = ['us', 'jp', 'gb', 'fr', 'kr'];
 const chartIds = { us: 0, jp: 1, gb: 2, fr: 4, kr: 5 };
 
-export default () => {
+export default function Current() {
   const [entries, setEntries] = useState(undefined);
   const { type } = useParams();
   const store = useStore();
@@ -115,4 +115,4 @@ export default () => {
       ))}
     </Container>
   );
-};
+}

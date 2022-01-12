@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default ({ target }) => {
+export default function Explicit({ target }) {
   const classes = useStyles();
   const { contentRating, name } = target.attributes;
   if (contentRating === undefined) {
@@ -23,10 +23,9 @@ export default ({ target }) => {
 
   return (
     <div className={classes.root}>
-      {name}
       <Avatar className={classes.avatar}>
         {contentRating[0].toUpperCase()}
       </Avatar>
     </div>
   );
-};
+}

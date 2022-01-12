@@ -51,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default () => {
+export default function Tops() {
   const [charts, setCharts] = useState([]);
   const store = useStore();
   const classes = useStyles();
@@ -136,4 +136,4 @@ export default () => {
       </div>
     </div>
   );
-};
+}

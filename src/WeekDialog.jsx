@@ -29,7 +29,7 @@ function getWeeks(year) {
   );
 }
 
-export default ({ handleClose, week, type, chart, open }) => {
+export default function WeekDialog({ handleClose, week, type, chart, open }) {
   const [inYear, setInYear] = useState(false);
   const [year, setYear] = useState(null);
   const classes = useStyles();
@@ -109,4 +109,4 @@ export default ({ handleClose, week, type, chart, open }) => {
       </DialogActions>
     </Dialog>
   );
-};
+}

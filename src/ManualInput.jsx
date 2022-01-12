@@ -16,7 +16,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default ({ multiple, onSubmit }) => {
+export default function ManualInput({ multiple, onSubmit }) {
   const [ids, setIds] = useState(['']);
   const classes = useStyles();
 
@@ -67,4 +67,4 @@ export default ({ multiple, onSubmit }) => {
       </Button>
     </>
   );
-};
+}

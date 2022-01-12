@@ -64,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default () => {
+export default function SelectSongs() {
   const [keyword, setKeyword] = useState('');
   const [entries, setEntries] = useState([]);
   const [searchResults, setSearchResults] = useState(null);
@@ -228,4 +228,4 @@ export default () => {
       )}
     </Container>
   );
-};
+}

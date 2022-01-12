@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default () => {
+export default function ChartYear() {
   const [entries, setEntries] = useState(undefined);
   const [showButtons, setShowButtons] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
@@ -128,4 +128,4 @@ export default () => {
       />
     </Container>
   );
-};
+}

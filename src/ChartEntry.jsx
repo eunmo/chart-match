@@ -13,7 +13,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default ({ entry }) => {
+export default function ChartEntry({ entry }) {
   const classes = useStyles();
 
   let image = <div />;
@@ -60,4 +60,4 @@ export default ({ entry }) => {
       <Item title={dataSource.title} subtitle={dataSource.artist} />
     </>
   );
-};
+}

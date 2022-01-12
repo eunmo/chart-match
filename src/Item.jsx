@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default ({ title, subtitle }) => {
+export default function Item({ title, subtitle }) {
   const classes = useStyles();
 
   return (
@@ -29,4 +29,4 @@ export default ({ title, subtitle }) => {
       </div>
     </div>
   );
-};
+}

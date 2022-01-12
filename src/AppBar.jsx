@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
+import { AppBar as MuiAppBar } from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -24,13 +24,13 @@ const colors = {
   us: '#009688',
 };
 
-export default () => {
+export default function AppBar() {
   const [store, setStore] = useContext(Context);
   const classes = useStyles();
 
   return (
     <div className={classes.root}>
-      <AppBar position="static" style={{ backgroundColor: colors[store] }}>
+      <MuiAppBar position="static" style={{ backgroundColor: colors[store] }}>
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
             <Link to="/">Chart Match</Link>
@@ -47,7 +47,7 @@ export default () => {
             ))}
           </ButtonGroup>
         </Toolbar>
-      </AppBar>
+      </MuiAppBar>
     </div>
   );
-};
+}
