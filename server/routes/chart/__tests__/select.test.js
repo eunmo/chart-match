@@ -2,7 +2,7 @@ const express = require('express');
 const request = require('supertest');
 const { dml, query, cleanup } = require('@eunmo/mysql');
 const { chart, chartEntry, chartMatch } = require('../../../db');
-const { albums, singles, expected } = require('./test-data');
+const { albums, singles, expected } = require('./test-data.json');
 const router = require('..');
 
 jest.mock('../../../apple/query');
