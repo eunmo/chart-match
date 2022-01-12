@@ -1,12 +1,12 @@
 import React, { useEffect, useState, Fragment } from 'react';
 import { useParams } from 'react-router-dom';
 import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
 import Link from '@mui/material/Link';
 
 import { get } from './util';
 import { useStore } from './store';
 import Flag from './Flag';
+import Grid from './Grid';
 import Image from './Image';
 import Item from './Item';
 
@@ -21,9 +21,6 @@ const chartPos = {
 };
 
 const flagGridSx = {
-  display: 'grid',
-  gridTemplateColumns: 'repeat(6, 1fr)',
-  lineHeight: '25px',
   '& div': {
     height: '25px',
   },
@@ -40,63 +37,58 @@ export default function Current() {
   }, [type, store]);
 
   return (
-    <Container maxWidth="md">
-      <Box
-        display="grid"
-        gridTemplateColumns="50px 30px 75px 1fr"
-        columnGap={1}
-        rowGap={1}
-        lineHeight="25px"
-        marginBottom={1}
+    <Grid cols="50px 30px 75px 1fr" rg={1} sx={{ mb: 1 }}>
+      <Grid
+        cols="repeat(6, 1fr)"
+        cg={0}
+        sx={{ ...flagGridSx, gridColumnStart: 3 }}
       >
-        <Box sx={{ ...flagGridSx, gridColumnStart: 3 }}>
-          {charts.map((chart) => (
-            <Box key={chart} sx={{ gridColumn: chartPos[chart] }}>
-              <Flag chart={chart} size="25" />
-            </Box>
-          ))}
-        </Box>
-        <Box
-          fontSize="1.5em"
-          lineHeight="50px"
-          sx={{ textTransform: 'capitalize' }}
-        >
-          current {type}s
-        </Box>
-        {entries?.map((entry, index) => (
-          <Fragment key={entry.id}>
-            <Link href={entry.url}>
-              <Image url={entry.artworkUrl} />
-            </Link>
-            <Box fontSize="1.2em" lineHeight="50px" textAlign="center">
-              {index + 1}
-            </Box>
-            <Box sx={flagGridSx}>
-              {charts.map((chart) => {
-                const chartId = chartIds[chart];
-                const rank = entry.ranks.find((r) => r.chart === chartId);
-                const sx = { gridColumn: chartPos[chart] };
-
-                if (rank === undefined) {
-                  return <div key={chart} sx={sx} />;
-                }
-
-                return (
-                  <Box
-                    key={chart}
-                    textAlign="center"
-                    backgroundColor="divider"
-                    sx={sx}
-                  >
-                    {rank.ranking}
-                  </Box>
-                );
-              })}
-            </Box>
-            <Item title={entry.name} subtitle={entry.artist} />
-          </Fragment>
+        {charts.map((chart) => (
+          <Box key={chart} sx={{ gridColumn: chartPos[chart] }}>
+            <Flag chart={chart} size="25" />
+          </Box>
         ))}
+      </Grid>
+      <Box
+        fontSize="1.5em"
+        lineHeight="50px"
+        sx={{ textTransform: 'capitalize' }}
+      >
+        current {type}s
       </Box>
-    </Container>
+      {entries?.map((entry, index) => (
+        <Fragment key={entry.id}>
+          <Link href={entry.url}>
+            <Image url={entry.artworkUrl} />
+          </Link>
+          <Box fontSize="1.2em" lineHeight="50px" textAlign="center">
+            {index + 1}
+          </Box>
+          <Grid cols="repeat(6, 1fr)" cg={0} sx={flagGridSx}>
+            {charts.map((chart) => {
+              const chartId = chartIds[chart];
+              const rank = entry.ranks.find((r) => r.chart === chartId);
+              const sx = { gridColumn: chartPos[chart] };
+
+              if (rank === undefined) {
+                return <div key={chart} sx={sx} />;
+              }
+
+              return (
+                <Box
+                  key={chart}
+                  textAlign="center"
+                  backgroundColor="divider"
+                  sx={sx}
+                >
+                  {rank.ranking}
+                </Box>
+              );
+            })}
+          </Grid>
+          <Item title={entry.name} subtitle={entry.artist} />
+        </Fragment>
+      ))}
+    </Grid>
   );
 }

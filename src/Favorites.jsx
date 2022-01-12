@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import makeStyles from '@mui/styles/makeStyles';
 import Button from '@mui/material/Button';
-import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
 import Link from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
@@ -139,7 +138,7 @@ export default function Favorites() {
   }, [inEdit, gid, store, update]);
 
   return (
-    <Container maxWidth="md">
+    <>
       <div className={classes.header}>
         <div className={classes.headerText}>Favorite Artists</div>
         <IconButton onClick={() => setShowEdit(!showEdit)} size="large">
@@ -216,6 +215,6 @@ export default function Favorites() {
           ]}
         </div>
       ))}
-    </Container>
+    </>
   );
 }

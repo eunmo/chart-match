@@ -6,6 +6,7 @@ import {
   ThemeProvider,
   StyledEngineProvider,
 } from '@mui/material/styles';
+import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
 
 import { Provider as StoreProvider } from './store';
@@ -40,22 +41,24 @@ export default function App() {
         <StoreProvider>
           <Router>
             <AppBar />
-            <Routes>
-              <Route index element={<Tops />} />
-              <Route path="current/:type" element={<Current />} />
-              <Route path="week/:type/:chart/:week" element={<ChartWeek />} />
-              <Route path="year/:type/:chart/:year" element={<ChartYear />} />
-              <Route path="edit/:type/:chart/:entry" element={<Edit />} />
-              <Route
-                path="select-songs/:chart/:entry"
-                element={<SelectSongs />}
-              />
-              <Route
-                path="favorite-albums/:artist"
-                element={<FavoriteAlbums />}
-              />
-              <Route path="favorites" element={<Favorites />} />
-            </Routes>
+            <Container maxWidth="md">
+              <Routes>
+                <Route index element={<Tops />} />
+                <Route path="current/:type" element={<Current />} />
+                <Route path="week/:type/:chart/:week" element={<ChartWeek />} />
+                <Route path="year/:type/:chart/:year" element={<ChartYear />} />
+                <Route path="edit/:type/:chart/:entry" element={<Edit />} />
+                <Route
+                  path="select-songs/:chart/:entry"
+                  element={<SelectSongs />}
+                />
+                <Route
+                  path="favorite-albums/:artist"
+                  element={<FavoriteAlbums />}
+                />
+                <Route path="favorites" element={<Favorites />} />
+              </Routes>
+            </Container>
           </Router>
         </StoreProvider>
       </ThemeProvider>

@@ -5,6 +5,7 @@ import IconButton from '@mui/material/IconButton';
 import { Edit } from '@mui/icons-material';
 
 import ChartEntry from './ChartEntry';
+import Grid from './Grid';
 import Item from './Item';
 
 export default function ChartRows({ type, chart, entries, showButtons }) {
@@ -14,14 +15,7 @@ export default function ChartRows({ type, chart, entries, showButtons }) {
   }, [showButtons]);
 
   return (
-    <Box
-      display="grid"
-      gridTemplateColumns={columns}
-      columnGap={1}
-      rowGap={1}
-      lineHeight="25px"
-      marginBottom={1}
-    >
+    <Grid cols={columns} rg={1} sx={{ mb: 1 }}>
       {entries?.map((entry) => (
         <Fragment key={`${entry.entry} ${entry.track}`}>
           <ChartEntry entry={entry} />
@@ -49,6 +43,6 @@ export default function ChartRows({ type, chart, entries, showButtons }) {
           )}
         </Fragment>
       ))}
-    </Box>
+    </Grid>
   );
 }

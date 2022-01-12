@@ -7,18 +7,11 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import { useStore } from './store';
 import { get } from './util';
 import Flag from './Flag';
+import Grid from './Grid';
 import Image from './Image';
 import Item from './Item';
 import Link from './Link';
 
-const baseGridSx = { columnGap: 1, display: 'grid' };
-const gridSx = { ...baseGridSx, gridTemplateColumns: '1fr 50px 1fr' };
-const albumGridSx = {
-  ...baseGridSx,
-  gridTemplateColumns: '1fr 50px',
-  textAlign: 'right',
-};
-const songGridSx = { ...baseGridSx, gridTemplateColumns: '50px 1fr' };
 const filler = <Box height="100%" width="100%" />;
 
 export default function Tops() {
@@ -52,26 +45,26 @@ export default function Tops() {
       <Box fontSize="1.5em" lineHeight="50px" textAlign="center">
         Latest Charts
       </Box>
-      <Box sx={{ ...gridSx, lineHeight: '50px', fontSize: '1.2em' }}>
+      <Grid cols="1fr 50px 1fr" lh={50} sx={{ fontSize: '1.2em' }}>
         <div style={{ textAlign: 'right' }}>
           <Link to="/current/album">Albums</Link>
         </div>
         <div style={{ gridColumnStart: 3 }}>
           <Link to="/current/single">Singles</Link>
         </div>
-      </Box>
-      <Box sx={{ ...gridSx, lineHeight: '25px', mb: 1 }}>
+      </Grid>
+      <Grid cols="1fr 50px 1fr" sx={{ mb: 1 }}>
         {charts.map(({ chart, song, album }) => (
           <Fragment key={chart}>
             <div>
               <Link to={`/week/album/${chart}/${album.week}`}>
                 {album.url ? (
-                  <Box sx={albumGridSx}>
+                  <Grid cols="1fr 50px" sx={{ textAlign: 'right' }}>
                     <Item title={album.name} subtitle={album.artist} />
                     <div>
                       <Image url={album.url} />
                     </div>
-                  </Box>
+                  </Grid>
                 ) : (
                   filler
                 )}
@@ -83,12 +76,12 @@ export default function Tops() {
             <div>
               <Link to={`/week/single/${chart}/${song.week}`}>
                 {song.url ? (
-                  <Box sx={songGridSx}>
+                  <Grid cols="50px 1fr">
                     <div>
                       <Image url={song.url} />
                     </div>
                     <Item title={song.name} subtitle={song.artist} />
-                  </Box>
+                  </Grid>
                 ) : (
                   filler
                 )}
@@ -107,7 +100,7 @@ export default function Tops() {
             <FavoriteIcon />
           </IconButton>
         </Box>
-      </Box>
+      </Grid>
     </>
   );
 }

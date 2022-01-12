@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Link as RouterLink, useParams } from 'react-router-dom';
 import makeStyles from '@mui/styles/makeStyles';
 import Button from '@mui/material/Button';
-import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
 import Link from '@mui/material/Link';
 import { ArrowDownward, Assignment, Done, DoneAll } from '@mui/icons-material';
@@ -155,7 +154,7 @@ export default function Edit() {
   const { raw } = entries[0];
 
   return (
-    <Container maxWidth="md">
+    <>
       <div className={classes.header}>
         <div />
         <div>
@@ -236,6 +235,6 @@ export default function Edit() {
         </IconButton>
       )}
       <ManualInput onSubmit={manualInput} multiple />
-    </Container>
+    </>
   );
 }

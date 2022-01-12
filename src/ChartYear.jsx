@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
 import { Clear, Loupe } from '@mui/icons-material';
 
@@ -28,7 +27,7 @@ export default function ChartYear() {
   }, [type, chart, year, store]);
 
   return (
-    <Container maxWidth="md">
+    <>
       <Box
         display="grid"
         gridTemplateColumns="1fr 50px auto 1fr"
@@ -62,6 +61,6 @@ export default function ChartYear() {
         chart={chart}
         open={openDialog}
       />
-    </Container>
+    </>
   );
 }

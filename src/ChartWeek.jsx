@@ -4,7 +4,6 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import CircularProgress from '@mui/material/CircularProgress';
-import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
 import { Clear, Loupe } from '@mui/icons-material';
 
@@ -12,6 +11,7 @@ import { useStore } from './store';
 import { get } from './util';
 import ChartRows from './ChartRows';
 import Flag from './Flag';
+import Grid from './Grid';
 import WeekDialog from './WeekDialog';
 
 export default function ChartWeek() {
@@ -60,13 +60,8 @@ export default function ChartWeek() {
   }
 
   return (
-    <Container maxWidth="md">
-      <Box
-        display="grid"
-        gridTemplateColumns="1fr 50px auto 1fr"
-        columnGap={1}
-        lineHeight="50px"
-      >
+    <>
+      <Grid cols="1fr 50px auto 1fr" lh={50}>
         <div style={{ gridColumnStart: 2 }}>
           <Flag chart={chart} />
         </div>
@@ -80,7 +75,7 @@ export default function ChartWeek() {
             {showButtons ? <Clear /> : <Loupe />}
           </IconButton>
         </Box>
-      </Box>
+      </Grid>
       <ChartRows
         type={type}
         chart={chart}
@@ -106,6 +101,6 @@ export default function ChartWeek() {
         chart={chart}
         open={openDialog}
       />
-    </Container>
+    </>
   );
 }

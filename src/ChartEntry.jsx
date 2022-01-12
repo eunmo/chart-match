@@ -18,7 +18,7 @@ export default function ChartEntry({ entry }) {
     );
   } else if (entry.id !== null) {
     image = (
-      <Box width={50} height={50}>
+      <Box width="50px" height="50px">
         <svg viewBox="0 0 70 70" style={{ width: '100%' }}>
           <polygon
             points="0,20 0,50 20,70 50,70 70,50 70,20 50,0 20,0"

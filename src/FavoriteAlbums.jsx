@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import makeStyles from '@mui/styles/makeStyles';
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
-import Container from '@mui/material/Container';
 import Link from '@mui/material/Link';
 
 import { useStore } from './store';
@@ -80,7 +79,7 @@ export default function FavoriteAlbums() {
   }, [included]);
 
   return (
-    <Container maxWidth="md">
+    <>
       <Button onClick={turnOff}>Unselect All</Button>
       {entries.map(({ id, attributes }) => (
         <div key={id} className={classes.entryGrid}>
@@ -97,6 +96,6 @@ export default function FavoriteAlbums() {
       <Button variant="contained" color="primary" onClick={update}>
         Update
       </Button>
-    </Container>
+    </>
   );
 }

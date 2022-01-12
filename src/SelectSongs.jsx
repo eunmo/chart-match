@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import makeStyles from '@mui/styles/makeStyles';
 import Button from '@mui/material/Button';
-import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
 import Link from '@mui/material/Link';
 import { ArrowDownward, Done } from '@mui/icons-material';
@@ -163,7 +162,7 @@ export default function SelectSongs() {
   const { raw } = entries[0];
 
   return (
-    <Container maxWidth="md">
+    <>
       <div className={classes.header}>
         <div />
         <div>
@@ -235,6 +234,6 @@ export default function SelectSongs() {
           <Button onClick={() => setSelectedSongs([])}>clear</Button>
         </div>
       )}
-    </Container>
+    </>
   );
 }
