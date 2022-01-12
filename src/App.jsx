@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   BrowserRouter as Router,
-  Redirect,
+  Navigate,
   Route,
   Routes,
 } from 'react-router-dom';
@@ -66,7 +66,7 @@ export default function App() {
               <Favorites />
             </Route>
             <Redirect from="/" to="tops" />
-            <Route path="/" render={() => <Redirect to="tops" />} />
+            <Route path="/" render={() => <Navigate to="tops" />} />
           </Routes>
         </Router>
       </StoreProvider>
