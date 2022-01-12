@@ -65,7 +65,6 @@ export default function App() {
             <Route path="favorites">
               <Favorites />
             </Route>
-            <Redirect from="/" to="tops" />
             <Route path="/" render={() => <Navigate to="tops" />} />
           </Routes>
         </Router>
