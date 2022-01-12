@@ -10,8 +10,7 @@ import { Clear, Loupe } from '@mui/icons-material';
 import { useStore } from './store';
 import { get } from './util';
 import ChartRows from './ChartRows';
-import Flag from './Flag';
-import Grid from './Grid';
+import Header from './Header';
 import WeekDialog from './WeekDialog';
 
 export default function ChartWeek() {
@@ -61,10 +60,7 @@ export default function ChartWeek() {
 
   return (
     <>
-      <Grid cols="1fr 50px auto 1fr" lh={50}>
-        <div style={{ gridColumnStart: 2 }}>
-          <Flag chart={chart} />
-        </div>
+      <Header chart={chart}>
         <div>
           <Button onClick={() => setOpenDialog(true)}>
             {week} {type}s
@@ -75,7 +71,7 @@ export default function ChartWeek() {
             {showButtons ? <Clear /> : <Loupe />}
           </IconButton>
         </Box>
-      </Grid>
+      </Header>
       <ChartRows
         type={type}
         chart={chart}

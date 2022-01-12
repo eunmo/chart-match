@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import { Clear, Loupe } from '@mui/icons-material';
@@ -8,7 +7,7 @@ import { Clear, Loupe } from '@mui/icons-material';
 import { useStore } from './store';
 import { get } from './util';
 import ChartRows from './ChartRows';
-import Flag from './Flag';
+import Header from './Header';
 import WeekDialog from './WeekDialog';
 
 export default function ChartYear() {
@@ -28,15 +27,7 @@ export default function ChartYear() {
 
   return (
     <>
-      <Box
-        display="grid"
-        gridTemplateColumns="1fr 50px auto 1fr"
-        columnGap={1}
-        lineHeight="50px"
-      >
-        <div style={{ gridColumnStart: 2 }}>
-          <Flag chart={chart} />
-        </div>
+      <Header chart={chart}>
         <div>
           <Button onClick={() => setOpenDialog(true)}>
             {year} Top 10 {type}s
@@ -47,7 +38,7 @@ export default function ChartYear() {
             {showButtons ? <Clear /> : <Loupe />}
           </IconButton>
         </div>
-      </Box>
+      </Header>
       <ChartRows
         type={type}
         chart={chart}

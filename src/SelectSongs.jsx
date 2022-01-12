@@ -9,19 +9,12 @@ import { ArrowDownward, Done } from '@mui/icons-material';
 import { useStore } from './store';
 import { get, put, deleteBody } from './util';
 import Explicit from './Explicit';
-import Flag from './Flag';
+import Header from './Header';
 import Image from './Image';
 import Item from './Item';
 import SearchBox from './SearchBox';
 
 const useStyles = makeStyles((theme) => ({
-  header: {
-    display: 'grid',
-    gridTemplateColumns: '1fr 50px auto 1fr',
-    gridColumnGap: theme.spacing(1),
-    fontSize: '1.5em',
-    lineHeight: '50px',
-  },
   grid: {
     display: 'grid',
     gridTemplateColumns: '50px 1fr',
@@ -163,13 +156,9 @@ export default function SelectSongs() {
 
   return (
     <>
-      <div className={classes.header}>
-        <div />
-        <div>
-          <Flag chart={chart} />
-        </div>
+      <Header chart={chart}>
         <div>Select Singles</div>
-      </div>
+      </Header>
       <div className={classes.grid}>
         <div className={classes.raw}>Raw</div>
         <Item title={raw.title} subtitle={raw.artist} />

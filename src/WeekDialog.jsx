@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
+
+import Grid from './Grid';
 
 const years = Array.from({ length: 23 }, (x, i) => `${i + 2000}`);
 
@@ -49,7 +50,7 @@ export default function WeekDialog({ handleClose, week, type, chart, open }) {
         {inYear ? 'Select Year' : 'Select Week'}
       </DialogTitle>
       <DialogContent>
-        <Box display="grid" gridTemplateColumns="repeat(5, 1fr)">
+        <Grid cols="repeat(5, 1fr)" cg={0}>
           {inYear ? (
             years.map((y) => {
               const style = {};
@@ -93,7 +94,7 @@ export default function WeekDialog({ handleClose, week, type, chart, open }) {
               </div>
             </>
           )}
-        </Box>
+        </Grid>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Close</Button>
