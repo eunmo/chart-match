@@ -1,60 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import { Link as RouterLink, useParams } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import Container from '@material-ui/core/Container';
-import IconButton from '@material-ui/core/IconButton';
-import { Clear, Edit, Loupe } from '@material-ui/icons';
+import { useParams } from 'react-router-dom';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import CircularProgress from '@mui/material/CircularProgress';
+import IconButton from '@mui/material/IconButton';
+import { Clear, Loupe } from '@mui/icons-material';
 
 import { useStore } from './store';
 import { get } from './util';
-import ChartEntry from './ChartEntry';
-import Flag from './Flag';
-import Item from './Item';
+import ChartRows from './ChartRows';
+import Header from './Header';
 import WeekDialog from './WeekDialog';
 
-const useStyles = makeStyles((theme) => ({
-  header: {
-    display: 'grid',
-    gridTemplateColumns: '1fr 50px auto 1fr',
-    gridColumnGap: theme.spacing(1),
-    lineHeight: '50px',
-  },
-  showGrid: {
-    display: 'grid',
-    gridTemplateColumns: '50px 30px 1fr',
-    gridColumnGap: theme.spacing(1),
-    lineHeight: '25px',
-    marginBottom: theme.spacing(1),
-  },
-  editGrid: {
-    display: 'grid',
-    gridTemplateColumns: '50px 30px 1fr 50px',
-    gridColumnGap: theme.spacing(1),
-    lineHeight: '25px',
-    marginBottom: theme.spacing(1),
-  },
-  rank: {
-    fontSize: '1.2em',
-    lineHeight: '50px',
-    textAlign: 'center',
-  },
-  raw: {
-    lineHeight: '50px',
-    textAlign: 'center',
-  },
-}));
-
-export default () => {
+export default function ChartWeek() {
   const [entries, setEntries] = useState(undefined);
   const [showButtons, setShowButtons] = useState(false);
   const [loading, setLoading] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const { type, chart, week } = useParams();
   const store = useStore();
-  const classes = useStyles();
 
   useEffect(() => {
     setEntries(undefined);
@@ -93,52 +58,26 @@ export default () => {
     get(`/api/chart/select/week/${type}/${chart}/${week}/${store}`, setEntries);
   }
 
-  const grid = showButtons ? classes.editGrid : classes.showGrid;
-
   return (
-    <Container maxWidth="md">
-      <div className={classes.header}>
-        <div />
-        <div>
-          <Flag chart={chart} />
-        </div>
+    <>
+      <Header chart={chart}>
         <div>
           <Button onClick={() => setOpenDialog(true)}>
             {week} {type}s
           </Button>
         </div>
-        <div style={{ textAlign: 'right' }}>
-          <IconButton onClick={() => setShowButtons(!showButtons)}>
+        <Box textAlign="right">
+          <IconButton onClick={() => setShowButtons(!showButtons)} size="large">
             {showButtons ? <Clear /> : <Loupe />}
           </IconButton>
-        </div>
-      </div>
-      {entries?.map((entry) => (
-        <div className={grid} key={`${entry.entry} ${entry.track}`}>
-          <ChartEntry entry={entry} />
-          {showButtons && (
-            <IconButton
-              component={RouterLink}
-              to={`/edit/${type}/${chart}/${entry.entry}`}
-            >
-              <Edit />
-            </IconButton>
-          )}
-          {showButtons &&
-            entry.catalog && [
-              <div
-                className={classes.raw}
-                style={{ gridColumnStart: 2 }}
-                key="raw"
-              >
-                Raw
-              </div>,
-              <div key="item">
-                <Item title={entry.raw.title} subtitle={entry.raw.artist} />
-              </div>,
-            ]}
-        </div>
-      ))}
+        </Box>
+      </Header>
+      <ChartRows
+        type={type}
+        chart={chart}
+        entries={entries}
+        showButtons={showButtons}
+      />
       {loading && (
         <div>
           <CircularProgress />
@@ -158,6 +97,6 @@ export default () => {
         chart={chart}
         open={openDialog}
       />
-    </Container>
+    </>
   );
-};
+}

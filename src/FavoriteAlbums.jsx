@@ -1,33 +1,20 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, Fragment } from 'react';
 import { useParams } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Checkbox from '@material-ui/core/Checkbox';
-import Container from '@material-ui/core/Container';
-import Link from '@material-ui/core/Link';
+import Button from '@mui/material/Button';
+import Checkbox from '@mui/material/Checkbox';
+import Link from '@mui/material/Link';
 
 import { useStore } from './store';
 import { get, put } from './util';
+import Grid from './Grid';
 import Image from './Image';
 import Item from './Item';
 
-const useStyles = makeStyles((theme) => ({
-  entryGrid: {
-    display: 'grid',
-    gridTemplateColumns: '50px 1fr 50px',
-    gridRowGap: theme.spacing(1),
-    gridColumnGap: theme.spacing(1),
-    lineHeight: '25px',
-    marginBottom: theme.spacing(1),
-  },
-}));
-
-export default () => {
+export default function FavoriteAlbums() {
   const [entries, setEntries] = useState([]);
   const [included, setIncluded] = useState({});
   const { artist } = useParams();
   const store = useStore();
-  const classes = useStyles();
 
   const fetch = useCallback(() => {
     setEntries([]);
@@ -58,42 +45,47 @@ export default () => {
     fetch();
   }, [fetch]);
 
-  function update() {
+  const update = useCallback(() => {
     put(`/api/favorite-artist/edit-albums`, { store, included }, () => {
       fetch();
     });
-  }
+  }, [fetch, included, store]);
 
-  function onChange(id) {
-    setIncluded({ ...included, [id]: !included[id] });
-  }
+  const onChange = useCallback(
+    (id) => {
+      setIncluded({ ...included, [id]: !included[id] });
+    },
+    [included]
+  );
 
-  function turnOff() {
+  const turnOff = useCallback(() => {
     const newIncluded = {};
     Object.keys(included).forEach((id) => {
       newIncluded[id] = false;
     });
     setIncluded(newIncluded);
-  }
+  }, [included]);
 
   return (
-    <Container maxWidth="md">
+    <>
       <Button onClick={turnOff}>Unselect All</Button>
-      {entries.map(({ id, attributes }) => (
-        <div key={id} className={classes.entryGrid}>
-          <Link href={attributes.url}>
-            <Image url={attributes.artwork.url} />
-          </Link>
-          <Item
-            title={attributes.name}
-            subtitle={`${attributes.releaseDate} ${attributes.trackCount} Songs`}
-          />
-          <Checkbox checked={included[id]} onChange={() => onChange(id)} />
-        </div>
-      ))}
+      <Grid cols="50px 1fr 50px">
+        {entries.map(({ id, attributes }) => (
+          <Fragment key={id}>
+            <Link href={attributes.url}>
+              <Image url={attributes.artwork.url} />
+            </Link>
+            <Item
+              title={attributes.name}
+              subtitle={`${attributes.releaseDate} ${attributes.trackCount} Songs`}
+            />
+            <Checkbox checked={included[id]} onChange={() => onChange(id)} />
+          </Fragment>
+        ))}
+      </Grid>
       <Button variant="contained" color="primary" onClick={update}>
         Update
       </Button>
-    </Container>
+    </>
   );
-};
+}

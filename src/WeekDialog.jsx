@@ -1,21 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
 
-const useStyles = makeStyles(() => ({
-  grid: {
-    display: 'grid',
-    gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr',
-  },
-}));
+import Grid from './Grid';
 
-const years = Array.from({ length: 22 }, (x, i) => `${i + 2000}`);
+const years = Array.from({ length: 23 }, (x, i) => `${i + 2000}`);
 
 function refDateYMD(year, weekDiff, dayDiff) {
   const utc = new Date(Date.UTC(year, 0, 1));
@@ -29,12 +24,11 @@ function getWeeks(year) {
   );
 }
 
-export default ({ handleClose, week, type, chart, open }) => {
+export default function WeekDialog({ handleClose, week, type, chart, open }) {
   const [inYear, setInYear] = useState(false);
   const [year, setYear] = useState(null);
-  const classes = useStyles();
   const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
   useEffect(() => {
     setYear(week.substring(0, 4));
@@ -56,9 +50,9 @@ export default ({ handleClose, week, type, chart, open }) => {
         {inYear ? 'Select Year' : 'Select Week'}
       </DialogTitle>
       <DialogContent>
-        {inYear ? (
-          <div className={classes.grid}>
-            {years.map((y) => {
+        <Grid cols="repeat(5, 1fr)" cg={0} rg={0} mb={0}>
+          {inYear ? (
+            years.map((y) => {
               const style = {};
               if (y === year) {
                 style.fontWeight = 'bold';
@@ -68,11 +62,9 @@ export default ({ handleClose, week, type, chart, open }) => {
                   {y}
                 </Button>
               );
-            })}
-          </div>
-        ) : (
-          <div>
-            <div className={classes.grid}>
+            })
+          ) : (
+            <>
               <div style={{ gridColumn: '1 / span 5', textAlign: 'center' }}>
                 <Button onClick={() => setInYear(true)}>{year}</Button>
               </div>
@@ -100,13 +92,13 @@ export default ({ handleClose, week, type, chart, open }) => {
                   {`Top 10 ${type}s`}
                 </Button>
               </div>
-            </div>
-          </div>
-        )}
+            </>
+          )}
+        </Grid>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Close</Button>
       </DialogActions>
     </Dialog>
   );
-};
+}

@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const request = require('supertest');
 const { dml, cleanup } = require('@eunmo/mysql');
 const { chart, chartEntry, chartMatch } = require('../../../db');
-const { singles, albums, expected } = require('./test-data');
+const { singles, albums, expected } = require('./test-data.json');
 const router = require('../edit');
 
 jest.mock('../../../apple/query');

@@ -1,6 +1,6 @@
 #week="2021-07-31"
 #week="2021-07-24"
-week="2021-09-18"
+week="2022-01-01"
 
 for type in single album
 do

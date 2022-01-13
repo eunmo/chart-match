@@ -1,32 +1,20 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Avatar from '@material-ui/core/Avatar';
+import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-  },
-  avatar: {
-    width: theme.spacing(3),
-    height: theme.spacing(3),
-    marginLeft: theme.spacing(1),
-    fontSize: '1em',
-  },
-}));
-
-export default ({ target }) => {
-  const classes = useStyles();
+export default function Explicit({ target }) {
   const { contentRating, name } = target.attributes;
+
   if (contentRating === undefined) {
     return name;
   }
 
   return (
-    <div className={classes.root}>
+    <Box display="flex">
       {name}
-      <Avatar className={classes.avatar}>
+      <Avatar sx={{ width: '25px', height: '25px', ml: 1, fontSize: '1em' }}>
         {contentRating[0].toUpperCase()}
       </Avatar>
-    </div>
+    </Box>
   );
-};
+}

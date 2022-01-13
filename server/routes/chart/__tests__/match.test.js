@@ -3,7 +3,7 @@ const request = require('supertest');
 const { dml, cleanup } = require('@eunmo/mysql');
 const { chart, chartEntry } = require('../../../db');
 const router = require('..');
-const { singles, albums, expected } = require('./test-data');
+const { singles, albums, expected } = require('./test-data.json');
 
 jest.mock('../../../apple/query');
 

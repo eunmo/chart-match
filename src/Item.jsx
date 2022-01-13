@@ -1,32 +1,17 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import Box from '@mui/material/Box';
 
-const useStyles = makeStyles((theme) => ({
-  overflow: {
-    overflow: 'hidden',
-  },
-  ellipsis: {
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap',
-  },
-  title: {
-    color: theme.palette.text.primary,
-  },
-  subtitle: {
-    color: theme.palette.text.secondary,
-  },
-}));
-
-export default ({ title, subtitle }) => {
-  const classes = useStyles();
-
-  return (
-    <div className={classes.overflow}>
-      <div className={`${classes.ellipsis} ${classes.title}`}>{title}</div>
-      <div className={`${classes.ellipsis} ${classes.subtitle}`}>
-        {subtitle}
-      </div>
-    </div>
-  );
+const ellipsisSx = {
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap',
 };
+
+export default function Item({ title, subtitle }) {
+  return (
+    <Box sx={{ overflow: 'hidden' }}>
+      <Box sx={{ ...ellipsisSx, color: 'text.primary' }}>{title}</Box>
+      <Box sx={{ ...ellipsisSx, color: 'text.secondary' }}>{subtitle}</Box>
+    </Box>
+  );
+}

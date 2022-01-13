@@ -6,7 +6,7 @@ const fetch = require('node-fetch');
 const { dml, query, cleanup } = require('@eunmo/mysql');
 const { chart } = require('../../../db');
 const router = require('../fetch');
-const { singles, albums } = require('./test-data');
+const { singles, albums } = require('./test-data.json');
 
 const chartId = chart.ids.jp;
 const app = express();
