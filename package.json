@@ -8,9 +8,6 @@
     "@eunmo/mysql": "^1.1.4",
     "@mui/icons-material": "^5.2.5",
     "@mui/material": "^5.2.8",
-    "@testing-library/jest-dom": "^5.16.1",
-    "@testing-library/react": "^12.1.2",
-    "@testing-library/user-event": "^13.5.0",
     "apn": "^2.2.0",
     "body-parser": "^1.19.1",
     "config": "^3.3.7",
@@ -23,6 +20,9 @@
     "react-scripts": "5.0.0"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^5.16.1",
+    "@testing-library/react": "^12.1.2",
+    "@testing-library/user-event": "^13.5.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
