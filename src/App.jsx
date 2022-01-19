@@ -1,4 +1,4 @@
-import React from 'react';
+import { useMemo } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import {
@@ -23,7 +23,7 @@ import Tops from './Tops';
 export default function App() {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
 
-  const theme = React.useMemo(
+  const theme = useMemo(
     () =>
       createTheme({
         palette: {

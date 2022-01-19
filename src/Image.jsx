@@ -1,5 +1,3 @@
-import React from 'react';
-
 function replaceUrl(url, size) {
   const sizeString = `${size}`;
   return url.replace('{w}', sizeString).replace('{h}', sizeString);

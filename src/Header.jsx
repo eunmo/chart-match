@@ -1,5 +1,3 @@
-import React from 'react';
-
 import Flag from './Flag';
 import Grid from './Grid';
 
