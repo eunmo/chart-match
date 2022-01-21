@@ -66,7 +66,6 @@ export default function Edit() {
   }, []);
 
   const update = useCallback(() => {
-    setKeyword('');
     setSearchResults(null);
     setEntries([]);
     get(
