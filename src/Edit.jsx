@@ -58,8 +58,10 @@ export default function Edit() {
   const fillSearchBox = useCallback(() => {
     const { raw } = entries[0];
     const newKeyword = `${raw.artist} ${raw.title}`;
-    setKeyword(newKeyword);
-    get(`/api/search/${type}/${newKeyword}/${store}`, setSearchResults);
+    // TODO: use regex
+    const normKeyword = newKeyword.replaceAll('/', ' ').replaceAll('?', ' ');
+    setKeyword(normKeyword);
+    get(`/api/search/${type}/${normKeyword}/${store}`, setSearchResults);
   }, [entries, store, type]);
 
   const clearSearch = useCallback(() => {
