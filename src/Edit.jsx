@@ -48,7 +48,9 @@ export default function Edit() {
   const submitSearch = useCallback(
     (e) => {
       e.preventDefault();
-      get(`/api/search/${type}/${keyword}/${store}`, setSearchResults);
+      // TODO: use regex
+      const normKeyword = keyword.replaceAll('/', ' ').replaceAll('?', ' ');
+      get(`/api/search/${type}/${normKeyword}/${store}`, setSearchResults);
     },
     [keyword, type, store]
   );
