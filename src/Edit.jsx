@@ -114,6 +114,7 @@ export default function Edit() {
   return (
     <>
       <EditInfo chart={chart} title={`edit ${type}s`} entries={entries} />
+      <div>{entries?.map(({ id }) => id)}</div>
       <Box display="flex" justifyContent="space-between" mb={1}>
         <IconButton onClick={() => fillSearchBox()} size="large">
           <ArrowDownward />
