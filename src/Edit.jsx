@@ -111,12 +111,12 @@ export default function Edit() {
     return null;
   }
 
-  const rawIds = entries?.map(({ id }) => id);
+  const rawIds = entries.map(({ id }) => id).filter((id) => id);
 
   return (
     <>
       <EditInfo chart={chart} title={`edit ${type}s`} entries={entries} />
-      {rawIds && <div>Raw IDs: [{rawIds.join(', ')}]</div>}
+      {rawIds.length > 0 && <div>Raw IDs: [{rawIds.join(', ')}]</div>}
       <Box display="flex" justifyContent="space-between" mb={1}>
         <IconButton onClick={() => fillSearchBox()} size="large">
           <ArrowDownward />
