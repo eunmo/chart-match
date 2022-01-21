@@ -33,8 +33,6 @@ export default function ChartYear() {
     [entries]
   );
 
-  const displayEntries = showMissing ? missing : entries;
-
   return (
     <>
       <Grid cols="1fr 50px auto 1fr" lh={50} mb={0}>
@@ -65,7 +63,7 @@ export default function ChartYear() {
       <ChartRows
         type={type}
         chart={chart}
-        entries={displayEntries}
+        entries={showMissing ? missing : entries}
         showButtons={showButtons}
       />
       <WeekDialog
