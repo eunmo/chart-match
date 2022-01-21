@@ -34,4 +34,14 @@ describe.each(['songs', 'albums'])('%s', (type) => {
       expect(result[id]).toBeTruthy();
     });
   });
+
+  test('search apple catalog long', async () => {
+    const ids = testData.map(({ id }) => id);
+    const longIds = ids.flatMap((id) => Array(100).fill(id));
+    const result = await searchAppleCatalog(type, store, longIds);
+
+    testData.forEach(({ id }) => {
+      expect(result[id]).toBeTruthy();
+    });
+  });
 });
