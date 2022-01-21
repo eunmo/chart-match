@@ -7,7 +7,7 @@ import Link from '@mui/material/Link';
 import { ArrowDownward, Assignment, Done, DoneAll } from '@mui/icons-material';
 
 import { useStore } from './store';
-import { get, put, deleteBody, usePrevious } from './util';
+import { get, put, deleteBody } from './util';
 import EditInfo from './EditInfo';
 import Explicit from './Explicit';
 import Grid from './Grid';
@@ -23,18 +23,18 @@ export default function Edit() {
   const [selected, setSelected] = useState(null);
   const { type, chart, entry } = useParams();
   const store = useStore();
-  const prevStore = usePrevious(store);
 
   useEffect(() => {
     get(
       `/api/chart/select/entry/${type}/${chart}/${entry}/${store}`,
       setEntries
     );
-    if (store !== prevStore) {
-      setKeyword('');
-    }
     setSearchResults(null);
-  }, [chart, entry, prevStore, store, type]);
+  }, [chart, entry, store, type]);
+
+  useEffect(() => {
+    setKeyword('');
+  }, [chart, entry, type]);
 
   const clear = useCallback(() => {
     deleteBody(`/api/chart/edit/${type}`, { store, entry }, () => {
