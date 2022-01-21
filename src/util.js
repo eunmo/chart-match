@@ -1,3 +1,5 @@
+import { useEffect, useRef } from 'react';
+
 export function get(url, callback) {
   fetch(url)
     .then((response) => response.json())
@@ -18,4 +20,12 @@ export function deleteBody(url, body, callback) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
   }).then(callback);
+}
+
+export function usePrevious(value) {
+  const ref = useRef();
+  useEffect(() => {
+    ref.current = value;
+  });
+  return ref.current;
 }

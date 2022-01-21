@@ -7,7 +7,7 @@ import Link from '@mui/material/Link';
 import { ArrowDownward, Assignment, Done, DoneAll } from '@mui/icons-material';
 
 import { useStore } from './store';
-import { get, put, deleteBody } from './util';
+import { get, put, deleteBody, usePrevious } from './util';
 import EditInfo from './EditInfo';
 import Explicit from './Explicit';
 import Grid from './Grid';
@@ -23,15 +23,18 @@ export default function Edit() {
   const [selected, setSelected] = useState(null);
   const { type, chart, entry } = useParams();
   const store = useStore();
+  const prevStore = usePrevious(store);
 
   useEffect(() => {
     get(
       `/api/chart/select/entry/${type}/${chart}/${entry}/${store}`,
       setEntries
     );
-    setKeyword('');
+    if (store !== prevStore) {
+      setKeyword('');
+    }
     setSearchResults(null);
-  }, [chart, entry, store, type]);
+  }, [chart, entry, prevStore, store, type]);
 
   const clear = useCallback(() => {
     deleteBody(`/api/chart/edit/${type}`, { store, entry }, () => {
@@ -111,12 +114,9 @@ export default function Edit() {
     return null;
   }
 
-  const rawIds = entries.map(({ id }) => id).filter((id) => id);
-
   return (
     <>
       <EditInfo chart={chart} title={`edit ${type}s`} entries={entries} />
-      {rawIds.length > 0 && <div>Raw IDs: [{rawIds.join(', ')}]</div>}
       <Box display="flex" justifyContent="space-between" mb={1}>
         <IconButton onClick={() => fillSearchBox()} size="large">
           <ArrowDownward />

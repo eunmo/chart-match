@@ -13,6 +13,7 @@ export default function EditInfo({ chart, title, entries }) {
   }
 
   const { raw } = entries[0];
+  const rawIds = entries.map(({ id }) => id).filter((id) => id);
 
   return (
     <>
@@ -37,6 +38,7 @@ export default function EditInfo({ chart, title, entries }) {
             </Fragment>
           ))}
       </Grid>
+      {rawIds.length > 0 && <div>Raw IDs: [{rawIds.join(', ')}]</div>}
     </>
   );
 }
