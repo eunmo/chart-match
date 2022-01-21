@@ -39,7 +39,7 @@ export default function ChartYear() {
     <>
       <Grid cols="1fr 50px auto 1fr" lh={50} mb={0}>
         <div>
-          {missing && (
+          {missing.length && (
             <IconButton
               onClick={() => setShowMissing(!showMissing)}
               size="large"
