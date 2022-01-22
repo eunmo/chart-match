@@ -10,7 +10,7 @@ function formQuery(store, keyword, type, replaceFT = false) {
   return `https://api.music.apple.com/v1/catalog/${store}/search?${query}`;
 }
 
-const QUERY_LIMIT = 100;
+const QUERY_LIMIT = 50;
 
 async function searchAppleCatalogHelper(url) {
   const dataMap = {};
