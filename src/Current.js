@@ -52,7 +52,7 @@ export default function Current() {
         ))}
       </Grid>
       <Box
-        fontSize="1.5em"
+        fontSize="1.2em"
         lineHeight="50px"
         sx={{ textTransform: 'capitalize' }}
       >
