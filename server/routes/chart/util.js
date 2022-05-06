@@ -60,9 +60,17 @@ function shouldUpdate(existing, toAdd) {
     return true;
   }
 
+  if (toAdd.length === 0) {
+    return false;
+  }
+
+  if (Math.abs(existing.length - toAdd.length) >= 10) {
+    return false;
+  }
+
   const diffs = existing.filter(
     ({ artist, title }, index) =>
-      artist !== toAdd[index].artist || title !== toAdd[index].title
+      artist !== toAdd[index]?.artist || title !== toAdd[index]?.title
   );
 
   return diffs.length > 5;
