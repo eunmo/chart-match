@@ -55,6 +55,10 @@ function refDateWeek(date, weekDiff, dayDiff) {
   return [year, week];
 }
 
+function differs(a, b) {
+  return a?.localeCompare(b, undefined, { sensitivity: 'base' });
+}
+
 function shouldUpdate(existing, toAdd) {
   if (existing.length === 0) {
     return true;
@@ -70,7 +74,8 @@ function shouldUpdate(existing, toAdd) {
 
   const diffs = existing.filter(
     ({ artist, title }, index) =>
-      artist !== toAdd[index]?.artist || title !== toAdd[index]?.title
+      differs(artist, toAdd[index]?.artist) ||
+      differs(title, toAdd[index]?.title)
   );
 
   return diffs.length > 5;
