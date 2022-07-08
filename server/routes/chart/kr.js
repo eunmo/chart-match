@@ -1,35 +1,52 @@
+const nodeFetch = require('node-fetch');
 const { getDoc, refDateWeek } = require('./util');
 
-function extract(doc) {
-  const ranks = [];
-  let rank = 1;
+async function fetchAlbums(date) {
+  const [year, week] = refDateWeek(date, 0, 0);
 
-  const query = 'td[class*="subject"]';
-  Array.from(doc.querySelectorAll(query)).some((td) => {
-    const titleQuery = 'p';
-    let title = td.querySelector(titleQuery).getAttribute('title');
-
-    const artistQuery = 'p[class~="singer"]';
-    let artist = td.querySelector(artistQuery).getAttribute('title');
-
-    title = title.replace(/`/g, "'");
-    artist = artist.replace(/`/g, "'").replace(/\|.*$/, '').trim();
-    ranks.push({ rank, artist, title });
-    rank += 1;
-
-    return rank > 100;
+  const url = `https://circlechart.kr/data/api/chart/album`;
+  const response = await nodeFetch(url, {
+    method: 'post',
+    body: `nationGbn=T&termGbn=week&hitYear=${year}&targetTime=${week}&yearTime=3&curUrl=circlechart.kr%2Fpage_chart%2Falbum.circle%3F`,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+    },
   });
+  const { List } = await response.json();
+  return Object.entries(List).map(([index, { ALBUM_NAME, ARTIST_NAME }]) => {
+    const rank = parseInt(index, 10) + 1;
+    const title = ALBUM_NAME.replace(/`/g, "'");
+    const artist = ARTIST_NAME.replace(/`/g, "'").replace(/\|.*$/, '').trim();
+    return { rank, artist, title };
+  });
+}
 
-  return ranks;
+async function fetchSingles(date) {
+  const [year, week] = refDateWeek(date, 0, 0);
+
+  const url = `https://circlechart.kr/data/api/chart/onoff`;
+  const response = await nodeFetch(url, {
+    method: 'post',
+    body: `nationGbn=T&termGbn=week&hitYear=${year}&targetTime=${week}&yearTime=3&curUrl=circlechart.kr%2Fpage_chart%2Falbum.onoff%3F`,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+    },
+  });
+  const { List } = await response.json();
+  return Object.entries(List)
+    .slice(0, 100)
+    .map(([index, { ALBUM_NAME, ARTIST_NAME }]) => {
+      const rank = parseInt(index, 10) + 1;
+      const title = ALBUM_NAME.replace(/`/g, "'");
+      const artist = ARTIST_NAME.replace(/`/g, "'").replace(/\|.*$/, '').trim();
+      return { rank, artist, title };
+    });
 }
 
 async function fetch(type, date) {
-  const [year, refWeek] = refDateWeek(date, 0, 6);
-  const url =
-    type === 'single'
-      ? `http://www.gaonchart.co.kr/main/section/chart/online.gaon?nationGbn=T&serviceGbn=ALL&targetTime=${refWeek}&hitYear=${year}&termGbn=week`
-      : `http://www.gaonchart.co.kr/main/section/chart/album.gaon?nationGbn=T&serviceGbn=ALL&targetTime=${refWeek}&hitYear=${year}&termGbn=week`;
-  return extract(await getDoc(url));
+  const fn = type === 'single' ? fetchSingles : fetchAlbums;
+  const ranks = await fn(date);
+  return ranks;
 }
 
 module.exports = fetch;
