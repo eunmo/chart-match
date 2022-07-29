@@ -7,10 +7,10 @@ function extract(docs) {
   docs.forEach((doc) => {
     const query = 'section[class="box-rank-entry"] div[class="wrap-text"]';
     Array.from(doc.querySelectorAll(query)).forEach((span) => {
-      const titleQuery = 'h2[class="title"]';
+      const titleQuery = 'h2[class*="title"]';
       const { textContent: title } = span.querySelector(titleQuery);
 
-      const artistQuery = 'p[class="name"]';
+      const artistQuery = 'p[class*="name"]';
       const { textContent: artist } = span.querySelector(artistQuery);
 
       ranks.push({ rank, artist, title });
