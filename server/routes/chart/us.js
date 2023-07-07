@@ -5,12 +5,12 @@ function extract(doc) {
   let rank = 1;
 
   const query = 'div[class="o-chart-results-list-row-container"]';
-  Array.from(doc.querySelectorAll(query)).some((span) => {
+  Array.from(doc.querySelectorAll(query)).some((div) => {
     const titleQuery = 'h3[class*="c-title"]';
-    const { textContent: title } = span.querySelector(titleQuery);
+    const { textContent: title } = div.querySelector(titleQuery);
 
-    const artistQuery = 'ul li ul li span[class*="c-label"]';
-    const { textContent: artist } = span.querySelector(artistQuery);
+    const artistQuery = `${titleQuery} + span[class*="c-label"]`;
+    const { textContent: artist } = div.querySelector(artistQuery);
 
     ranks.push({ rank, artist: artist.trim(), title: title.trim() });
     rank += 1;
