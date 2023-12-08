@@ -6,11 +6,11 @@ function extract(doc) {
 
   Array.from(doc.querySelectorAll('div[class="description block"] p')).some(
     (div) => {
-      const titleQuery = 'a[class*="chart-name"] span:last-child';
+      const titleQuery = 'a.chart-name span:last-child';
       let { textContent: title } = div.querySelector(titleQuery);
       title = title.trim();
 
-      const artistQuery = 'a[class*="chart-artist"]';
+      const artistQuery = '.chart-artist';
       let { textContent: artist } = div.querySelector(artistQuery);
       artist = artist.trim();
 
